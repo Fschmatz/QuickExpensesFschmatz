@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "QuickExpensesFschmatz",
+    "name": "Quick Expenses Fschmatz",
     "slug": "QuickExpensesFschmatz",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.fschmatz.QuickExpensesFschmatz"
     },
     "web": {
       "bundler": "metro",
@@ -27,10 +28,12 @@
       [
         "expo-splash-screen",
         {
+          "backgroundColor": "#1C110C",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "dark": {
+            "image": "./assets/images/splash-icon-dark.png",
+            "backgroundColor": "#1C110C"
+          }
         }
       ]
     ],
