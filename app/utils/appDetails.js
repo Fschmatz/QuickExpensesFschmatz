@@ -1,15 +1,20 @@
 const AppDetails = {
-  appVersion: "0.7.9",
+  appVersion: "0.8.0",
   appName: "Quick Expenses Fschmatz",
   appNameHomePage: "Quick Expenses",
-  //repositoryLink: "https://github.com/Fschmatz/date_countdown_fschmatz",
+  repositoryLink: "https://github.com/Fschmatz/QuickExpensesFschmatz",
   //backupFileName: "quick_expenses_backup",
 };
 
 AppDetails.changelog = `
 ${AppDetails.appVersion}
 - Detalhes do mês
+- Deletar despesa
+- Configurações organizadas
 - ExpenseTag criada
+- Correção criar tabelas 
+
+0.7.9
 - Ducks pattern
 - Nova página para criar/editar tag
 - Implementado styled-components

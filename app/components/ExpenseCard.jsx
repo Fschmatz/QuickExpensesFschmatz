@@ -2,6 +2,8 @@ import styled from "styled-components/native";
 import AppColors from "../utils/constants/appColors";
 import { formatDate, formatMoney, isEmpty } from "../utils/functionUtils";
 import TagChip from "./TagChip";
+import { TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 const CardContainer = styled.View`
   background-color: ${AppColors.primaryContainer};
@@ -33,7 +35,7 @@ const TagsContainer = styled.View`
   margin-top: 6px;
 `;
 
-const ExpenseCard = ({ expense }) => {
+const ExpenseCard = ({ expense, onDelete }) => {
   return (
     <CardContainer>
       <CardContent>
@@ -41,13 +43,18 @@ const ExpenseCard = ({ expense }) => {
         <ValueText>R$ {formatMoney(expense.value)}</ValueText>
       </CardContent>
 
-      {!isEmpty(expense.tags) && (
-        <TagsContainer>
-          {expense.tags.map((tag) => (
-            <TagChip key={tag.id} tag={tag} />
-          ))}
-        </TagsContainer>
-      )}
+      <CardContent>
+        {!isEmpty(expense.tags) && (
+          <TagsContainer>
+            {expense.tags.map((tag) => (
+              <TagChip key={tag.id} tag={tag} />
+            ))}
+          </TagsContainer>
+        )}
+        <TouchableOpacity onPress={() => onDelete(expense)}>
+          <Ionicons name="trash-outline" size={20} color={AppColors.text} style={{marginTop: 5}} />
+        </TouchableOpacity>
+      </CardContent>
     </CardContainer>
   );
 };

@@ -8,7 +8,7 @@ const ChipContainer = styled.View`
   align-items: center;
   background-color: ${AppColors.background};
   border-radius: 50px;
-  padding: 8px 16px;
+  padding: 8px 12px;
   gap: 6px;
 `;
 

@@ -6,6 +6,7 @@ import AppColors from "../utils/constants/appColors";
 const Container = styled.View`
   flex-direction: row;
   align-items: center;
+  padding: ${(props) => props.padding || '0px'};
 `;
 
 const Icon = styled(Ionicons)``;
@@ -22,9 +23,10 @@ const ListTileWithIcon = ({
   icon,
   iconColor = AppColors.text,
   titleColor = AppColors.text,
+  padding,
 }) => {
   return (
-    <Container>
+    <Container padding={padding}>
       {icon && <Icon name={icon} size={24} color={iconColor} />}
 
       <Title color={titleColor}>{title}</Title>

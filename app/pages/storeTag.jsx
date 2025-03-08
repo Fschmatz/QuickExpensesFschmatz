@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import PageContainer from "../components/PageContainer";
+import { PageContainer, SizedBox } from "../components/utils";
 import AppColors from "../utils/constants/appColors";
 import { TagIcons } from "../utils/constants/tagIcons";
 import { addTag } from "../redux/ducks/tagDuck";
@@ -15,7 +15,6 @@ import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
 import ColorPicker, { Panel1, HueSlider } from "reanimated-color-picker";
 import { createTag } from "../entities/tag";
-import SizedBox from "../components/SizedBox";
 import Label from "../components/Label";
 import { showToast } from "../utils/functionUtils";
 import { selectTagById } from "../redux/selectors/tagSelector";

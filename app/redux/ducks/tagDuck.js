@@ -44,7 +44,7 @@ const actionHandlers = {
   [DELETE_TAG]: (state) => ({ ...state, loading: true, error: null }),
   [ADD_TAG]: (state) => ({ ...state, loading: true, error: null }),
 
-  //SUCESS
+  //SUCCESS
   [FETCH_TAGS_SUCCESS]: (state, action) => ({
     ...state,
     loading: false,

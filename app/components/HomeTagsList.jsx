@@ -10,7 +10,7 @@ const StyledScrollView = styled(ScrollView)``;
 const TagsContainer = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   padding: 0px 8px;
 `;
 
@@ -19,7 +19,7 @@ const HomeTagChip = styled.TouchableOpacity`
   align-items: center;
   background-color: ${(props) => props.backgroundColor || AppColors.background};
   border-radius: 50px;
-  padding: 8px 16px;
+  padding: 8px 12px;
   gap: 6px;
 `;
 

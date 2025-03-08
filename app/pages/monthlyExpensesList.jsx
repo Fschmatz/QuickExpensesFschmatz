@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MonthlyExpenseCard from "../components/MonthlyExpenseCard";
 import { fetchMonthlyExpenses, getMonthlyExpenses } from "../redux/ducks/expenseDuck";
-import PageContainer from "../components/PageContainer";
+import { PageContainer } from "../components/utils";
 
 const MonthlyExpensesList = () => {
   const dispatch = useDispatch();

@@ -52,7 +52,7 @@ function* handleAddExpense(action) {
     }
 
     yield put(addExpenseSuccess());
-    yield put(fetchExpenses());
+    //yield put(fetchExpenses());
     yield put(fetchMonthlyExpenses());
   } catch (error) {
     yield put(addExpenseFailure(error.toString()));
@@ -63,7 +63,7 @@ function* handleDeleteExpense(action) {
   try {
     yield call([ExpenseService, "deleteById"], action.payload);
     yield put(deleteExpenseSuccess());
-    yield put(fetchExpenses());
+    //yield put(fetchExpenses());
     yield put(fetchMonthlyExpenses());
   } catch (error) {
     yield put(deleteExpenseFailure(error.toString()));

@@ -15,8 +15,8 @@ class ExpenseService {
     return await ExpenseDAO.fetchMonthly();
   }
 
-  async deleteById(expense) {
-    await ExpenseDAO.deleteById(expense);
+  async deleteById(id) {
+    await ExpenseDAO.deleteById(id);
   }
 
   async deleteAll() {

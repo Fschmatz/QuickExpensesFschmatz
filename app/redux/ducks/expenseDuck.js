@@ -100,25 +100,22 @@ const actionHandlers = {
   [DELETE_ALL_EXPENSES]: setLoading,
   [FETCH_BY_MONTH_YEAR]: setLoading,
 
-  // SUCESS
+  // SUCCESS
   [FETCH_EXPENSES_SUCCESS]: (state, action) => ({
     ...state,
     loading: false,
     list: action.payload,
   }),
-
   [FETCH_MONTHLY_EXPENSES_SUCCESS]: (state, action) => ({
     ...state,
     loading: false,
     monthlyList: action.payload,
   }),
-
   [FETCH_BY_MONTH_YEAR_SUCCESS]: (state, action) => ({
     ...state,
     loading: false,
     expensesByMonthYear: action.payload,
   }),
-
   [ADD_EXPENSE_SUCCESS]: (state) => ({ ...state, loading: false }),
   [DELETE_EXPENSE_SUCCESS]: (state) => ({ ...state, loading: false }),
   [DELETE_ALL_EXPENSES_SUCCESS]: (state) => ({ ...state, loading: false }),

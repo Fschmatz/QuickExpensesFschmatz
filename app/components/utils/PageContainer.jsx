@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import AppColors from "../utils/constants/appColors";
+import { AppColors } from "../../utils/constants/appColors";
 
 const Container = styled.View`
   flex: 1;

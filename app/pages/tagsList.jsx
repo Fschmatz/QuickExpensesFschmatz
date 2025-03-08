@@ -1,19 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { FlatList } from "react-native";
-import AppColors from "../utils/constants/appColors";
 import TagTile from "../components/TagTile";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTag, getTags } from "../redux/ducks/tagDuck";
-import PageContainer from "../components/PageContainer";
-import styled from "styled-components/native";
+import { PageContainer, Separator } from "../components/utils";
 import FloatingActionButton from "../components/FloatingActionButton";
 import { useRouter } from "expo-router";
-
-const Separator = styled.View`
-  height: 1px;
-  background-color: ${AppColors.text};
-  opacity: 0.1;
-`;
 
 const TagsList = () => {
   const router = useRouter();

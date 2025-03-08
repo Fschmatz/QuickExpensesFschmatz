@@ -4,25 +4,25 @@ import ExpenseService from "../service/expenseService";
 import ExpenseTagService from "../service/expenseTagService";
 import TagService from "../service/tagService";
 import { createTag } from "../entities/tag";
-import PageContainer from "../components/PageContainer";
 import ExpenseDAO from "../dao/expenseDAO";
 import { ScrollView } from "react-native";
 import { dropAllTables } from "../db/database";
 import * as Clipboard from "expo-clipboard";
+import { PageContainer } from "../components/utils";
 
 const Button = styled.TouchableOpacity`
-  background-color: ${AppColors.btnDeleteBackground};
-  padding: 20px;
+  background-color: ${(props) => props.backgroundColor};
+  padding: 12px;
   border-radius: 10px;
   margin: 10px 0px;
-  width: 80%;
+  width: 95%;
   align-items: center;
 `;
 
 const ButtonText = styled.Text`
   color: ${AppColors.btnDeleteText};
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 900;
 `;
 
 const Container = styled.View`
@@ -40,15 +40,33 @@ const Debug = () => {
   };
 
   const handleCreateTags = async () => {
-    const newTag1 = createTag(null, "Mercado", "#ff6c61", "cart-outline");
-    await TagService.insert(newTag1);
-    const newTag2 = createTag(
+    const newTag1 = createTag(
       null,
-      "Restaurante",
-      "#73d3ff",
+      "Alimentação",
+      "#f0fd62",
       "restaurant-outline"
     );
+    await TagService.insert(newTag1);
+
+    const newTag2 = createTag(null, "Compras", "#6ddab6", "bag-outline");
     await TagService.insert(newTag2);
+
+    const newTag3 = createTag(
+      null,
+      "Contas",
+      "#f75380",
+      "document-text-outline"
+    );
+    await TagService.insert(newTag3);
+
+    const newTag4 = createTag(null, "Gasolina", "#6d94da", "water-outline");
+    await TagService.insert(newTag4);
+
+    const newTag5 = createTag(null, "Lazer", "#b277cb", "balloon-outline");
+    await TagService.insert(newTag5);
+
+    const newTag6 = createTag(null, "Mercado", "#36A348", "cart-outline");
+    await TagService.insert(newTag6);
   };
 
   const handleInsertExpenses = async () => {
@@ -89,45 +107,40 @@ const Debug = () => {
     await Clipboard.setStringAsync(JSON.stringify(data));
   };
 
+  const createButtonDebug = (
+    onPress,
+    text,
+    backgroundColor = AppColors.btnDeleteBackground
+  ) => (
+    <Button onPress={onPress} backgroundColor={backgroundColor}>
+      <ButtonText>{text}</ButtonText>
+    </Button>
+  );
+
   return (
     <PageContainer>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 75 }}>
         <Container>
-          <Button onPress={handleDropTables}>
-            <ButtonText>### Drop All Tables ###</ButtonText>
-          </Button>
-
-          <Button onPress={handleInsertExpenses}>
-            <ButtonText>Insert Some Expenses</ButtonText>
-          </Button>
-
-          <Button onPress={handleDeleteAllExpenses}>
-            <ButtonText>Delete All Expenses</ButtonText>
-          </Button>
-
-          <Button onPress={handleDeleteAllTags}>
-            <ButtonText>Delete All Tags</ButtonText>
-          </Button>
-
-          <Button onPress={handleCreateTags}>
-            <ButtonText>Create Tags</ButtonText>
-          </Button>
-
-          <Button onPress={handleCopyAllExpenses}>
-            <ButtonText>Copy All Expenses</ButtonText>
-          </Button>
-
-          <Button onPress={handleCopyAllTags}>
-            <ButtonText>Copy All Tags</ButtonText>
-          </Button>
-
-          <Button onPress={handleCopyAllMonthlyExpenses}>
-            <ButtonText>Copy All Monthly Expenses</ButtonText>
-          </Button>
-
-          <Button onPress={handleCopyAllExpensesTags}>
-            <ButtonText>Copy All Expenses Tags</ButtonText>
-          </Button>
+          {createButtonDebug(
+            handleDropTables,
+            "### Dropar Tabelas ###",
+            "#a11212"
+          )}
+          {createButtonDebug(
+            handleDeleteAllExpenses,
+            "Excluir Despesas",
+            "#aa3737"
+          )}
+          {createButtonDebug(handleDeleteAllTags, "Excluir Tags", "#aa3737")}
+          {createButtonDebug(handleInsertExpenses, "Criar Despesas", "#1e5b94")}
+          {createButtonDebug(handleCreateTags, "Criar Tags", "#1e5b94")}
+          {createButtonDebug(handleCopyAllExpenses, "Copiar Despesas")}
+          {createButtonDebug(handleCopyAllTags, "Copiar Tags")}
+          {createButtonDebug(
+            handleCopyAllMonthlyExpenses,
+            "Copiar Despesas Mensais"
+          )}
+          {createButtonDebug(handleCopyAllExpensesTags, "Copiar Tags_Despesas")}
         </Container>
       </ScrollView>
     </PageContainer>

@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchByMonthYear,
   getExpensesByMonthYear,
+  deleteExpense
 } from "../redux/ducks/expenseDuck";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import PageContainer from "../components/PageContainer";
+import { PageContainer } from "../components/utils";
 import ExpenseCard from "../components/ExpenseCard";
 import { formatDate } from "../utils/functionUtils";
 
@@ -23,13 +24,18 @@ const MonthYearExpensesDetail = () => {
     dispatch(fetchByMonthYear(date));
   }, [dispatch, navigation]);
 
+  const handleDelete = (expense) => {
+    dispatch(deleteExpense(expense.id));
+    dispatch(fetchByMonthYear(date));
+  };
+
   return (
     <PageContainer>
       <FlatList
         contentContainerStyle={{ gap: 8, paddingBottom: 75 }}
         data={expensesByMonthYear}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ExpenseCard expense={item} />}
+        renderItem={({ item }) => <ExpenseCard expense={item} onDelete={handleDelete}/>}
       />
     </PageContainer>
   );

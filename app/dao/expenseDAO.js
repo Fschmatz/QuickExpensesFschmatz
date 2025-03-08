@@ -32,10 +32,10 @@ class ExpenseDAO {
     );
   }
 
-  async deleteById(expense) {
+  async deleteById(id) {
     const db = await getDatabase();
     await db.runAsync(`DELETE FROM ${tables.EXPENSES} WHERE id = ?;`, [
-      expense.id,
+      id,
     ]);
   }
 
