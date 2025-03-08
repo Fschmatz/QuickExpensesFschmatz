@@ -48,15 +48,7 @@ export const lessThanZero = (value) => {
 };
 
 export const formatMoney = (value) => {
-  if (value === undefined || value === null || value === "") {
-    return "0,00";
-  }
-
-  const num = Number(value);
-
-  return !isNaN(num)
-    ? num.toLocaleString("pt-BR", { minimumFractionDigits: 2 })
-    : "0,00";
+  return Number(value).toLocaleString("pt-BR", { minimumFractionDigits: 2 });
 };
 
 export const showToast = (message) => {

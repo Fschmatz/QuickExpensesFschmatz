@@ -11,7 +11,7 @@ const CurrentVersionContainer = styled.View`
   background-color: ${AppColors.btnDeleteBackground};
   justify-content: center;
   align-items: center;
-  border-radius: 50px;
+  border-radius: 12px;
   margin-top: 8px;
   margin-bottom: 25px;
 `;

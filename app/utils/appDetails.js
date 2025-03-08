@@ -1,5 +1,5 @@
 const AppDetails = {
-  appVersion: "0.8.0",
+  appVersion: "0.8.1",
   appName: "Quick Expenses Fschmatz",
   appNameHomePage: "Quick Expenses",
   repositoryLink: "https://github.com/Fschmatz/QuickExpensesFschmatz",

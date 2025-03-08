@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import AppColors from "../utils/constants/appColors";
 import HomeTagsList from "../components/HomeTagsList";
-import { greaterThanZero, formatMoney } from "../utils/functionUtils";
+import { greaterThanZero } from "../utils/functionUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTags, getTags } from "../redux/ducks/tagDuck";
 import { addExpense } from "../redux/ducks/expenseDuck";
@@ -93,7 +93,7 @@ const ConfirmKey = styled.TouchableOpacity`
 `;
 
 const Home = () => {
-  const numPad = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", "."];
+  const numPad = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ","];
   const maxLength = 8;
   const [inputValue, setInputValue] = useState("");
   const [selectedTag, setSelectedTag] = useState();
@@ -105,9 +105,9 @@ const Home = () => {
   }, [dispatch]);
 
   const handlePress = (value) => {
-    const hasDot = inputValue.includes(".");
-    const decimalPart = hasDot ? inputValue.split(".")[1] : null;
-    const isAddingDot = value === ".";
+    const hasDot = inputValue.includes(",");
+    const decimalPart = hasDot ? inputValue.split(",")[1] : null;
+    const isAddingDot = value === ",";
     const isAddingDigitAfterDot = hasDot && decimalPart?.length >= 2;
     const canAddValue =
       (!isAddingDot || !hasDot) &&
@@ -161,7 +161,7 @@ const Home = () => {
     <Container>
       <TopContainer>
         <StyledInputText
-          value={formatMoney(inputValue)}
+          value={inputValue}
           editable={false}
           maxLength={maxLength}
         />
@@ -183,7 +183,7 @@ const Home = () => {
                 big={num === "0"}
                 onPress={() => handlePress(num.toString())}
               >
-                <KeyText>{num !== "." ? num : ","}</KeyText>
+                <KeyText>{num}</KeyText>
               </KeyButton>
             ))}
           </NumbersContainer>

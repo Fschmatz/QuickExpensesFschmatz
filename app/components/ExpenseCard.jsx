@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 import AppColors from "../utils/constants/appColors";
 import { formatDate, formatMoney, isEmpty } from "../utils/functionUtils";
 import TagChip from "./TagChip";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 const CardContainer = styled.View`
@@ -11,7 +11,7 @@ const CardContainer = styled.View`
   border-radius: 12px;
 `;
 
-const CardContent = styled.View`
+const TopRowContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -35,26 +35,39 @@ const TagsContainer = styled.View`
   margin-top: 6px;
 `;
 
+const BottomRowContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+
 const ExpenseCard = ({ expense, onDelete }) => {
   return (
     <CardContainer>
-      <CardContent>
+      <TopRowContainer>
         <DateText>{formatDate(expense.createdDate, "dd/mm/yyyy")}</DateText>
         <ValueText>R$ {formatMoney(expense.value)}</ValueText>
-      </CardContent>
+      </TopRowContainer>
 
-      <CardContent>
-        {!isEmpty(expense.tags) && (
-          <TagsContainer>
-            {expense.tags.map((tag) => (
-              <TagChip key={tag.id} tag={tag} />
-            ))}
-          </TagsContainer>
-        )}
+      <BottomRowContainer>
+        <View style={{ flex: 1 }}>
+          {!isEmpty(expense.tags) && (
+            <TagsContainer>
+              {expense.tags.map((tag) => (
+                <TagChip key={tag.id} tag={tag} />
+              ))}
+            </TagsContainer>
+          )}
+        </View>
         <TouchableOpacity onPress={() => onDelete(expense)}>
-          <Ionicons name="trash-outline" size={20} color={AppColors.text} style={{marginTop: 5}} />
+          <Ionicons
+            name="trash-outline"
+            size={20}
+            color={AppColors.text}     
+            style={{ marginTop: !isEmpty(expense.tags) ? 12 : 5}}      
+          />
         </TouchableOpacity>
-      </CardContent>
+      </BottomRowContainer>
     </CardContainer>
   );
 };
