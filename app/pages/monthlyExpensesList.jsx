@@ -2,12 +2,12 @@ import { FlatList } from "react-native";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MonthlyExpenseCard from "../components/MonthlyExpenseCard";
-import { fetchMonthlyExpenses } from "../redux/ducks/expenseDuck";
+import { fetchMonthlyExpenses, getMonthlyExpenses } from "../redux/ducks/expenseDuck";
 import PageContainer from "../components/PageContainer";
 
 const MonthlyExpensesList = () => {
   const dispatch = useDispatch();
-  const monthlyExpenses = useSelector((state) => state.expenses.monthlyList);
+  const monthlyExpenses = useSelector(getMonthlyExpenses);
 
   useEffect(() => {
     dispatch(fetchMonthlyExpenses());

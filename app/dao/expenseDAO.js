@@ -5,14 +5,14 @@ class ExpenseDAO {
   async insert(date, value) {
     const db = await getDatabase();
     await db.runAsync(
-      `INSERT INTO ${tables.EXPENSES} (date, value) VALUES (?, ?);`,
+      `INSERT INTO ${tables.EXPENSES} (createdDate, value) VALUES (?, ?);`,
       [date, value]
     );
 
     const result = await db.runAsync(
       `SELECT last_insert_rowid() as lastInsertRowId;`
     );
-        
+
     return result.lastInsertRowId;
   }
 
@@ -24,11 +24,11 @@ class ExpenseDAO {
   async fetchMonthly() {
     const db = await getDatabase();
     return await db.getAllAsync(
-      `SELECT substr(date, 1, 7) || '-01' AS date, 
+      `SELECT substr(createdDate, 1, 7) || '-01' AS date, 
        SUM(value) AS value
        FROM ${tables.EXPENSES}
-       GROUP BY substr(date, 1, 7)
-       ORDER BY date DESC;`
+       GROUP BY substr(createdDate, 1, 7)
+       ORDER BY createdDate DESC;`
     );
   }
 
@@ -48,7 +48,7 @@ class ExpenseDAO {
     const db = await getDatabase();
     await db.execAsync(
       `UPDATE ${tables.EXPENSES} 
-       SET date = ?, value = ?
+       SET createdDate = ?, value = ?
        WHERE id = ?;`,
       [expense.date, expense.value, expense.id]
     );
@@ -56,13 +56,36 @@ class ExpenseDAO {
 
   async getExpensesByMonthYear(date) {
     const db = await getDatabase();
-    const firstDayMonth = getFirstDayOfMonth(date);    
-    const lastDayMonth = getLastDayOfMonth(date);    
+    const firstDayMonth = getFirstDayOfMonth(date);
+    const lastDayMonth = getLastDayOfMonth(date);
     const query = `
     SELECT * FROM ${tables.EXPENSES}
-    WHERE DATE(date) >= DATE(?) AND DATE(date) <= DATE(?)
-    ORDER BY date ASC
+    WHERE DATE(createdDate) >= DATE(?) AND DATE(createdDate) <= DATE(?)
+    ORDER BY DATE(createdDate) ASC
   `;
+
+    return await db.getAllAsync(query, [firstDayMonth, lastDayMonth]);
+  }
+
+  async getExpensesByMonthYearWithTags(date) {
+    const db = await getDatabase();
+    const firstDayMonth = getFirstDayOfMonth(date);
+    const lastDayMonth = getLastDayOfMonth(date);
+
+    const query = `
+    SELECT expe.id AS expense_id, 
+    expe.createdDate AS createdDate, 
+    expe.value AS value,
+    tags.id AS tag_id, 
+    tags.name AS tag_name, 
+    tags.color AS tag_color, 
+    tags.icon AS tag_icon
+    FROM ${tables.EXPENSES} expe
+    LEFT JOIN ${tables.EXPENSES_TAGS} exta ON exta.expense_id = expe.id
+    LEFT JOIN ${tables.TAGS} tags ON exta.tag_id = tags.id
+    WHERE DATE(expe.createdDate) BETWEEN DATE(?) AND DATE(?)
+    ORDER BY DATE(expe.createdDate) ASC;
+    `;
 
     return await db.getAllAsync(query, [firstDayMonth, lastDayMonth]);
   }

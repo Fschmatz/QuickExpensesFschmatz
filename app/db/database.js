@@ -30,7 +30,7 @@ export const initializeTables = async () => {
   await db.execAsync(
     `CREATE TABLE IF NOT EXISTS ${tables.EXPENSES} (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      date TEXT NOT NULL,
+      createdDate TEXT NOT NULL,
       value REAL NOT NULL
     );`
   );

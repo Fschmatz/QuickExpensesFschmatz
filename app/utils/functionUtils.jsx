@@ -65,18 +65,20 @@ export const showToast = (message) => {
 
 //YYYY-MM-DD format
 export const getFirstDayOfMonth = (dateString) => {
-  const [year, month, _] = dateString.split('-').map(num => parseInt(num));
+  const [year, month, _] = dateString.split("-").map((num) => parseInt(num));
 
   return `${year}-${month.toString().padStart(2, "0")}-01`;
-}
+};
 
 //YYYY-MM-DD format
 export const getLastDayOfMonth = (dateString) => {
-  const [year, month, _] = dateString.split('-').map(num => parseInt(num));
+  const [year, month, _] = dateString.split("-").map((num) => parseInt(num));
   const lastDay = new Date(year, month, 0).getDate();
 
   return `${year}-${month.toString().padStart(2, "0")}-${lastDay}`;
-}
+};
+
+export const isEmpty = (array) => !array || array.length === 0;
 
 export default {
   formatDate,
@@ -88,4 +90,5 @@ export default {
   showToast,
   getFirstDayOfMonth,
   getLastDayOfMonth,
+  isEmpty,
 };

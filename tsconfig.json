@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "app/entities/tag.js", "app/entities/monthlyExpense.js", "app/entities/expenseTag.js", "app/entities/expense.js"  ]
 }

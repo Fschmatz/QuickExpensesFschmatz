@@ -1,5 +1,5 @@
 const AppDetails = {
-  appVersion: "0.7.8",
+  appVersion: "0.7.9",
   appName: "Quick Expenses Fschmatz",
   appNameHomePage: "Quick Expenses",
   //repositoryLink: "https://github.com/Fschmatz/date_countdown_fschmatz",
@@ -8,6 +8,7 @@ const AppDetails = {
 
 AppDetails.changelog = `
 ${AppDetails.appVersion}
+- Detalhes do mês
 - ExpenseTag criada
 - Ducks pattern
 - Nova página para criar/editar tag

@@ -1,36 +1,35 @@
 import { FlatList } from "react-native";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchByMonthYear } from "../redux/ducks/expenseDuck";
-import { useLocalSearchParams } from "expo-router";
+import {
+  fetchByMonthYear,
+  getExpensesByMonthYear,
+} from "../redux/ducks/expenseDuck";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import PageContainer from "../components/PageContainer";
-import styled from "styled-components/native";
-import AppColors from "../utils/constants/appColors";
-
-const StyledText = styled.Text`
-  color: ${AppColors.text};
-`;
+import ExpenseCard from "../components/ExpenseCard";
+import { formatDate } from "../utils/functionUtils";
 
 const MonthYearExpensesDetail = () => {
   const { date } = useLocalSearchParams();
   const dispatch = useDispatch();
-  const expensesByMonthYear = useSelector(
-    (state) => state.expenses.expensesByMonthYear
-  );
+  const navigation = useNavigation();
+  const expensesByMonthYear = useSelector(getExpensesByMonthYear);
 
   useEffect(() => {
+    navigation.setOptions({
+      title: "Despesas de " + formatDate(date, "mm/yyyy"),
+    });
     dispatch(fetchByMonthYear(date));
-  }, [dispatch]);
+  }, [dispatch, navigation]);
 
   return (
     <PageContainer>
       <FlatList
         contentContainerStyle={{ gap: 8, paddingBottom: 75 }}
         data={expensesByMonthYear}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item: { id } }) => (
-          <StyledText>{`ID: ${id}`}</StyledText>
-        )}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <ExpenseCard expense={item} />}
       />
     </PageContainer>
   );

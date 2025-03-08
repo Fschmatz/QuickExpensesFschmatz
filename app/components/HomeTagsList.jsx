@@ -14,7 +14,7 @@ const TagsContainer = styled.View`
   padding: 0px 8px;
 `;
 
-const TagChip = styled.TouchableOpacity`
+const HomeTagChip = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   background-color: ${(props) => props.backgroundColor || AppColors.background};
@@ -58,7 +58,7 @@ const HomeTagsList = ({ tags, selectedTag, onSelectTag }) => {
     <StyledScrollView>
       <TagsContainer>
         {tags.map((tag) => (
-          <TagChip
+          <HomeTagChip
             key={tag.id}
             backgroundColor={getBackgroundColor(tag)}
             onPress={() => onSelectTag(tag)}
@@ -66,7 +66,7 @@ const HomeTagsList = ({ tags, selectedTag, onSelectTag }) => {
           >
             <Ionicons name={tag.icon} size={18} color={getTextColor(tag)} />
             <ChipText>{tag.name}</ChipText>
-          </TagChip>
+          </HomeTagChip>
         ))}
       </TagsContainer>
     </StyledScrollView>

@@ -9,7 +9,6 @@ import { addExpense } from "../redux/ducks/expenseDuck";
 import styled from "styled-components/native";
 import { showToast } from "../utils/functionUtils";
 
-
 const Container = styled.View`
   padding: 0px;
   flex: 1;
