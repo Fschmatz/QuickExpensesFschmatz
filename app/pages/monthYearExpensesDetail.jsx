@@ -22,7 +22,7 @@ const MonthYearExpensesDetail = () => {
       title: "Despesas de " + formatDate(date, "mm/yyyy"),
     });
     dispatch(fetchByMonthYear(date));
-  }, [dispatch, navigation]);
+  }, [dispatch, navigation, expensesByMonthYear]);
 
   const handleDelete = (expense) => {
     dispatch(deleteExpense(expense.id));

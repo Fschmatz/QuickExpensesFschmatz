@@ -53,8 +53,8 @@ export const initializeTables = async () => {
           expense_id INTEGER NOT NULL,
           tag_id INTEGER NOT NULL,
           PRIMARY KEY (expense_id, tag_id),
-          FOREIGN KEY (expense_id) REFERENCES expenses(id) ON DELETE CASCADE,
-          FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+          FOREIGN KEY (expense_id) REFERENCES expenses(id),
+          FOREIGN KEY (tag_id) REFERENCES tags(id)
         );`
       );
 

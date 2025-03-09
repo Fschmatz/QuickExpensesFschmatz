@@ -2,8 +2,6 @@ import ExpenseTagDAO from "../dao/expenseTagDAO";
 
 class ExpenseTagService {
   async insert(expenseId, tagId) {
-    console.log(expenseId + "  " + tagId);
-
     await ExpenseTagDAO.insert(expenseId, tagId);
   }
 

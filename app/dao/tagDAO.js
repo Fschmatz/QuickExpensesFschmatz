@@ -14,9 +14,28 @@ class TagDAO {
     return await db.getAllAsync(`SELECT * FROM ${tables.TAGS} order by name;`);
   }
 
-  async deleteById(tag) {
+  /*   async deleteById(tag) {
     const db = await getDatabase();
     await db.runAsync(`DELETE FROM ${tables.TAGS} WHERE id = ?;`, [tag.id]);
+  } */
+
+  async deleteById(tag) {
+    const db = await getDatabase();
+
+    await db.runAsync("BEGIN TRANSACTION");
+
+    try {
+      await db.runAsync(
+        `DELETE FROM ${tables.EXPENSES_TAGS} WHERE tag_id = ?;`,
+        [tag.id]
+      );
+
+      await db.runAsync(`DELETE FROM ${tables.TAGS} WHERE id = ?;`, [tag.id]);
+
+      await db.runAsync("COMMIT");
+    } catch (error) {
+      await db.runAsync("ROLLBACK");
+    }
   }
 
   async deleteAll() {

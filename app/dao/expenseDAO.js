@@ -32,9 +32,28 @@ class ExpenseDAO {
     );
   }
 
-  async deleteById(id) {
+  /*   async deleteById(id) {
     const db = await getDatabase();
     await db.runAsync(`DELETE FROM ${tables.EXPENSES} WHERE id = ?;`, [id]);
+  } */
+
+  async deleteById(id) {
+    const db = await getDatabase();
+
+    await db.runAsync("BEGIN TRANSACTION");
+    
+    try {
+      await db.runAsync(
+        `DELETE FROM ${tables.EXPENSES_TAGS} WHERE expense_id = ?;`,
+        [id]
+      );
+
+      await db.runAsync(`DELETE FROM ${tables.EXPENSES} WHERE id = ?;`, [id]);
+
+      await db.runAsync("COMMIT");
+    } catch (error) {
+      await db.runAsync("ROLLBACK");
+    }
   }
 
   async deleteAll() {
