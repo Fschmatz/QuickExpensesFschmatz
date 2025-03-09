@@ -4,6 +4,10 @@ import AppColors from "../utils/constants/appColors";
 import ListTileWithIcon from "../components/ListTileWithIcon";
 import { ScrollView, Linking } from "react-native";
 import { PageContainer, Separator, SizedBox } from "../components/utils";
+import { exportBackup, importBackup } from "../db/backup";
+import { useDispatch } from "react-redux";
+import { fetchTags } from "../redux/ducks/tagDuck";
+import ButtonWithIcon from "../components/ButtonWithIcon";
 
 const CurrentVersionContainer = styled.View`
   width: 100%;
@@ -29,17 +33,28 @@ const StyledText = styled.Text`
   font-size: 14px;
 `;
 
-const LinkButton = styled.TouchableOpacity``;
+/* const LinkButton = styled.TouchableOpacity``;
 
 const LinkText = styled.Text`
   color: #3498db;
   font-size: 16px;
   text-decoration: underline;
-`;
+`; */
 
 const Settings = () => {
-  const openGitHubRepo = () => {
+  const dispatch = useDispatch();
+
+  const handleOpenGitHubRepo = () => {
     Linking.openURL(AppDetails.repositoryLink);
+  };
+
+  const handleExportBackup = async () => {
+    await exportBackup();
+  };
+
+  const handleImportBackup = async () => {
+    await importBackup();
+    dispatch(fetchTags());
   };
 
   return (
@@ -54,27 +69,53 @@ const Settings = () => {
         <Separator />
 
         <ListTileWithIcon
-          title="Sobre"
-          icon="information-circle-outline"
+          title="Backup"
           titleColor={AppColors.btnDeleteText}
           iconColor={AppColors.btnDeleteText}
-          padding='16px 0px'
         />
 
-        <LinkButton onPress={openGitHubRepo}>
-          <LinkText>Código-Fonte no GitHub</LinkText>
-        </LinkButton>
+        <ListTileWithIcon
+          title="Exportar backup"
+          icon="push-outline"
+          disabled={false}
+          onPress={handleExportBackup}
+        />
 
-        <SizedBox height={10}/>
+        <ListTileWithIcon
+          title="Importar backup"
+          icon="download-outline"
+          disabled={false}
+          onPress={handleImportBackup}
+        />
+
+        <Separator />
+
+        <ListTileWithIcon
+          title="Sobre"
+          titleColor={AppColors.btnDeleteText}
+          iconColor={AppColors.btnDeleteText}
+        />
+
+        <ListTileWithIcon
+          title="Ver código-Fonte no GitHub"
+          icon="link-outline"
+          disabled={false}
+          onPress={handleOpenGitHubRepo}
+        />
+
+        {/*   
+        <LinkButton onPress={handleOpenGitHubRepo}>
+          <LinkText></LinkText>
+        </LinkButton> 
+        */}
 
         <Separator />
 
         <ListTileWithIcon
           title="Changelog"
-          icon="document-text-outline"
           titleColor={AppColors.btnDeleteText}
           iconColor={AppColors.btnDeleteText}
-          padding='16px 0px 0px 0px'
+          padding="16px 0px 0px 0px"
         />
 
         <ChangelogContainer>

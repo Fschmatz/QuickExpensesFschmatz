@@ -18,6 +18,7 @@ import { createTag } from "../entities/tag";
 import Label from "../components/Label";
 import { showToast } from "../utils/functionUtils";
 import { selectTagById } from "../redux/selectors/tagSelector";
+import ButtonWithIcon from "../components/ButtonWithIcon";
 
 const NameInput = styled.TextInput`
   background-color: transparent;
@@ -36,23 +37,6 @@ const IconsContainer = styled.View`
   gap: 8px;
   align-items: center;
   justify-content: center;
-`;
-
-const SaveButton = styled.TouchableOpacity`
-  background-color: ${AppColors.btnConfirmBackground};
-  padding: 12px;
-  border-radius: 28px;
-  align-items: center;
-  justify-content: center;
-  margin: 25px 0px;
-  flex-direction: row;
-`;
-
-const SaveButtonText = styled.Text`
-  color: ${AppColors.btnConfirmText};
-  font-size: 16px;
-  font-weight: 500;
-  margin-left: 8px;
 `;
 
 const IconButton = styled(TouchableOpacity)`
@@ -156,14 +140,13 @@ const StoreTag = () => {
             ))}
           </IconsContainer>
 
-          <SaveButton onPress={handleCreateTag}>
-            <Ionicons
-              name="save-outline"
-              size={20}
-              color={AppColors.btnConfirmText}
-            />
-            <SaveButtonText>Salvar</SaveButtonText>
-          </SaveButton>
+          <ButtonWithIcon
+            icon={"save-outline"}
+            bgColor={AppColors.btnConfirmBackground}
+            textColor={AppColors.btnConfirmText}
+            text={"Salvar"}
+            onPress={handleCreateTag}
+          />
         </ScrollView>
       </KeyboardAvoidingView>
     </PageContainer>

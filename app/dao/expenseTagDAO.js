@@ -41,10 +41,31 @@ class ExpenseTagDAO {
     await db.runAsync(`DELETE FROM ${tables.EXPENSES_TAGS};`);
   }
 
+  async importFromBackup(expensesTags) {
+    const db = await getDatabase();
+
+    try {
+      await db.execAsync("BEGIN TRANSACTION;");
+
+      await db.runAsync(`DELETE FROM ${tables.EXPENSES_TAGS};`);
+
+      const insertQuery = `INSERT INTO ${tables.EXPENSES_TAGS} (expense_id, tag_id) VALUES (?, ?);`;
+
+      for (const expenseTag of expensesTags) {
+        await db.runAsync(insertQuery, [
+          expenseTag.expense_id,
+          expenseTag.tag_id,
+        ]);
+      }
+
+      await db.execAsync("COMMIT;");
+    } catch (error) {
+      await db.execAsync("ROLLBACK;");
+    }
+  }
 }
 
 export default new ExpenseTagDAO();
-
 
 /* async unlink(expenseId, tagId) {
   const db = await getDatabase();

@@ -1,6 +1,5 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import ExpenseService from "../../service/expenseService";
-import ExpenseTagService from "../../service/expenseTagService";
 import {
   fetchExpensesSuccess,
   fetchExpensesFailure,

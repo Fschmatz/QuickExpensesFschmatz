@@ -1,13 +1,20 @@
 const AppDetails = {
-  appVersion: "0.8.1",
+  appVersion: "1.0.0",
   appName: "Quick Expenses Fschmatz",
   appNameHomePage: "Quick Expenses",
   repositoryLink: "https://github.com/Fschmatz/QuickExpensesFschmatz",
-  //backupFileName: "quick_expenses_backup",
+  backupFileName: "quick_expenses_backup",
 };
 
 AppDetails.changelog = `
 ${AppDetails.appVersion}
+- Tecnicamente usável
+
+0.9.0
+- Exportar backup
+- Importar backup
+
+0.8.1
 - Detalhes do mês
 - Deletar despesa
 - Configurações organizadas

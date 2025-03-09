@@ -9,6 +9,9 @@ import { ScrollView } from "react-native";
 import { dropAllTables } from "../db/database";
 import * as Clipboard from "expo-clipboard";
 import { PageContainer } from "../components/utils";
+import { exportBackup, importBackup } from "../db/backup";
+import { useDispatch } from "react-redux";
+import { fetchTags } from "../redux/ducks/tagDuck";
 
 const Button = styled.TouchableOpacity`
   background-color: ${(props) => props.backgroundColor};
@@ -31,12 +34,25 @@ const Container = styled.View`
 `;
 
 const Debug = () => {
+  const dispatch = useDispatch();
+
+  const createButtonDebug = (
+    onPress,
+    text,
+    backgroundColor = AppColors.btnDeleteBackground
+  ) => (
+    <Button onPress={onPress} backgroundColor={backgroundColor}>
+      <ButtonText>{text}</ButtonText>
+    </Button>
+  );
+
   const handleDeleteAllExpenses = async () => {
     await ExpenseService.deleteAll();
   };
 
   const handleDeleteAllTags = async () => {
     await TagService.deleteAll();
+    reloadTags();
   };
 
   const handleCreateTags = async () => {
@@ -67,6 +83,8 @@ const Debug = () => {
 
     const newTag6 = createTag(null, "Mercado", "#36A348", "cart-outline");
     await TagService.insert(newTag6);
+
+    reloadTags();
   };
 
   const handleInsertExpenses = async () => {
@@ -107,15 +125,18 @@ const Debug = () => {
     await Clipboard.setStringAsync(JSON.stringify(data));
   };
 
-  const createButtonDebug = (
-    onPress,
-    text,
-    backgroundColor = AppColors.btnDeleteBackground
-  ) => (
-    <Button onPress={onPress} backgroundColor={backgroundColor}>
-      <ButtonText>{text}</ButtonText>
-    </Button>
-  );
+  /*  const handleExportBackup = async () => {
+    await exportBackup();
+  };
+
+  const handleImportBackup = async () => {
+    await importBackup();
+    reloadTags();
+  }; */
+
+  const reloadTags = async () => {
+    dispatch(fetchTags());
+  };
 
   return (
     <PageContainer>
@@ -141,6 +162,10 @@ const Debug = () => {
             "Copiar Despesas Mensais"
           )}
           {createButtonDebug(handleCopyAllExpensesTags, "Copiar Tags_Despesas")}
+
+          {/* {createButtonDebug(handleExportBackup, "Criar Backup", "#bb5e28")}
+          {createButtonDebug(handleImportBackup, "Importar Backup", "#bb5e28")} */}
+          
         </Container>
       </ScrollView>
     </PageContainer>

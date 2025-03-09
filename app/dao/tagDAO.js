@@ -33,6 +33,26 @@ class TagDAO {
       [tag.name, tag.color, tag.icon, tag.id]
     );
   }
+
+  async importFromBackup(tags) {
+    const db = await getDatabase();
+
+    try {
+      await db.execAsync("BEGIN TRANSACTION;");
+
+      await db.runAsync(`DELETE FROM ${tables.TAGS};`);
+
+      const insertQuery = `INSERT INTO ${tables.TAGS} (id, name, color, icon) VALUES (?, ?, ?, ?);`;
+
+      for (const tag of tags) {
+        await db.runAsync(insertQuery, [tag.id, tag.name, tag.color, tag.icon]);
+      }
+
+      await db.execAsync("COMMIT;");
+    } catch (error) {
+      await db.execAsync("ROLLBACK;");
+    }
+  }
 }
 
 export default new TagDAO();

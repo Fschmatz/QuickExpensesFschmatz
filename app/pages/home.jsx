@@ -29,7 +29,7 @@ const StyledInputText = styled.TextInput`
   text-align: right;
   align-self: flex-end;
   margin-right: 5px;
-  height: 76%;
+  height: 77%;
 `;
 
 const BottomContainer = styled.View`
@@ -143,7 +143,7 @@ const Home = () => {
   const insertExpense = async (inputValue) => {
     dispatch(
       addExpense({
-        value: inputValue,
+        value: inputValue.replace(',','.'),
         tagId: selectedTag?.id || "",
       })
     );

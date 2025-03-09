@@ -21,7 +21,7 @@ const HomeHeaderButtons = () => {
 
   return (
     <Container>
-      <IconButton icon="build-outline" onPress={navigateToDebug} />
+      <IconButton icon="bug-outline" onPress={navigateToDebug} />
       <IconButton icon="receipt-outline" onPress={navigateToMonthlyExpenses} />
       <IconButton icon="pricetag-outline" onPress={navigateToTags} />
       <LastIconButton icon="settings-outline" onPress={navigateToSettings} />

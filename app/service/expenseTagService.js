@@ -23,7 +23,10 @@ class ExpenseTagService {
     await ExpenseTagDAO.deleteAll();
   }
 
-  async delete(expense) {}
+  async importFromBackup(expensesTags) {
+    await ExpenseTagDAO.importFromBackup(expensesTags);
+  }
+
 }
 
 export default new ExpenseTagService();

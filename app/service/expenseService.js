@@ -1,5 +1,4 @@
 import ExpenseDAO from "../dao/expenseDAO";
-import createExpense from "../entities/expense";
 
 class ExpenseService {
   async insert(value) {
@@ -27,10 +26,6 @@ class ExpenseService {
     await ExpenseDAO.update(expense);
   }
 
-  async fetchByMonthYearXX(date) {
-    return await ExpenseDAO.getExpensesByMonthYear(date);
-  }
-
   async fetchByMonthYear(date) {
     const data = await ExpenseDAO.getExpensesByMonthYearWithTags(date);
     const expenseMap = new Map();
@@ -48,6 +43,16 @@ class ExpenseService {
     return Array.from(expenseMap.values());
   }
 
+  async importFromBackup(expenses) {
+    await ExpenseDAO.importFromBackup(expenses);
+  }
+
 }
 
 export default new ExpenseService();
+
+
+
+/* async fetchByMonthYearXX(date) {
+  return await ExpenseDAO.getExpensesByMonthYear(date);
+} */

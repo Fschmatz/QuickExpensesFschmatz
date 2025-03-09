@@ -34,9 +34,7 @@ class ExpenseDAO {
 
   async deleteById(id) {
     const db = await getDatabase();
-    await db.runAsync(`DELETE FROM ${tables.EXPENSES} WHERE id = ?;`, [
-      id,
-    ]);
+    await db.runAsync(`DELETE FROM ${tables.EXPENSES} WHERE id = ?;`, [id]);
   }
 
   async deleteAll() {
@@ -89,14 +87,30 @@ class ExpenseDAO {
 
     return await db.getAllAsync(query, [firstDayMonth, lastDayMonth]);
   }
+
+  async importFromBackup(expenses) {
+    const db = await getDatabase();
+
+    try {
+      await db.execAsync("BEGIN TRANSACTION;");
+
+      await db.runAsync(`DELETE FROM ${tables.EXPENSES};`);
+
+      const insertQuery = `INSERT INTO ${tables.EXPENSES} (id, createdDate, value) VALUES (?, ?, ?);`;
+
+      for (const expense of expenses) {
+        await db.runAsync(insertQuery, [
+          expense.id,
+          expense.createdDate,
+          expense.value,
+        ]);
+      }
+
+      await db.execAsync("COMMIT;");
+    } catch (error) {
+      await db.execAsync("ROLLBACK;");
+    }
+  }
 }
 
 export default new ExpenseDAO();
-
-/* 
-`SELECT strftime('%Y-%m-01', date) AS date
-,      SUM(value) AS value
-FROM ${tables.EXPENSES}
-GROUP BY strftime('%Y-%m', date)
-ORDER BY date DESC;` 
-*/

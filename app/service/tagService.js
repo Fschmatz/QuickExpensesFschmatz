@@ -20,6 +20,10 @@ class TagService {
   async update(tag) {
     await TagDAO.update(tag);
   }
+
+  async importFromBackup(tags) {
+    await TagDAO.importFromBackup(tags);
+  }
 }
 
 export default new TagService();
