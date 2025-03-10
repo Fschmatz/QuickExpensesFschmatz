@@ -3,7 +3,7 @@ import AppColors from "../utils/constants/appColors";
 import { formatDate, formatMoney } from "../utils/functionUtils";
 import { useRouter } from "expo-router";
 
-const CardContainer = styled.TouchableOpacity`
+const CardContainer = styled.Pressable`
   background-color: ${AppColors.primaryContainer};
   padding: 16px;
   border-radius: 12px;
@@ -39,6 +39,10 @@ const MonthlyExpenseCard = ({ monthlyExpense }) => {
   return (
     <CardContainer
       onPress={() => navigateToMonthlyExpenseDetail(monthlyExpense.date)}
+      android_ripple={{ color: "rgba(0, 0, 0, 0.1)" }}
+      style={({ pressed }) => [
+        pressed && { opacity: 0.5, backgroundColor: "#FFFFFF" },
+      ]}
     >
       <CardContent>
         <DateText>{formatDate(monthlyExpense.date, "mm/yyyy")}</DateText>

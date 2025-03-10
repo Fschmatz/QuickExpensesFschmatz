@@ -12,18 +12,16 @@ const LastIconButton = styled(IconButton)`
 `;
 
 const HomeHeaderButtons = () => {
-  const navigation = useNavigation();
-  const navigateToDebug = () => navigation.navigate("pages/debug");
+  const navigation = useNavigation();  
   const navigateToMonthlyExpenses = () =>
     navigation.navigate("pages/monthlyExpensesList");
   const navigateToTags = () => navigation.navigate("pages/tagsList");
   const navigateToSettings = () => navigation.navigate("pages/settings");
 
   return (
-    <Container>
-      <IconButton icon="bug-outline" onPress={navigateToDebug} />
+    <Container>     
+      <IconButton icon="pricetags-outline" onPress={navigateToTags} />
       <IconButton icon="receipt-outline" onPress={navigateToMonthlyExpenses} />
-      <IconButton icon="pricetag-outline" onPress={navigateToTags} />
       <LastIconButton icon="settings-outline" onPress={navigateToSettings} />
     </Container>
   );

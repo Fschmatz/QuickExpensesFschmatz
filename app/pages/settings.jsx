@@ -3,11 +3,11 @@ import AppDetails from "../utils/appDetails";
 import AppColors from "../utils/constants/appColors";
 import ListTileWithIcon from "../components/ListTileWithIcon";
 import { ScrollView, Linking } from "react-native";
-import { PageContainer, Separator, SizedBox } from "../components/utils";
+import { PageContainer, Separator } from "../components/utils";
 import { exportBackup, importBackup } from "../db/backup";
 import { useDispatch } from "react-redux";
 import { fetchTags } from "../redux/ducks/tagDuck";
-import ButtonWithIcon from "../components/ButtonWithIcon";
+import { useNavigation } from "expo-router";
 
 const CurrentVersionContainer = styled.View`
   width: 100%;
@@ -26,23 +26,11 @@ const CurrentVersionText = styled.Text`
   font-weight: 600;
 `;
 
-const ChangelogContainer = styled.View``;
-
-const StyledText = styled.Text`
-  color: ${AppColors.text};
-  font-size: 14px;
-`;
-
-/* const LinkButton = styled.TouchableOpacity``;
-
-const LinkText = styled.Text`
-  color: #3498db;
-  font-size: 16px;
-  text-decoration: underline;
-`; */
-
 const Settings = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const navigateToChangelog = () => navigation.navigate("pages/changelog");
+  const navigateToDebug = () => navigation.navigate("pages/debug");
 
   const handleOpenGitHubRepo = () => {
     Linking.openURL(AppDetails.repositoryLink);
@@ -72,6 +60,7 @@ const Settings = () => {
           title="Backup"
           titleColor={AppColors.btnDeleteText}
           iconColor={AppColors.btnDeleteText}
+          boldText={true}
         />
 
         <ListTileWithIcon
@@ -94,6 +83,7 @@ const Settings = () => {
           title="Sobre"
           titleColor={AppColors.btnDeleteText}
           iconColor={AppColors.btnDeleteText}
+          boldText={true}
         />
 
         <ListTileWithIcon
@@ -103,24 +93,19 @@ const Settings = () => {
           onPress={handleOpenGitHubRepo}
         />
 
-        {/*   
-        <LinkButton onPress={handleOpenGitHubRepo}>
-          <LinkText></LinkText>
-        </LinkButton> 
-        */}
-
-        <Separator />
-
         <ListTileWithIcon
           title="Changelog"
-          titleColor={AppColors.btnDeleteText}
-          iconColor={AppColors.btnDeleteText}
-          padding="16px 0px 0px 0px"
+          icon="document-text-outline"
+          disabled={false}
+          onPress={navigateToChangelog}
         />
 
-        <ChangelogContainer>
-          <StyledText>{AppDetails.changelog}</StyledText>
-        </ChangelogContainer>
+        <ListTileWithIcon
+          title="Debug"
+          icon="bug-outline"
+          disabled={false}
+          onPress={navigateToDebug}
+        />
       </ScrollView>
     </PageContainer>
   );

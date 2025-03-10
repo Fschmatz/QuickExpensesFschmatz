@@ -15,6 +15,7 @@ import {
   fetchByMonthYearFailure,
   fetchExpenses,
   fetchMonthlyExpenses,
+  fetchByMonthYear,
 } from "../ducks/expenseDuck";
 import { addExpenseTag } from "../ducks/expenseTagDuck";
 
@@ -60,10 +61,12 @@ function* handleAddExpense(action) {
 
 function* handleDeleteExpense(action) {
   try {
-    yield call([ExpenseService, "deleteById"], action.payload);
-    yield put(deleteExpenseSuccess());
-    //yield put(fetchExpenses());
+    const { expenseId, date } = action.payload;
+
+    yield call([ExpenseService, "deleteById"], expenseId);
     yield put(fetchMonthlyExpenses());
+    yield put(fetchByMonthYear(date));
+    yield put(deleteExpenseSuccess());
   } catch (error) {
     yield put(deleteExpenseFailure(error.toString()));
   }

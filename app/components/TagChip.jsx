@@ -19,10 +19,13 @@ const ChipText = styled.Text`
 `;
 
 const TagChip = ({ tag }) => {
+  {/* Pequeno truque para deixar os Sem Tag por ultimo nos detalhes */}
+  const name = tag.name === "zzzzz" ? "Sem Tag" : tag.name;
+
   return (
     <ChipContainer>
-      <Ionicons name={tag.icon} size={18} color={tag.color} />
-      <ChipText>{tag.name}</ChipText>
+      <Ionicons name={tag.icon} size={18} color={tag.color} />      
+      <ChipText>{name}</ChipText>
     </ChipContainer>
   );
 };

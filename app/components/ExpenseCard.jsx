@@ -5,7 +5,7 @@ import TagChip from "./TagChip";
 import { TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-const CardContainer = styled.View`
+const CardContainer = styled.Pressable`
   background-color: ${AppColors.primaryContainer};
   padding: 12px 16px;
   border-radius: 12px;
@@ -28,46 +28,19 @@ const DateText = styled.Text`
   color: ${AppColors.text};
 `;
 
-const TagsContainer = styled.View`
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 6px;
-`;
-
-const BottomRowContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-`;
-
 const ExpenseCard = ({ expense, onDelete }) => {
   return (
-    <CardContainer>
+    <CardContainer
+      onLongPress={() => onDelete(expense)}
+      android_ripple={{ color: "rgba(0, 0, 0, 0.1)" }}
+      style={({ pressed }) => [
+        pressed && { opacity: 0.5, backgroundColor: "#FFFFFF" },
+      ]}
+    >
       <TopRowContainer>
         <DateText>{formatDate(expense.createdDate, "dd/mm/yyyy")}</DateText>
         <ValueText>R$ {formatMoney(expense.value)}</ValueText>
       </TopRowContainer>
-
-      <BottomRowContainer>
-        <View style={{ flex: 1 }}>
-          {!isEmpty(expense.tags) && (
-            <TagsContainer>
-              {expense.tags.map((tag) => (
-                <TagChip key={tag.id} tag={tag} />
-              ))}
-            </TagsContainer>
-          )}
-        </View>
-        <TouchableOpacity onPress={() => onDelete(expense)}>
-          <Ionicons
-            name="trash-outline"
-            size={20}
-            color={AppColors.text}     
-            style={{ marginTop: !isEmpty(expense.tags) ? 12 : 5}}      
-          />
-        </TouchableOpacity>
-      </BottomRowContainer>
     </CardContainer>
   );
 };
