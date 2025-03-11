@@ -7,6 +7,9 @@ const DELETE_TAG_FAILURE = "tag/deleteTagFailure";
 const ADD_TAG = "tag/addTag";
 const ADD_TAG_SUCCESS = "tag/addTagSuccess";
 const ADD_TAG_FAILURE = "tag/addTagFailure";
+const UPDATE_TAG = "tag/updateTag";
+const UPDATE_TAG_SUCCESS = "tag/updateTagSuccess";
+const UPDATE_TAG_FAILURE = "tag/updateTagFailure";
 
 export const fetchTags = () => ({ type: FETCH_TAGS });
 export const fetchTagsSuccess = (data) => ({
@@ -32,6 +35,13 @@ export const addTagFailure = (error) => ({
   payload: error,
 });
 
+export const updateTag = (tag) => ({ type: UPDATE_TAG, payload: tag });
+export const updateTagSuccess = () => ({ type: UPDATE_TAG_SUCCESS });
+export const updateTagFailure = (error) => ({
+  type: UPDATE_TAG_FAILURE,
+  payload: error,
+});
+
 const initialState = {
   list: [],
   loading: false,
@@ -43,6 +53,11 @@ const actionHandlers = {
   [FETCH_TAGS]: (state) => ({ ...state, loading: true, error: null }),
   [DELETE_TAG]: (state) => ({ ...state, loading: true, error: null }),
   [ADD_TAG]: (state) => ({ ...state, loading: true, error: null }),
+  [UPDATE_TAG]: (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  }),  
 
   //SUCCESS
   [FETCH_TAGS_SUCCESS]: (state, action) => ({
@@ -52,6 +67,7 @@ const actionHandlers = {
   }),
   [DELETE_TAG_SUCCESS]: (state) => ({ ...state, loading: false }),
   [ADD_TAG_SUCCESS]: (state) => ({ ...state, loading: false }),
+  [UPDATE_TAG_SUCCESS]: (state) => ({ ...state, loading: false }),
 
   //FAILURE
   [FETCH_TAGS_FAILURE]: (state, action) => ({
@@ -65,6 +81,11 @@ const actionHandlers = {
     error: action.payload,
   }),
   [ADD_TAG_FAILURE]: (state, action) => ({
+    ...state,
+    loading: false,
+    error: action.payload,
+  }),
+  [UPDATE_TAG_FAILURE]: (state, action) => ({
     ...state,
     loading: false,
     error: action.payload,

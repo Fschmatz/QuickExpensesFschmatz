@@ -5,13 +5,12 @@ import ExpenseTagService from "../service/expenseTagService";
 import TagService from "../service/tagService";
 import { createTag } from "../entities/tag";
 import ExpenseDAO from "../dao/expenseDAO";
-import { ScrollView } from "react-native";
 import { dropAllTables } from "../db/database";
 import * as Clipboard from "expo-clipboard";
 import { PageContainer } from "../components/utils";
-import { exportBackup, importBackup } from "../db/backup";
 import { useDispatch } from "react-redux";
 import { fetchTags } from "../redux/ducks/tagDuck";
+//import { exportBackup, importBackup } from "../db/backup";
 
 const Button = styled.TouchableOpacity`
   background-color: ${(props) => props.backgroundColor};
@@ -140,34 +139,31 @@ const Debug = () => {
 
   return (
     <PageContainer>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 75 }}>
-        <Container>
-          {createButtonDebug(
-            handleDropTables,
-            "### Dropar Tabelas ###",
-            "#a11212"
-          )}
-          {createButtonDebug(
-            handleDeleteAllExpenses,
-            "Excluir Despesas",
-            "#aa3737"
-          )}
-          {createButtonDebug(handleDeleteAllTags, "Excluir Tags", "#aa3737")}
-          {createButtonDebug(handleInsertExpenses, "Criar Despesas", "#1e5b94")}
-          {createButtonDebug(handleCreateTags, "Criar Tags", "#1e5b94")}
-          {createButtonDebug(handleCopyAllExpenses, "Copiar Despesas")}
-          {createButtonDebug(handleCopyAllTags, "Copiar Tags")}
-          {createButtonDebug(
-            handleCopyAllMonthlyExpenses,
-            "Copiar Despesas Mensais"
-          )}
-          {createButtonDebug(handleCopyAllExpensesTags, "Copiar Tags_Despesas")}
+      <Container>
+        {createButtonDebug(
+          handleDropTables,
+          "### Dropar Tabelas ###",
+          "#a11212"
+        )}
+        {createButtonDebug(
+          handleDeleteAllExpenses,
+          "Excluir Despesas",
+          "#aa3737"
+        )}
+        {createButtonDebug(handleDeleteAllTags, "Excluir Tags", "#aa3737")}
+        {createButtonDebug(handleInsertExpenses, "Criar Despesas", "#1e5b94")}
+        {createButtonDebug(handleCreateTags, "Criar Tags", "#1e5b94")}
+        {createButtonDebug(handleCopyAllExpenses, "Copiar Despesas")}
+        {createButtonDebug(handleCopyAllTags, "Copiar Tags")}
+        {createButtonDebug(
+          handleCopyAllMonthlyExpenses,
+          "Copiar Despesas Mensais"
+        )}
+        {createButtonDebug(handleCopyAllExpensesTags, "Copiar Tags_Despesas")}
 
-          {/* {createButtonDebug(handleExportBackup, "Criar Backup", "#bb5e28")}
+        {/* {createButtonDebug(handleExportBackup, "Criar Backup", "#bb5e28")}
           {createButtonDebug(handleImportBackup, "Importar Backup", "#bb5e28")} */}
-          
-        </Container>
-      </ScrollView>
+      </Container>
     </PageContainer>
   );
 };

@@ -16,6 +16,11 @@ const DELETE_ALL_EXPENSES_FAILURE = "expense/deleteAllExpensesFailure";
 const FETCH_BY_MONTH_YEAR = "expense/fetchByMonthYear";
 const FETCH_BY_MONTH_YEAR_SUCCESS = "expense/fetchByMonthYearSuccess";
 const FETCH_BY_MONTH_YEAR_FAILURE = "expense/fetchByMonthYearFailure";
+const CLEAR_EXPENSES_BY_MONTH_YEAR = "expense/clearExpensesByMonthYear";
+const CLEAR_EXPENSES_BY_MONTH_YEAR_SUCCESS =
+  "expense/clearExpensesByMonthYearSuccess";
+const CLEAR_EXPENSES_BY_MONTH_YEAR_FAILURE =
+  "expense/clearExpensesByMonthYearFailure";
 
 export const fetchExpenses = () => ({ type: FETCH_EXPENSES });
 export const fetchExpensesSuccess = (data) => ({
@@ -76,6 +81,17 @@ export const fetchByMonthYearFailure = (error) => ({
   payload: error,
 });
 
+export const clearExpensesByMonthYear = () => ({
+  type: CLEAR_EXPENSES_BY_MONTH_YEAR,
+});
+export const clearExpensesByMonthYearSuccess = () => ({
+  type: CLEAR_EXPENSES_BY_MONTH_YEAR_SUCCESS,
+});
+export const clearExpensesByMonthYearFailure = (error) => ({
+  type: CLEAR_EXPENSES_BY_MONTH_YEAR_FAILURE,
+  payload: error,
+});
+
 const initialState = {
   list: [],
   monthlyList: [],
@@ -99,6 +115,7 @@ const actionHandlers = {
   [DELETE_EXPENSE]: setLoading,
   [DELETE_ALL_EXPENSES]: setLoading,
   [FETCH_BY_MONTH_YEAR]: setLoading,
+  [CLEAR_EXPENSES_BY_MONTH_YEAR]: setLoading,
 
   // SUCCESS
   [FETCH_EXPENSES_SUCCESS]: (state, action) => ({
@@ -119,6 +136,11 @@ const actionHandlers = {
   [ADD_EXPENSE_SUCCESS]: (state) => ({ ...state, loading: false }),
   [DELETE_EXPENSE_SUCCESS]: (state) => ({ ...state, loading: false }),
   [DELETE_ALL_EXPENSES_SUCCESS]: (state) => ({ ...state, loading: false }),
+  [CLEAR_EXPENSES_BY_MONTH_YEAR_SUCCESS]: (state) => ({
+    ...state,
+    loading: false,
+    expensesByMonthYear: [],
+  }),
 
   // FAILURE
   [FETCH_EXPENSES_FAILURE]: setError,
@@ -127,6 +149,11 @@ const actionHandlers = {
   [DELETE_EXPENSE_FAILURE]: setError,
   [DELETE_ALL_EXPENSES_FAILURE]: setError,
   [FETCH_BY_MONTH_YEAR_FAILURE]: setError,
+  [CLEAR_EXPENSES_BY_MONTH_YEAR_FAILURE]: (state, action) => ({
+    ...state,
+    loading: false,
+    error: action.payload,
+  }),
 };
 
 export default function expenseReducer(state = initialState, action) {

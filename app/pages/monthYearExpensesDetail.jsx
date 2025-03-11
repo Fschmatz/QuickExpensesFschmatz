@@ -1,4 +1,4 @@
-import { FlatList, Text, View } from "react-native";
+import { View } from "react-native";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,10 +9,11 @@ import {
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { PageContainer } from "../components/utils";
 import ExpenseCard from "../components/ExpenseCard";
-import { formatDate } from "../utils/functionUtils";
+import { formatDate, isEmpty } from "../utils/functionUtils";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import TagChip from "../components/TagChip";
 import AppColors from "../utils/constants/appColors";
+import { clearExpensesByMonthYear } from "../redux/ducks/expenseDuck";
 
 const MonthYearExpensesDetail = () => {
   const { date } = useLocalSearchParams();
@@ -28,6 +29,10 @@ const MonthYearExpensesDetail = () => {
       title: "Despesas de " + formatDate(date, "mm/yyyy"),
     });
     dispatch(fetchByMonthYear(date));
+
+    return () => {
+      dispatch(clearExpensesByMonthYear());
+    };
   }, [dispatch, navigation]);
 
   useEffect(() => {
@@ -61,15 +66,17 @@ const MonthYearExpensesDetail = () => {
       });
     });
 
-    tagExpenseMap.set("untagged", {
-      tag: {
-        id: "99999",
-        name: "zzzzz",
-        color: AppColors.text,
-        icon: "pricetag-outline",
-      },
-      expenses: untaggedExpenses,
-    });
+    if (!isEmpty(untaggedExpenses)) {
+      tagExpenseMap.set("untagged", {
+        tag: {
+          id: "99999",
+          name: "zzzzz",
+          color: AppColors.text,
+          icon: "pricetag-outline",
+        },
+        expenses: untaggedExpenses,
+      });
+    }
 
     return tagExpenseMap;
   }
@@ -87,7 +94,6 @@ const MonthYearExpensesDetail = () => {
           date: date,
         })
       );
-      //dispatch(fetchByMonthYear(date));
     }
     setDialogVisible(false);
     setExpenseToDelete(null);

@@ -14,11 +14,9 @@ const StyledText = styled.Text`
 const Changelog = () => {
   return (
     <PageContainer>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 75 }}>
-        <ChangelogContainer>
-          <StyledText>{AppDetails.changelog}</StyledText>
-        </ChangelogContainer>
-      </ScrollView>
+      <ChangelogContainer>
+        <StyledText>{AppDetails.changelog}</StyledText>
+      </ChangelogContainer>
     </PageContainer>
   );
 };

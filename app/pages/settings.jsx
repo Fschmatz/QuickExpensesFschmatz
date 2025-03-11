@@ -64,14 +64,14 @@ const Settings = () => {
         />
 
         <ListTileWithIcon
-          title="Exportar backup"
+          title="Exportar"
           icon="push-outline"
           disabled={false}
           onPress={handleExportBackup}
         />
 
         <ListTileWithIcon
-          title="Importar backup"
+          title="Importar"
           icon="download-outline"
           disabled={false}
           onPress={handleImportBackup}
@@ -87,7 +87,7 @@ const Settings = () => {
         />
 
         <ListTileWithIcon
-          title="Ver código-Fonte no GitHub"
+          title="Ver código-fonte no GitHub"
           icon="link-outline"
           disabled={false}
           onPress={handleOpenGitHubRepo}

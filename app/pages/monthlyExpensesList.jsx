@@ -14,7 +14,7 @@ const MonthlyExpensesList = () => {
   }, [dispatch]);
 
   return (
-    <PageContainer>
+    <PageContainer addScrollView={false}>
       <FlatList
         contentContainerStyle={{ gap: 8, paddingBottom: 75 }}
         data={monthlyExpenses}

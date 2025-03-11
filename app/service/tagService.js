@@ -18,7 +18,11 @@ class TagService {
   }
 
   async update(tag) {
+    console.log(tag);
+    
     await TagDAO.update(tag);
+
+    console.log('opi');
   }
 
   async importFromBackup(tags) {

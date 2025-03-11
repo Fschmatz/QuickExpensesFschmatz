@@ -16,6 +16,8 @@ import {
   fetchExpenses,
   fetchMonthlyExpenses,
   fetchByMonthYear,
+  clearExpensesByMonthYearSuccess,
+  clearExpensesByMonthYearFailure,
 } from "../ducks/expenseDuck";
 import { addExpenseTag } from "../ducks/expenseTagDuck";
 
@@ -95,6 +97,14 @@ function* handleFetchByMonthYear(action) {
   }
 }
 
+function* handleClearExpenses() {
+  try {  
+    yield put(clearExpensesByMonthYearSuccess());
+  } catch (error) {
+    yield put(clearExpensesByMonthYearFailure(error.toString()));
+  }
+}
+
 export default function* expenseSaga() {
   yield takeLatest("expense/fetchExpenses", handleFetchExpenses);
   yield takeLatest("expense/fetchMonthlyExpenses", handleFetchMonthlyExpenses);
@@ -102,4 +112,5 @@ export default function* expenseSaga() {
   yield takeLatest("expense/deleteExpense", handleDeleteExpense);
   yield takeLatest("expense/deleteAllExpenses", handleDeleteAllExpenses);
   yield takeLatest("expense/fetchByMonthYear", handleFetchByMonthYear);
+  yield takeLatest("expense/clearExpensesByMonthYear", handleClearExpenses);
 }

@@ -45,7 +45,7 @@ class TagDAO {
 
   async update(tag) {
     const db = await getDatabase();
-    await db.execAsync(
+    await db.runAsync(
       `UPDATE ${tables.TAGS} 
        SET name = ?, color = ?, icon = ?
        WHERE id = ?;`,

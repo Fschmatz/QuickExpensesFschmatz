@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  TouchableOpacity,
-  ScrollView,
-  KeyboardAvoidingView,
-} from "react-native";
+import { TouchableOpacity, KeyboardAvoidingView, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { PageContainer, SizedBox } from "../components/utils";
 import AppColors from "../utils/constants/appColors";
 import { TagIcons } from "../utils/constants/tagIcons";
-import { addTag } from "../redux/ducks/tagDuck";
+import { addTag, updateTag } from "../redux/ducks/tagDuck";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
@@ -83,13 +79,25 @@ const StoreTag = () => {
       return;
     }
 
-    // insert
+    if (isInsert) {
+      const newTag = createTag(null, name, selectedColor, selectedIcon);
+      showToast("Tag criada com sucesso!");
+      dispatch(addTag(newTag));
+    }
 
-    const newTag = createTag(null, name, selectedColor, selectedIcon);
-    showToast("Tag criada com sucesso!");
-    dispatch(addTag(newTag));
+    if (isUpdate) {
+      const updatedTag = {
+        ...tagForUpdate,
+        name: name,
+        color: selectedColor,
+        icon: selectedIcon,
+      };
 
-    // fazer o update
+      console.log(updatedTag);
+
+      showToast("Tag atualizada com sucesso!");
+      dispatch(updateTag(updatedTag));
+    }
 
     router.back();
   };
@@ -101,45 +109,45 @@ const StoreTag = () => {
   return (
     <PageContainer>
       <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <Label>Nome:</Label>
-          <NameInput
-            placeholder=""
-            value={name}
-            onChangeText={setName}
-            maxLength={30}
-            autoFocus={Boolean(isInsert)}
-          />
+        <Label>Nome:</Label>
+        <NameInput
+          placeholder=""
+          value={name}
+          onChangeText={setName}
+          maxLength={30}
+          autoFocus={Boolean(isInsert)}
+        />
 
-          <SizedBox height={10} />
+        <SizedBox height={10} />
 
-          <Label>Cor:</Label>
+        <Label>Cor:</Label>
 
-          <ColorPicker value={selectedColor} onComplete={handleSelectColor}>
-            <Panel1 />
-            <HueSlider style={{ marginTop: 15 }} />
-          </ColorPicker>
+        <ColorPicker value={selectedColor} onComplete={handleSelectColor}>
+          <Panel1 />
+          <HueSlider style={{ marginTop: 15 }} />
+        </ColorPicker>
 
-          <SizedBox height={10} />
+        <SizedBox height={10} />
 
-          <Label>Ícone:</Label>
+        <Label>Ícone:</Label>
 
-          <IconsContainer>
-            {TagIcons.map((icon, index) => (
-              <IconButton
-                key={index}
-                selected={selectedIcon === icon}
-                onPress={() => setSelectedIcon(icon)}
-              >
-                <Ionicons
-                  name={icon}
-                  size={32}
-                  color={AppColors.btnConfirmText}
-                />
-              </IconButton>
-            ))}
-          </IconsContainer>
+        <IconsContainer>
+          {TagIcons.map((icon, index) => (
+            <IconButton
+              key={index}
+              selected={selectedIcon === icon}
+              onPress={() => setSelectedIcon(icon)}
+            >
+              <Ionicons
+                name={icon}
+                size={32}
+                color={AppColors.btnConfirmText}
+              />
+            </IconButton>
+          ))}
+        </IconsContainer>
 
+        <View style={{ marginTop: 25 }}>
           <ButtonWithIcon
             icon={"save-outline"}
             bgColor={AppColors.btnConfirmBackground}
@@ -147,7 +155,7 @@ const StoreTag = () => {
             text={"Salvar"}
             onPress={handleCreateTag}
           />
-        </ScrollView>
+        </View>
       </KeyboardAvoidingView>
     </PageContainer>
   );
