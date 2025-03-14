@@ -3,6 +3,7 @@ import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import styled from "styled-components/native";
 import AppColors from "../utils/constants/appColors";
+import IconButton from "./IconButton";
 
 const Container = styled.View`
   flex-direction: row;
@@ -13,7 +14,9 @@ const Container = styled.View`
 
 const ButtonContainer = styled.View`
   flex-direction: row;
-  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 `;
 
 const TagIcon = styled(Ionicons)`
@@ -35,12 +38,16 @@ const TagTile = ({ tag, onDelete, onEdit }) => {
       <TagName>{tag.name}</TagName>
 
       <ButtonContainer>
-        <TouchableOpacity onPress={() => onEdit(tag)}>
-          <Ionicons name="create-outline" size={24} color={AppColors.text} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => onDelete(tag)}>
-          <Ionicons name="trash-outline" size={24} color={AppColors.text} />
-        </TouchableOpacity>
+        <IconButton
+          icon="create-outline"
+          onPress={() => onEdit(tag)}
+          style={{ padding: 0, margin: 0 }}
+        />
+        <IconButton
+          icon="trash-outline"
+          onPress={() => onDelete(tag)}
+          style={{ padding: 0, margin: 0 }}
+        />
       </ButtonContainer>
     </Container>
   );

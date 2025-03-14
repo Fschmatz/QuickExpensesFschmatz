@@ -4,12 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import styled from "styled-components/native";
 import AppColors from "../utils/constants/appColors";
 
-const StyledButton = styled(TouchableOpacity)`
-  height: 48px;
-  aspect-ratio: 1;
-  justify-content: center;
-  align-items: center;
-`;
+const StyledButton = styled(TouchableOpacity)``;
 
 const IconButton = ({
   icon,

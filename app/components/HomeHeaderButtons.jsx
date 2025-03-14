@@ -3,12 +3,11 @@ import styled from "styled-components/native";
 import IconButton from "./IconButton";
 
 const Container = styled.View`
-  flex-direction: row;
+  flex-direction: row; 
+  justify-content: center;
   align-items: center;
-`;
-
-const LastIconButton = styled(IconButton)`
-  margin-right: -15px;
+  gap: 20px;
+  margin-right: -2px;
 `;
 
 const HomeHeaderButtons = () => {
@@ -22,7 +21,7 @@ const HomeHeaderButtons = () => {
     <Container>     
       <IconButton icon="pricetags-outline" onPress={navigateToTags} />
       <IconButton icon="receipt-outline" onPress={navigateToMonthlyExpenses} />
-      <LastIconButton icon="settings-outline" onPress={navigateToSettings} />
+      <IconButton icon="settings-outline" onPress={navigateToSettings} />
     </Container>
   );
 };

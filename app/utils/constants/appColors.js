@@ -1,4 +1,4 @@
-export const AppColors = { 
+export const AppColors = {
   background: "#1C110C",
   text: "#EBD1C6",
   icons: "#EBD1C6",
@@ -7,10 +7,13 @@ export const AppColors = {
 
   /* BTNs CALC */
   btnDeleteText: "#DDE8B3",
-  btnDeleteBackground: "#424B23",  
+  btnDeleteBackground: "#424B23",
   btnConfirmText: "#D9E2FF",
-  btnConfirmBackground: "#27457F", 
-  btnNumberBackground: "#2E2119",  
+  btnConfirmBackground: "#27457F",
+  btnNumberBackground: "#2E2119",
+
+  androidRippleColor: { opacity: 0.6, backgroundColor: "#DADADA" },
+  androidRippleEffect: { color: "rgba(0, 0, 0, 0.4)" },
 };
 
 export default AppColors;

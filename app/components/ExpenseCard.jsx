@@ -1,9 +1,6 @@
 import styled from "styled-components/native";
 import AppColors from "../utils/constants/appColors";
-import { formatDate, formatMoney, isEmpty } from "../utils/functionUtils";
-import TagChip from "./TagChip";
-import { TouchableOpacity, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { formatDate, formatMoney } from "../utils/functionUtils";
 
 const CardContainer = styled.Pressable`
   background-color: ${AppColors.primaryContainer};
@@ -32,10 +29,8 @@ const ExpenseCard = ({ expense, onDelete }) => {
   return (
     <CardContainer
       onLongPress={() => onDelete(expense)}
-      android_ripple={{ color: "rgba(0, 0, 0, 0.1)" }}
-      style={({ pressed }) => [
-        pressed && { opacity: 0.5, backgroundColor: "#FFFFFF" },
-      ]}
+      android_ripple={AppColors.androidRippleEffect}
+      style={({ pressed }) => [pressed && AppColors.androidRippleColor]}
     >
       <TopRowContainer>
         <DateText>{formatDate(expense.createdDate, "dd/mm/yyyy")}</DateText>

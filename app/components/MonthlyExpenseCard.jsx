@@ -39,10 +39,8 @@ const MonthlyExpenseCard = ({ monthlyExpense }) => {
   return (
     <CardContainer
       onPress={() => navigateToMonthlyExpenseDetail(monthlyExpense.date)}
-      android_ripple={{ color: "rgba(0, 0, 0, 0.1)" }}
-      style={({ pressed }) => [
-        pressed && { opacity: 0.5, backgroundColor: "#FFFFFF" },
-      ]}
+      android_ripple={AppColors.androidRippleEffect}
+      style={({ pressed }) => [pressed && AppColors.androidRippleColor]}
     >
       <CardContent>
         <DateText>{formatDate(monthlyExpense.date, "mm/yyyy")}</DateText>

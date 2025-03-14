@@ -54,7 +54,7 @@ const ConfirmDeleteContainer = styled.View`
   flex-wrap: wrap;
 `;
 
-const KeyButton = styled.TouchableOpacity`
+const KeyButton = styled.Pressable`
   width: ${(props) => (props.big ? "170px" : "80px")};
   height: 80px;
   justify-content: center;
@@ -143,7 +143,7 @@ const Home = () => {
   const insertExpense = async (inputValue) => {
     dispatch(
       addExpense({
-        value: inputValue.replace(',','.'),
+        value: inputValue.replace(",", "."),
         tagId: selectedTag?.id || "",
       })
     );
@@ -182,6 +182,14 @@ const Home = () => {
                 key={num}
                 big={num === "0"}
                 onPress={() => handlePress(num.toString())}
+                android_ripple={{
+                  ...AppColors.androidRippleEffect,
+                  borderless: true,
+                  radius: 40,
+                }}
+                style={({ pressed }) => [
+                  pressed && AppColors.androidRippleColor,
+                ]}
               >
                 <KeyText>{num}</KeyText>
               </KeyButton>
