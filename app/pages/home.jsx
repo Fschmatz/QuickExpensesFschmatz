@@ -1,29 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import AppColors from "../utils/constants/appColors";
-import HomeTagsList from "../components/HomeTagsList";
-import { greaterThanZero } from "../utils/functionUtils";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchTags, getTags } from "../redux/ducks/tagDuck";
-import { addExpense } from "../redux/ducks/expenseDuck";
 import styled from "styled-components/native";
-import { showToast } from "../utils/functionUtils";
+import { useDispatch, useSelector } from "react-redux";
+import { appColors } from "@constants";
+import { HomeTagsList } from "@components";
+import { greaterThanZero, showToast } from "@utils";
+import { fetchTags, getTags } from "@tagDuck";
+import { addExpense } from "@expenseDuck";
 
 const Container = styled.View`
   padding: 0px;
   flex: 1;
-  background-color: ${AppColors.background};
+  background-color: ${appColors.background};
 `;
 
 const TopContainer = styled.View`
-  background-color: ${AppColors.primaryContainer};
+  background-color: ${appColors.primaryContainer};
   flex: 1;
   padding: 16px;
   border-radius: 40px;
 `;
 
 const StyledInputText = styled.TextInput`
-  color: ${AppColors.text};
+  color: ${appColors.text};
   font-size: 65px;
   font-weight: 700;
   text-align: right;
@@ -60,12 +59,12 @@ const KeyButton = styled.Pressable`
   justify-content: center;
   align-items: center;
   margin: 5px;
-  background-color: ${AppColors.btnNumberBackground};
+  background-color: ${appColors.btnNumberBackground};
   border-radius: 40px;
 `;
 
 const KeyText = styled.Text`
-  color: ${AppColors.text};
+  color: ${appColors.text};
   font-size: 45px;
   font-weight: 600;
 `;
@@ -73,7 +72,7 @@ const KeyText = styled.Text`
 const DeleteKey = styled.TouchableOpacity`
   width: 80px;
   height: 80px;
-  background-color: ${AppColors.btnDeleteBackground};
+  background-color: ${appColors.btnDeleteBackground};
   justify-content: center;
   align-items: center;
   margin-top: 5px;
@@ -84,7 +83,7 @@ const DeleteKey = styled.TouchableOpacity`
 const ConfirmKey = styled.TouchableOpacity`
   width: 80px;
   height: 260px;
-  background-color: ${AppColors.btnConfirmBackground};
+  background-color: ${appColors.btnConfirmBackground};
   justify-content: center;
   align-items: center;
   margin-top: 10px;
@@ -183,12 +182,12 @@ const Home = () => {
                 big={num === "0"}
                 onPress={() => handlePress(num.toString())}
                 android_ripple={{
-                  ...AppColors.androidRippleEffect,
+                  ...appColors.androidRippleEffect,
                   borderless: true,
                   radius: 40,
                 }}
                 style={({ pressed }) => [
-                  pressed && AppColors.androidRippleColor,
+                  pressed && appColors.androidRippleColor,
                 ]}
               >
                 <KeyText>{num}</KeyText>
@@ -201,14 +200,14 @@ const Home = () => {
               <Ionicons
                 name="backspace-outline"
                 size={38}
-                color={AppColors.btnDeleteText}
+                color={appColors.btnDeleteText}
               />
             </DeleteKey>
             <ConfirmKey onPress={handleConfirm}>
               <Ionicons
                 name="checkmark"
                 size={38}
-                color={AppColors.btnConfirmText}
+                color={appColors.btnConfirmText}
               />
             </ConfirmKey>
           </ConfirmDeleteContainer>

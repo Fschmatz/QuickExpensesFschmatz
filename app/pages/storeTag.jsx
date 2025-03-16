@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import styled from "styled-components/native";
 import { TouchableOpacity, KeyboardAvoidingView, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { PageContainer, SizedBox } from "../components/utils";
-import AppColors from "../utils/constants/appColors";
-import { TagIcons } from "../utils/constants/tagIcons";
-import { addTag, updateTag } from "../redux/ducks/tagDuck";
-import { useRouter, useLocalSearchParams } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
-import styled from "styled-components/native";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import ColorPicker, { Panel1, HueSlider } from "reanimated-color-picker";
-import { createTag } from "../entities/tag";
-import Label from "../components/Label";
-import { showToast } from "../utils/functionUtils";
-import { selectTagById } from "../redux/selectors/tagSelector";
-import ButtonWithIcon from "../components/ButtonWithIcon";
+import { appColors, tagIcons } from "@constants";
+import { showToast } from "@utils";
+import { ButtonWithIcon, Label, PageContainer, SizedBox } from "@components";
+import { addTag, updateTag } from "@tagDuck";
+import { selectTagById } from "@tagSelector";
+import { createTag } from "../../entities/tag";
 
 const NameInput = styled.TextInput`
   background-color: transparent;
@@ -23,7 +20,7 @@ const NameInput = styled.TextInput`
   height: 50px;
   border-width: 1px;
   border-color: #d1d1d1;
-  color: ${AppColors.text};
+  color: ${appColors.text};
   padding: 8px;
 `;
 
@@ -41,7 +38,7 @@ const IconButton = styled(TouchableOpacity)`
   ${({ selected }) =>
     selected &&
     `
-    background-color: ${AppColors.btnConfirmBackground};
+    background-color: ${appColors.btnConfirmBackground};
   `}
 `;
 
@@ -92,9 +89,6 @@ const StoreTag = () => {
         color: selectedColor,
         icon: selectedIcon,
       };
-
-      console.log(updatedTag);
-
       showToast("Tag atualizada com sucesso!");
       dispatch(updateTag(updatedTag));
     }
@@ -132,7 +126,7 @@ const StoreTag = () => {
         <Label>Ícone:</Label>
 
         <IconsContainer>
-          {TagIcons.map((icon, index) => (
+          {tagIcons.map((icon, index) => (
             <IconButton
               key={index}
               selected={selectedIcon === icon}
@@ -141,7 +135,7 @@ const StoreTag = () => {
               <Ionicons
                 name={icon}
                 size={32}
-                color={AppColors.btnConfirmText}
+                color={appColors.btnConfirmText}
               />
             </IconButton>
           ))}
@@ -150,8 +144,8 @@ const StoreTag = () => {
         <View style={{ marginTop: 25 }}>
           <ButtonWithIcon
             icon={"save-outline"}
-            bgColor={AppColors.btnConfirmBackground}
-            textColor={AppColors.btnConfirmText}
+            bgColor={appColors.btnConfirmBackground}
+            textColor={appColors.btnConfirmText}
             text={"Salvar"}
             onPress={handleCreateTag}
           />

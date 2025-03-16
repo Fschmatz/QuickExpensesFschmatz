@@ -1,19 +1,21 @@
 import { View } from "react-native";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import {
   fetchByMonthYear,
   getExpensesByMonthYear,
   deleteExpense,
-} from "../redux/ducks/expenseDuck";
-import { useLocalSearchParams, useNavigation } from "expo-router";
-import { PageContainer } from "../components/utils";
-import ExpenseCard from "../components/ExpenseCard";
-import { formatDate, isEmpty } from "../utils/functionUtils";
-import ConfirmationDialog from "../components/ConfirmationDialog";
-import TagChip from "../components/TagChip";
-import AppColors from "../utils/constants/appColors";
-import { clearExpensesByMonthYear } from "../redux/ducks/expenseDuck";
+  clearExpensesByMonthYear,
+} from "@expenseDuck";
+import {
+  PageContainer,
+  ExpenseCard,
+  ConfirmationDialog,
+  TagChip,
+} from "@components";
+import { formatDate, isEmpty } from "@utils";
+import { appColors } from "@constants";
 
 const MonthYearExpensesDetail = () => {
   const { date } = useLocalSearchParams();
@@ -71,7 +73,7 @@ const MonthYearExpensesDetail = () => {
         tag: {
           id: "99999",
           name: "zzzzz",
-          color: AppColors.text,
+          color: appColors.text,
           icon: "pricetag-outline",
         },
         expenses: untaggedExpenses,

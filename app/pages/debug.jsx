@@ -1,16 +1,16 @@
 import styled from "styled-components/native";
-import AppColors from "../utils/constants/appColors";
-import ExpenseService from "../service/expenseService";
-import ExpenseTagService from "../service/expenseTagService";
-import TagService from "../service/tagService";
-import { createTag } from "../entities/tag";
-import ExpenseDAO from "../dao/expenseDAO";
-import { dropAllTables } from "../db/database";
 import * as Clipboard from "expo-clipboard";
-import { PageContainer } from "../components/utils";
 import { useDispatch } from "react-redux";
-import { fetchTags } from "../redux/ducks/tagDuck";
-//import { exportBackup, importBackup } from "../db/backup";
+import ExpenseService from "../../service/expenseService";
+import ExpenseTagService from "../../service/expenseTagService";
+import TagService from "../../service/tagService";
+import ExpenseDAO from "../../dao/expenseDAO";
+import { PageContainer } from "@components";
+import { appColors } from "@constants";
+import { createTag } from "../../entities/tag";
+import { dropAllTables } from "../../db/database";
+import { fetchTags } from "@tagDuck";
+//import { exportBackup, importBackup } from "../../db/backup";
 
 const Button = styled.TouchableOpacity`
   background-color: ${(props) => props.backgroundColor};
@@ -22,7 +22,7 @@ const Button = styled.TouchableOpacity`
 `;
 
 const ButtonText = styled.Text`
-  color: ${AppColors.btnDeleteText};
+  color: ${appColors.btnDeleteText};
   font-size: 16px;
   font-weight: 900;
 `;
@@ -38,7 +38,7 @@ const Debug = () => {
   const createButtonDebug = (
     onPress,
     text,
-    backgroundColor = AppColors.btnDeleteBackground
+    backgroundColor = appColors.btnDeleteBackground
   ) => (
     <Button onPress={onPress} backgroundColor={backgroundColor}>
       <ButtonText>{text}</ButtonText>

@@ -1,13 +1,12 @@
-import { ScrollView } from "react-native";
-import { PageContainer } from "../components/utils";
-import AppDetails from "../utils/appDetails";
 import styled from "styled-components/native";
-import AppColors from "../utils/constants/appColors";
+import { appColors } from "@constants";
+import { appDetails } from "@utils";
+import { PageContainer } from "@components";
 
 const ChangelogContainer = styled.View``;
 
 const StyledText = styled.Text`
-  color: ${AppColors.text};
+  color: ${appColors.text};
   font-size: 16px;
 `;
 
@@ -15,7 +14,7 @@ const Changelog = () => {
   return (
     <PageContainer>
       <ChangelogContainer>
-        <StyledText>{AppDetails.changelog}</StyledText>
+        <StyledText>{appDetails.changelog}</StyledText>
       </ChangelogContainer>
     </PageContainer>
   );

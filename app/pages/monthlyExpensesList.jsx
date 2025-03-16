@@ -1,9 +1,8 @@
 import { FlatList } from "react-native";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import MonthlyExpenseCard from "../components/MonthlyExpenseCard";
-import { fetchMonthlyExpenses, getMonthlyExpenses } from "../redux/ducks/expenseDuck";
-import { PageContainer } from "../components/utils";
+import { MonthlyExpenseCard, PageContainer } from "@components";
+import { fetchMonthlyExpenses, getMonthlyExpenses } from "@expenseDuck";
 
 const MonthlyExpensesList = () => {
   const dispatch = useDispatch();

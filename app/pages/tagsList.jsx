@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FlatList } from "react-native";
-import TagTile from "../components/TagTile";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteTag, getTags } from "../redux/ducks/tagDuck";
-import { PageContainer, Separator } from "../components/utils";
-import FloatingActionButton from "../components/FloatingActionButton";
 import { useRouter } from "expo-router";
-import { ConfirmDialog } from "react-native-simple-dialogs";
-import AppColors from "../utils/constants/appColors";
-import ConfirmationDialog from "../components/ConfirmationDialog";
+import {
+  ConfirmationDialog,
+  TagTile,
+  PageContainer,
+  Separator,
+  FloatingActionButton,
+} from "@components";
+import { deleteTag, getTags } from "@tagDuck";
 
 const TagsList = () => {
   const router = useRouter();

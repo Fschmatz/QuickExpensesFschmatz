@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Home from "./pages/home";
-import DatabaseInit from "./db/databaseInit";
-import { View, Text } from "react-native";
+import DatabaseInit from "../db/databaseInit";
+import { PageContainer } from "@components";
 
 export default function Index() {
   const [isDbReady, setIsDbReady] = useState(false);
@@ -17,11 +17,7 @@ export default function Index() {
   }, []);
 
   if (!isDbReady) {
-    return (
-      <View>
-        <Text>Iniciando...</Text>
-      </View>
-    ); 
+    return <PageContainer />;
   }
 
   return <Home />;

@@ -2,16 +2,16 @@ import { Stack } from "expo-router";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SystemUI from "expo-system-ui";
 import { StatusBar } from "expo-status-bar";
-import HomeHeaderButtons from "./components/HomeHeaderButtons";
-import AppColors from "./utils/constants/appColors";
 import * as SplashScreen from "expo-splash-screen";
-import AppDetails from "./utils/appDetails";
 import { Provider } from "react-redux";
-import { store } from "./redux/store";
+import { store } from "../redux/store";
+import { HomeHeaderButtons } from "@components";
+import { appColors } from "@constants";
+import { appDetails } from "@utils";
 
 export default function RootLayout() {
-  NavigationBar.setBackgroundColorAsync(AppColors.background);
-  SystemUI.setBackgroundColorAsync(AppColors.background);
+  NavigationBar.setBackgroundColorAsync(appColors.background);
+  SystemUI.setBackgroundColorAsync(appColors.background);
 
   SplashScreen.setOptions({
     duration: 400,
@@ -24,18 +24,19 @@ export default function RootLayout() {
         <Stack.Screen
           name="index"
           options={{
-            title: AppDetails.appNameHomePage,
-            headerTintColor: AppColors.text,
-            headerStyle: { backgroundColor: AppColors.background },
+            title: appDetails.appNameHomePage,
+            headerTintColor: appColors.text,
+            headerStyle: { backgroundColor: appColors.background },
             headerRight: () => <HomeHeaderButtons />,
           }}
         />
+
         <Stack.Screen
           name="pages/monthlyExpensesList"
           options={{
             title: "Despesas Mensais",
-            headerTintColor: AppColors.text,
-            headerStyle: { backgroundColor: AppColors.background },
+            headerTintColor: appColors.text,
+            headerStyle: { backgroundColor: appColors.background },
           }}
         />
 
@@ -43,8 +44,8 @@ export default function RootLayout() {
           name="pages/tagsList"
           options={{
             title: "Minhas Tags",
-            headerTintColor: AppColors.text,
-            headerStyle: { backgroundColor: AppColors.background },
+            headerTintColor: appColors.text,
+            headerStyle: { backgroundColor: appColors.background },
           }}
         />
 
@@ -52,8 +53,8 @@ export default function RootLayout() {
           name="pages/settings"
           options={{
             title: "Configurações",
-            headerTintColor: AppColors.text,
-            headerStyle: { backgroundColor: AppColors.background },
+            headerTintColor: appColors.text,
+            headerStyle: { backgroundColor: appColors.background },
           }}
         />
 
@@ -61,8 +62,8 @@ export default function RootLayout() {
           name="pages/debug"
           options={{
             title: "Debug",
-            headerTintColor: AppColors.text,
-            headerStyle: { backgroundColor: AppColors.background },
+            headerTintColor: appColors.text,
+            headerStyle: { backgroundColor: appColors.background },
           }}
         />
 
@@ -70,8 +71,8 @@ export default function RootLayout() {
           name="pages/monthYearExpensesDetail"
           options={{
             title: "Detalhes",
-            headerTintColor: AppColors.text,
-            headerStyle: { backgroundColor: AppColors.background },
+            headerTintColor: appColors.text,
+            headerStyle: { backgroundColor: appColors.background },
           }}
         />
 
@@ -79,8 +80,8 @@ export default function RootLayout() {
           name="pages/storeTag"
           options={{
             title: "Tag",
-            headerTintColor: AppColors.text,
-            headerStyle: { backgroundColor: AppColors.background },
+            headerTintColor: appColors.text,
+            headerStyle: { backgroundColor: appColors.background },
           }}
         />
 
@@ -88,8 +89,8 @@ export default function RootLayout() {
           name="pages/changelog"
           options={{
             title: "Changelog",
-            headerTintColor: AppColors.text,
-            headerStyle: { backgroundColor: AppColors.background },
+            headerTintColor: appColors.text,
+            headerStyle: { backgroundColor: appColors.background },
           }}
         />
       </Stack>
