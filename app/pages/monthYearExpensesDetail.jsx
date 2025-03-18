@@ -14,16 +14,24 @@ import {
   ConfirmationDialog,
   TagChip,
   ExpensePieChart,
-  Separator,
+  SizedBox
 } from "@components";
 import { formatDate, isEmpty, formatMoney } from "@utils";
 import { appColors } from "@constants";
 import styled from "styled-components/native";
 
+const ExpenseByTagContainer = styled.View`
+  border-radius: 16px;
+  border-color: ${(props) => props.borderColor};
+  border-width: 0.7;
+  padding: 8px 0 16px 0;
+  margin: 8px 0;
+`;
+
 const PercentTag = styled.Text`
   font-size: 14px;
   font-weight: 500;
-  color: ${appColors.text};
+  color:  ${(props) => props.color};
 `;
 
 const TotalTag = styled.Text`
@@ -44,7 +52,7 @@ const BottomContainer = styled.View`
   align-items: center;
   justify-content: space-between;
   margin-right: 16px;
-  margin-top: 8px;
+  margin-top: 12px;
   margin-left: 16px;
 `;
 
@@ -153,14 +161,15 @@ const MonthYearExpensesDetail = () => {
 
   return (
     <PageContainer>
-      <View style={{ paddingBottom: 75 }}>
+      <View>
         <ExpensePieChart tagExpenseMap={tagExpenseMap} />
-        
+
         <MonthTotal>
           Total Mensal: R$ {formatMoney(totalAllExpenses)}
         </MonthTotal>
 
-        <Separator style={{ marginTop: 16, marginBottom: 8 }} />
+        <SizedBox height={6}/>
+
         {Array.from(tagExpenseMap.values())
           .sort((a, b) => a.tag.name.localeCompare(b.tag.name))
           .map(({ tag, expenses }) => {
@@ -168,15 +177,14 @@ const MonthYearExpensesDetail = () => {
               const amount = parseFloat(expense?.value) || 0;
               return sum + amount;
             }, 0);
-
             const percentage = ((totalTag / totalAllExpenses) * 100).toFixed(2);
 
             return (
-              <View key={tag.id}>
+              <ExpenseByTagContainer key={tag.id} borderColor={tag.color}>
                 <TopContainer>
                   <TagChip key={tag.id} tag={tag} />
 
-                  <PercentTag>{percentage}%</PercentTag>
+                  <PercentTag color={tag.color}>{percentage}%</PercentTag>
                 </TopContainer>
 
                 <View style={{ gap: 8 }}>
@@ -193,9 +201,7 @@ const MonthYearExpensesDetail = () => {
                   <TotalTag>Total: </TotalTag>
                   <TotalTag>R$ {formatMoney(totalTag)}</TotalTag>
                 </BottomContainer>
-
-                <Separator style={{ marginTop: 16, marginBottom: 8 }} />
-              </View>
+              </ExpenseByTagContainer>
             );
           })}
       </View>

@@ -2,9 +2,8 @@ import styled from "styled-components/native";
 import { appColors } from "@constants";
 import { formatDate, formatMoney } from "@utils";
 
-const CardContainer = styled.Pressable`
-  background-color: ${appColors.primaryContainer};
-  padding: 12px 16px;
+const CardContainer = styled.Pressable` 
+  padding: 8px 16px;
   border-radius: 12px;
 `;
 
@@ -15,13 +14,12 @@ const TopRowContainer = styled.View`
 `;
 
 const ValueText = styled.Text`
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 14px;
   color: ${appColors.text};
 `;
 
 const DateText = styled.Text`
-  font-size: 16px;
+  font-size: 14px;
   color: ${appColors.text};
 `;
 
