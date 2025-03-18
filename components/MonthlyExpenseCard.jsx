@@ -29,21 +29,16 @@ const DateText = styled.Text`
 const MonthlyExpenseCard = ({ monthlyExpense }) => {
   const router = useRouter();
 
-  const navigateToMonthlyExpenseDetail = (date, monthlyExpenseValue) => {
+  const navigateToMonthlyExpenseDetail = (date) => {
     router.push({
       pathname: "/pages/monthYearExpensesDetail",
-      params: { date, monthlyExpenseValue },
+      params: { date },
     });
   };
 
   return (
     <CardContainer
-      onPress={() =>
-        navigateToMonthlyExpenseDetail(
-          monthlyExpense.date,
-          monthlyExpense.value
-        )
-      }
+      onPress={() => navigateToMonthlyExpenseDetail(monthlyExpense.date)}
       android_ripple={appColors.androidRippleEffect}
       style={({ pressed }) => [pressed && appColors.androidRippleColor]}
     >

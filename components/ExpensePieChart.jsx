@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Dimensions } from "react-native";
+import { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import PieChart from "react-native-pie-chart";
 import { appColors } from "@constants";
-import { SizedBox } from "@components";
+import SizedBox from "./SizedBox";
+import { Dimensions } from 'react-native';
 
 const Container = styled.View`
   background-color: ${appColors.backgroundColor};
@@ -17,13 +17,14 @@ const ChartContainer = styled.View`
 
 const ExpensePieChart = ({ tagExpenseMap }) => {
   const [series, setSeries] = useState([]);
-  const windowWidth = Dimensions.get("window").width;
-  const chartSize = windowWidth * 0.4;
-
+  const windowWidth = Dimensions.get('window').width;
+  const chartSize = windowWidth * 0.5;
+ 
   useEffect(() => {
     if (!tagExpenseMap || tagExpenseMap.size === 0) {
       return;
     }
+    
     const series = [];
     const legendItems = [];
 
@@ -65,8 +66,7 @@ const ExpensePieChart = ({ tagExpenseMap }) => {
               series={series}
               sliceColor={series.map((item) => item.color)}
               doughnut={true}
-              cover={0.45}
-              coverFill={"#FFF"}
+              cover={0.5}             
             />
           </ChartContainer>
 

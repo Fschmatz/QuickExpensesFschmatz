@@ -40,9 +40,9 @@ const TopContainer = styled.View`
 `;
 
 const BottomContainer = styled.View`
- flex-direction: row;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-between;  
+  justify-content: space-between;
   margin-right: 16px;
   margin-top: 8px;
   margin-left: 16px;
@@ -56,7 +56,7 @@ const MonthTotal = styled.Text`
 `;
 
 const MonthYearExpensesDetail = () => {
-  const { date, monthlyExpenseValue } = useLocalSearchParams();
+  const { date } = useLocalSearchParams();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const expensesByMonthYear = useSelector(getExpensesByMonthYear);
@@ -144,15 +144,23 @@ const MonthYearExpensesDetail = () => {
     setExpenseToDelete(null);
   };
 
+  const totalAllExpenses = Array.from(tagExpenseMap.values())
+    .flatMap(({ expenses }) => expenses)
+    .reduce((sum, expense) => {
+      const amount = parseFloat(expense?.value) || 0;
+      return sum + amount;
+    }, 0);
+
   return (
     <PageContainer>
       <View style={{ paddingBottom: 75 }}>
         <ExpensePieChart tagExpenseMap={tagExpenseMap} />
-
-        <MonthTotal>Total Mensal: R$ {formatMoney(monthlyExpenseValue)}</MonthTotal>
+        
+        <MonthTotal>
+          Total Mensal: R$ {formatMoney(totalAllExpenses)}
+        </MonthTotal>
 
         <Separator style={{ marginTop: 16, marginBottom: 8 }} />
-
         {Array.from(tagExpenseMap.values())
           .sort((a, b) => a.tag.name.localeCompare(b.tag.name))
           .map(({ tag, expenses }) => {
@@ -161,9 +169,7 @@ const MonthYearExpensesDetail = () => {
               return sum + amount;
             }, 0);
 
-            const percentage = ((totalTag / monthlyExpenseValue) * 100).toFixed(
-              2
-            );
+            const percentage = ((totalTag / totalAllExpenses) * 100).toFixed(2);
 
             return (
               <View key={tag.id}>
