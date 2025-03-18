@@ -17,6 +17,12 @@ export default function RootLayout() {
     duration: 400,
   });
 
+  const defaultHeaderScreenOptions = {
+    headerTintColor: appColors.text,
+    headerStyle: { backgroundColor: appColors.background },
+    headerShadowVisible: false,
+  };
+
   return (
     <Provider store={store}>
       <StatusBar style={"light"} />
@@ -25,9 +31,8 @@ export default function RootLayout() {
           name="index"
           options={{
             title: appDetails.appNameHomePage,
-            headerTintColor: appColors.text,
-            headerStyle: { backgroundColor: appColors.background },
             headerRight: () => <HomeHeaderButtons />,
+            ...defaultHeaderScreenOptions,
           }}
         />
 
@@ -35,8 +40,7 @@ export default function RootLayout() {
           name="pages/monthlyExpensesList"
           options={{
             title: "Despesas Mensais",
-            headerTintColor: appColors.text,
-            headerStyle: { backgroundColor: appColors.background },
+            ...defaultHeaderScreenOptions,
           }}
         />
 
@@ -44,8 +48,7 @@ export default function RootLayout() {
           name="pages/tagsList"
           options={{
             title: "Minhas Tags",
-            headerTintColor: appColors.text,
-            headerStyle: { backgroundColor: appColors.background },
+            ...defaultHeaderScreenOptions,
           }}
         />
 
@@ -53,8 +56,7 @@ export default function RootLayout() {
           name="pages/settings"
           options={{
             title: "Configurações",
-            headerTintColor: appColors.text,
-            headerStyle: { backgroundColor: appColors.background },
+            ...defaultHeaderScreenOptions,
           }}
         />
 
@@ -62,8 +64,7 @@ export default function RootLayout() {
           name="pages/debug"
           options={{
             title: "Debug",
-            headerTintColor: appColors.text,
-            headerStyle: { backgroundColor: appColors.background },
+            ...defaultHeaderScreenOptions,
           }}
         />
 
@@ -71,8 +72,7 @@ export default function RootLayout() {
           name="pages/monthYearExpensesDetail"
           options={{
             title: "Detalhes",
-            headerTintColor: appColors.text,
-            headerStyle: { backgroundColor: appColors.background },
+            ...defaultHeaderScreenOptions,
           }}
         />
 
@@ -80,8 +80,7 @@ export default function RootLayout() {
           name="pages/storeTag"
           options={{
             title: "Tag",
-            headerTintColor: appColors.text,
-            headerStyle: { backgroundColor: appColors.background },
+            ...defaultHeaderScreenOptions,
           }}
         />
 
@@ -89,8 +88,7 @@ export default function RootLayout() {
           name="pages/changelog"
           options={{
             title: "Changelog",
-            headerTintColor: appColors.text,
-            headerStyle: { backgroundColor: appColors.background },
+            ...defaultHeaderScreenOptions,
           }}
         />
       </Stack>

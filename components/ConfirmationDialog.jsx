@@ -35,7 +35,7 @@ const ConfirmationDialog = ({
         },
       }}
       dialogStyle={{
-        backgroundColor: appColors.secondaryContainer,
+        backgroundColor: appColors.primaryContainer,
         borderRadius: 16,
         paddingLeft: 0,
         paddingRight: 8,

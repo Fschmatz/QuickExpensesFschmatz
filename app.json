@@ -2,7 +2,7 @@
   "expo": {
     "name": "Quick Expenses Fschmatz",
     "slug": "QuickExpensesFschmatz",
-    "version": "1.0.0",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -32,11 +32,11 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#1C110C",
+          "backgroundColor": "#1C1919",
           "image": "./assets/images/splash-icon.png",
           "dark": {
             "image": "./assets/images/splash-icon-dark.png",
-            "backgroundColor": "#1C110C"
+            "backgroundColor": "#1C1919"
           }
         }
       ]

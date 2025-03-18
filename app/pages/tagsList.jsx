@@ -51,7 +51,7 @@ const TagsList = () => {
   };
 
   return (
-    <PageContainer addScrollView={false}>
+    <PageContainer isScrollView={false} containerPadding='0'>
       <FlatList
         contentContainerStyle={{ gap: 8, paddingBottom: 75 }}
         data={tags}

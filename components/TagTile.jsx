@@ -8,6 +8,7 @@ const Container = styled.View`
   align-items: center;
   margin-bottom: 16px;
   margin-top: 8px;
+  padding: 0px 16px;
 `;
 
 const ButtonContainer = styled.View`

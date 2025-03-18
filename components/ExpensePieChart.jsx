@@ -18,7 +18,7 @@ const ChartContainer = styled.View`
 const ExpensePieChart = ({ tagExpenseMap }) => {
   const [series, setSeries] = useState([]);
   const windowWidth = Dimensions.get('window').width;
-  const chartSize = windowWidth * 0.5;
+  const chartSize = windowWidth * 0.45;
  
   useEffect(() => {
     if (!tagExpenseMap || tagExpenseMap.size === 0) {
@@ -66,7 +66,7 @@ const ExpensePieChart = ({ tagExpenseMap }) => {
               series={series}
               sliceColor={series.map((item) => item.color)}
               doughnut={true}
-              cover={0.5}             
+              cover={0.4}             
             />
           </ChartContainer>
 

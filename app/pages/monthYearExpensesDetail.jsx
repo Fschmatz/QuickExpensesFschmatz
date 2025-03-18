@@ -14,7 +14,7 @@ import {
   ConfirmationDialog,
   TagChip,
   ExpensePieChart,
-  SizedBox
+  SizedBox,
 } from "@components";
 import { formatDate, isEmpty, formatMoney } from "@utils";
 import { appColors } from "@constants";
@@ -23,7 +23,7 @@ import styled from "styled-components/native";
 const ExpenseByTagContainer = styled.View`
   border-radius: 16px;
   border-color: ${(props) => props.borderColor};
-  border-width: 0.7;
+  border-width: 1px;
   padding: 8px 0 16px 0;
   margin: 8px 0;
 `;
@@ -31,7 +31,7 @@ const ExpenseByTagContainer = styled.View`
 const PercentTag = styled.Text`
   font-size: 14px;
   font-weight: 500;
-  color:  ${(props) => props.color};
+  color: ${(props) => props.color};
 `;
 
 const TotalTag = styled.Text`
@@ -161,50 +161,46 @@ const MonthYearExpensesDetail = () => {
 
   return (
     <PageContainer>
-      <View>
-        <ExpensePieChart tagExpenseMap={tagExpenseMap} />
+      <ExpensePieChart tagExpenseMap={tagExpenseMap} />
 
-        <MonthTotal>
-          Total Mensal: R$ {formatMoney(totalAllExpenses)}
-        </MonthTotal>
+      <MonthTotal>Total Mensal: R$ {formatMoney(totalAllExpenses)}</MonthTotal>
 
-        <SizedBox height={6}/>
+      <SizedBox height={6} />
 
-        {Array.from(tagExpenseMap.values())
-          .sort((a, b) => a.tag.name.localeCompare(b.tag.name))
-          .map(({ tag, expenses }) => {
-            const totalTag = expenses.reduce((sum, expense) => {
-              const amount = parseFloat(expense?.value) || 0;
-              return sum + amount;
-            }, 0);
-            const percentage = ((totalTag / totalAllExpenses) * 100).toFixed(2);
+      {Array.from(tagExpenseMap.values())
+        .sort((a, b) => a.tag.name.localeCompare(b.tag.name))
+        .map(({ tag, expenses }) => {
+          const totalTag = expenses.reduce((sum, expense) => {
+            const amount = parseFloat(expense?.value) || 0;
+            return sum + amount;
+          }, 0);
+          const percentage = ((totalTag / totalAllExpenses) * 100).toFixed(2);
 
-            return (
-              <ExpenseByTagContainer key={tag.id} borderColor={tag.color}>
-                <TopContainer>
-                  <TagChip key={tag.id} tag={tag} />
+          return (
+            <ExpenseByTagContainer key={tag.id} borderColor={tag.color}>
+              <TopContainer>
+                <TagChip key={tag.id} tag={tag} />
 
-                  <PercentTag color={tag.color}>{percentage}%</PercentTag>
-                </TopContainer>
+                <PercentTag color={tag.color}>{percentage}%</PercentTag>
+              </TopContainer>
 
-                <View style={{ gap: 8 }}>
-                  {expenses.map((expense) => (
-                    <ExpenseCard
-                      key={expense.id}
-                      expense={expense}
-                      onDelete={showDeleteConfirmation}
-                    />
-                  ))}
-                </View>
+              <View style={{ gap: 8 }}>
+                {expenses.map((expense) => (
+                  <ExpenseCard
+                    key={expense.id}
+                    expense={expense}
+                    onDelete={showDeleteConfirmation}
+                  />
+                ))}
+              </View>
 
-                <BottomContainer>
-                  <TotalTag>Total: </TotalTag>
-                  <TotalTag>R$ {formatMoney(totalTag)}</TotalTag>
-                </BottomContainer>
-              </ExpenseByTagContainer>
-            );
-          })}
-      </View>
+              <BottomContainer>
+                <TotalTag>Total: </TotalTag>
+                <TotalTag>R$ {formatMoney(totalTag)}</TotalTag>
+              </BottomContainer>
+            </ExpenseByTagContainer>
+          );
+        })}
 
       <ConfirmationDialog
         message="Deseja excluir esta despesa?"

@@ -7,6 +7,7 @@ const CardContainer = styled.Pressable`
   background-color: ${appColors.primaryContainer};
   padding: 16px;
   border-radius: 12px;
+  margin: 0px 16px;
 `;
 
 const CardContent = styled.View`

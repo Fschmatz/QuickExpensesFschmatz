@@ -8,27 +8,30 @@ const Container = styled.View`
   padding: ${(props) => props.padding};
 `;
 
+const ContainerScrollView = styled.ScrollView`
+  flex: 1;
+  background-color: ${appColors.background};
+  padding: ${(props) => props.padding};
+`;
+
 const PageContainer = ({
   children,
   containerPadding = "8px 16px",
   scrollViewPaddingBottom = 75,
-  addScrollView = true,
+  isScrollView = true,
 }) => {
-  return (
-    <Container padding={containerPadding}>
-      {addScrollView ? (
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            paddingBottom: scrollViewPaddingBottom,
-          }}
-        >
-          {children}
-        </ScrollView>
-      ) : (
-        children
-      )}
-    </Container>
+  return isScrollView ? (
+    <ContainerScrollView
+      padding={containerPadding}
+      contentContainerStyle={{
+        flexGrow: 1,
+        paddingBottom: scrollViewPaddingBottom,
+      }}
+    >
+      {children}
+    </ContainerScrollView>
+  ) : (
+    <Container padding={containerPadding}>{children}</Container>
   );
 };
 
