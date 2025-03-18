@@ -13,3 +13,4 @@ export { default as ListTileWithIcon } from "./ListTileWithIcon";
 export { default as MonthlyExpenseCard } from "./MonthlyExpenseCard";
 export { default as TagChip } from "./TagChip";
 export { default as TagTile } from "./TagTile";
+export { default as ExpensePieChart } from "./ExpensePieChart";

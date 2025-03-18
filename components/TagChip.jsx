@@ -19,7 +19,7 @@ const ChipText = styled.Text`
 
 const TagChip = ({ tag }) => {
   {/* Pequeno truque para deixar os Sem Tag por ultimo nos detalhes */}
-  const name = tag.name === "zzzzz" ? "Sem Tag" : tag.name;
+  const name = tag.name === "zzz_" ? "Sem Tag" : tag.name;
 
   return (
     <ChipContainer>

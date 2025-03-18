@@ -3,7 +3,6 @@ import { useRouter } from "expo-router";
 import { appColors } from "@constants";
 import { formatDate, formatMoney } from "@utils";
 
-
 const CardContainer = styled.Pressable`
   background-color: ${appColors.primaryContainer};
   padding: 16px;
@@ -30,16 +29,21 @@ const DateText = styled.Text`
 const MonthlyExpenseCard = ({ monthlyExpense }) => {
   const router = useRouter();
 
-  const navigateToMonthlyExpenseDetail = (date) => {
+  const navigateToMonthlyExpenseDetail = (date, monthlyExpenseValue) => {
     router.push({
       pathname: "/pages/monthYearExpensesDetail",
-      params: { date },
+      params: { date, monthlyExpenseValue },
     });
   };
 
   return (
     <CardContainer
-      onPress={() => navigateToMonthlyExpenseDetail(monthlyExpense.date)}
+      onPress={() =>
+        navigateToMonthlyExpenseDetail(
+          monthlyExpense.date,
+          monthlyExpense.value
+        )
+      }
       android_ripple={appColors.androidRippleEffect}
       style={({ pressed }) => [pressed && appColors.androidRippleColor]}
     >
