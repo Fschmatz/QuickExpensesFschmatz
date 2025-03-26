@@ -1,5 +1,5 @@
 const AppDetails = {
-  appVersion: "1.0.8",
+  appVersion: "1.0.9",
   appName: "Quick Expenses Fschmatz",
   appNameHomePage: "Quick Expenses",
   repositoryLink: "https://github.com/Fschmatz/QuickExpensesFschmatz",
@@ -9,6 +9,7 @@ const AppDetails = {
 AppDetails.changelog = `
 ${AppDetails.appVersion}
 - Nova página de detalhes
+- Total do mês atual no topo da página inicial 
 - Gráfico na página de detalhes
 - Alterado o projeto para o padrão expo
 - Tecnicamente usável

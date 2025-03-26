@@ -4,9 +4,14 @@ import styled from "styled-components/native";
 import { useDispatch, useSelector } from "react-redux";
 import { appColors } from "@constants";
 import { HomeTagsList } from "@components";
-import { greaterThanZero, showToast } from "@utils";
+import { greaterThanZero, showToast, formatMoney } from "@utils";
 import { fetchTags, getTags } from "@tagDuck";
-import { addExpense } from "@expenseDuck";
+import {
+  addExpense,
+  fetchTotalExpensesCurrentMonth,
+  getTotalExpensesCurrentMonth,
+} from "@expenseDuck";
+import { useRouter } from "expo-router";
 
 const Container = styled.View`
   padding: 0px;
@@ -28,7 +33,7 @@ const StyledInputText = styled.TextInput`
   text-align: right;
   align-self: flex-end;
   margin-right: 5px;
-  height: 77%;
+  height: 66%;
 `;
 
 const BottomContainer = styled.View`
@@ -91,16 +96,35 @@ const ConfirmKey = styled.TouchableOpacity`
   border-radius: 40px;
 `;
 
+const TotalExpensesCurrentMonthContainer = styled.TouchableOpacity`
+  width: 95%;
+  align-self: center;
+  background-color: ${appColors.background};
+  border-radius: 25px;
+  padding: 8px 12px;
+`;
+
+const TotalExpensesCurrentMonthText = styled.Text`
+  color: ${appColors.text};
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+`;
+
 const Home = () => {
-  const numPad = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ","];
-  const maxLength = 8;
   const [inputValue, setInputValue] = useState("");
   const [selectedTag, setSelectedTag] = useState();
+  const router = useRouter();
   const dispatch = useDispatch();
   const tags = useSelector(getTags);
+  const totalExpensesCurrentMonth = useSelector(getTotalExpensesCurrentMonth);
+
+  const numPad = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ","];
+  const maxLength = 8;
 
   useEffect(() => {
     dispatch(fetchTags());
+    dispatch(fetchTotalExpensesCurrentMonth());
   }, [dispatch]);
 
   const handlePress = (value) => {
@@ -156,9 +180,25 @@ const Home = () => {
     }
   };
 
+  const navigateToCurrentMonthDetail = () => {
+    const today = new Date();  
+    const todayFormatted = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-01`;
+
+    router.push({
+      pathname: "/pages/monthYearExpensesDetail",
+      params: { date: todayFormatted },
+    });
+  };
+
   return (
     <Container>
       <TopContainer>
+        <TotalExpensesCurrentMonthContainer onPress={navigateToCurrentMonthDetail}>
+          <TotalExpensesCurrentMonthText>
+            Mês Atual: R$ {formatMoney(totalExpensesCurrentMonth)}
+          </TotalExpensesCurrentMonthText>
+        </TotalExpensesCurrentMonthContainer>
+
         <StyledInputText
           value={inputValue}
           editable={false}

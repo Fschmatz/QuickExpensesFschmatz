@@ -4,6 +4,7 @@ export const AppColors = {
   icons: "#E7D1C6",
   primaryContainer: "#292525",
   secondaryContainer: "#262222",
+  dialogBackground: "#353131",
 
   /* BTNs CALC */
   btnDeleteText: "#DDE8B3",

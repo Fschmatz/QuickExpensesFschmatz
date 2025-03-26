@@ -130,6 +130,18 @@ class ExpenseDAO {
       await db.execAsync("ROLLBACK;");
     }
   }
+
+  async fetchTotalExpensesCurrentMonth() {
+    const db = await getDatabase();
+    const currentDate = new Date();
+    const currentYearMonth = currentDate.toISOString().slice(0, 7);
+    
+    const query = `SELECT SUM(value) AS value
+       FROM ${tables.EXPENSES}
+       WHERE substr(createdDate, 1, 7) = ?`;
+    
+    return await db.getFirstAsync(query, [currentYearMonth]);
+  }
 }
 
 export default new ExpenseDAO();
