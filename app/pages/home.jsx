@@ -33,7 +33,7 @@ const StyledInputText = styled.TextInput`
   text-align: right;
   align-self: flex-end;
   margin-right: 5px;
-  height: 66%;
+  height: 64%;
 `;
 
 const BottomContainer = styled.View`
@@ -97,11 +97,13 @@ const ConfirmKey = styled.TouchableOpacity`
 `;
 
 const TotalExpensesCurrentMonthContainer = styled.TouchableOpacity`
-  width: 95%;
+  width: 100%;
+  flex-direction: row;
   align-self: center;
+  justify-content: space-between;
   background-color: ${appColors.background};
-  border-radius: 25px;
-  padding: 8px 12px;
+  border-radius: 50px;
+  padding: 12px 24px;
 `;
 
 const TotalExpensesCurrentMonthText = styled.Text`
@@ -181,8 +183,10 @@ const Home = () => {
   };
 
   const navigateToCurrentMonthDetail = () => {
-    const today = new Date();  
-    const todayFormatted = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-01`;
+    const today = new Date();
+    const todayFormatted = `${today.getFullYear()}-${String(
+      today.getMonth() + 1
+    ).padStart(2, "0")}-01`;
 
     router.push({
       pathname: "/pages/monthYearExpensesDetail",
@@ -190,12 +194,25 @@ const Home = () => {
     });
   };
 
+  const getCurrentMonthYear = () => {
+    const today = new Date();
+    return `${String(today.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}/${today.getFullYear()}`;
+  };
+
   return (
     <Container>
       <TopContainer>
-        <TotalExpensesCurrentMonthContainer onPress={navigateToCurrentMonthDetail}>
+        <TotalExpensesCurrentMonthContainer
+          onPress={navigateToCurrentMonthDetail}
+        >
           <TotalExpensesCurrentMonthText>
-            Mês Atual: R$ {formatMoney(totalExpensesCurrentMonth)}
+            {getCurrentMonthYear()}
+          </TotalExpensesCurrentMonthText>
+          <TotalExpensesCurrentMonthText>
+            R$ {formatMoney(totalExpensesCurrentMonth)}
           </TotalExpensesCurrentMonthText>
         </TotalExpensesCurrentMonthContainer>
 
