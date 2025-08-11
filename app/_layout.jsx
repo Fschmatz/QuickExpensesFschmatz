@@ -91,6 +91,22 @@ export default function RootLayout() {
             ...defaultHeaderScreenOptions,
           }}
         />
+
+        <Stack.Screen
+          name="pages/storeLoan"
+          options={{
+            title: "Empréstimo",
+            ...defaultHeaderScreenOptions,
+          }}
+        />
+
+        <Stack.Screen
+          name="pages/loansList"
+          options={{
+            title: "Empréstimos",
+            ...defaultHeaderScreenOptions,
+          }}
+        />
       </Stack>
     </Provider>
   );

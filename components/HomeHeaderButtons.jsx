@@ -16,9 +16,11 @@ const HomeHeaderButtons = () => {
     navigation.navigate("pages/monthlyExpensesList");
   const navigateToTags = () => navigation.navigate("pages/tagsList");
   const navigateToSettings = () => navigation.navigate("pages/settings");
+  const navigateToLoans = () => navigation.navigate("pages/loansList");
 
   return (
     <Container>
+      <IconButton icon="cash-outline" onPress={navigateToLoans} />
       <IconButton icon="pricetags-outline" onPress={navigateToTags} />
       <IconButton icon="receipt-outline" onPress={navigateToMonthlyExpenses} />
       <IconButton icon="settings-outline" onPress={navigateToSettings} />

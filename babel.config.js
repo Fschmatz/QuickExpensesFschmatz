@@ -15,12 +15,15 @@ module.exports = function (api) {
             "@expenseDuck": "./redux/ducks/expenseDuck.js",
             "@tagDuck": "./redux/ducks/tagDuck.js",
             "@expenseTagDuck": "./redux/ducks/expenseTagDuck.js",
+            "@loanDuck": "./redux/ducks/loanDuck.js",
 
             "@expenseSaga": "./redux/sagas/expenseSaga.js",
             "@tagSaga": "./redux/ducks/tagSaga.js",
             "@expenseTagSaga": "./redux/ducks/expenseTagSaga.js",
+            "@loanSaga": "./redux/ducks/loanSaga.js",
 
             "@tagSelector": "./redux/selectors/tagSelector.js",
+            "@loanSelector": "./redux/selectors/loanSelector.js",
           },
         },
       ],

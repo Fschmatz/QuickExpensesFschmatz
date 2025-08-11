@@ -14,7 +14,8 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "monochromeImage": "./assets/images/monochrome-icon.png"
       },
       "package": "com.fschmatz.QuickExpensesFschmatz",
       "permissions": [
@@ -39,7 +40,8 @@
             "backgroundColor": "#1C1919"
           }
         }
-      ]
+      ],
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true

@@ -13,6 +13,7 @@ export const tables = {
   EXPENSES: "expenses",
   TAGS: "tags",
   EXPENSES_TAGS: "expenses_tags",
+  LOANS: "loans",
 };
 
 export const initializeTables = async () => {
@@ -55,6 +56,16 @@ export const initializeTables = async () => {
           PRIMARY KEY (expense_id, tag_id),
           FOREIGN KEY (expense_id) REFERENCES expenses(id),
           FOREIGN KEY (tag_id) REFERENCES tags(id)
+        );`
+      );
+
+      await db.execAsync(
+        `CREATE TABLE IF NOT EXISTS ${tables.LOANS} (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          value REAL NOT NULL,
+          note TEXT NOT NULL,
+          createdDate TEXT NOT NULL
         );`
       );
 
@@ -105,6 +116,7 @@ export const dropAllTables = async () => {
   await db.execAsync(`DROP TABLE IF EXISTS ${tables.EXPENSES_TAGS};`);
   await db.execAsync(`DROP TABLE IF EXISTS ${tables.EXPENSES};`);
   await db.execAsync(`DROP TABLE IF EXISTS ${tables.TAGS};`);
+  await db.execAsync(`DROP TABLE IF EXISTS ${tables.LOANS};`);
 };
 
 export default { getDatabase, initializeTables, dropAllTables };

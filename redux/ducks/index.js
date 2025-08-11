@@ -1,9 +1,11 @@
 import expenseReducer from './expenseDuck';
 import tagReducer from './tagDuck';
-import expenseTag from './expenseTagDuck';
+import expenseTagReducer from './expenseTagDuck';
+import loanReducer from './loanDuck';
 
 export default {
   expenses: expenseReducer,
   tags: tagReducer,
-  expensesTags: expenseTag,
+  expensesTags: expenseTagReducer,
+  loans: loanReducer
 };

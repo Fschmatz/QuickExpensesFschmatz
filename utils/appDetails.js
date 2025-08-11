@@ -1,5 +1,5 @@
 const AppDetails = {
-  appVersion: "1.0.9",
+  appVersion: "1.1.0",
   appName: "Quick Expenses Fschmatz",
   appNameHomePage: "Quick Expenses",
   repositoryLink: "https://github.com/Fschmatz/QuickExpensesFschmatz",
@@ -8,6 +8,10 @@ const AppDetails = {
 
 AppDetails.changelog = `
 ${AppDetails.appVersion}
+- Nova página de empréstimos
+- Ícone monocromático
+
+1.0.9
 - Nova página de detalhes
 - Total do mês atual no topo da página inicial 
 - Gráfico na página de detalhes
