@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import {
   ConfirmationDialog,
   PageContainer,
-  Separator,
+  SizedBox,
   FloatingActionButton,
 } from "@components";
 import { deleteLoan, getLoans, fetchLoans } from "@loanDuck";
@@ -67,11 +67,11 @@ const LoansList = () => {
             onEdit={goToStoreLoanForUpdate}
           />
         )}
-        ItemSeparatorComponent={() => <Separator />}
+        ItemSeparatorComponent={() =>   <SizedBox height={2} />}
       />
 
       <ConfirmationDialog
-        message="Deseja excluir este empréstimo?"
+        message="Marcar este empréstimo como pago?"
         visible={dialogVisible}
         setVisible={handleCancelDelete}
         handleConfirm={handleConfirmDelete}

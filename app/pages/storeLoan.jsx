@@ -40,7 +40,7 @@ const StoreLoan = () => {
   const dispatch = useDispatch();
   const loanForUpdate = isUpdate ? useSelector(selectLoanById(loanId)) : "";
   const [name, setName] = useState(isUpdate ? loanForUpdate.name : "");
-  const [value, setValue] = useState(isUpdate ? loanForUpdate.value.toString() : 0);
+  const [value, setValue] = useState(isUpdate ? cleanValue(loanForUpdate.value.toString()) : 0);
   const [note, setNote] = useState(isUpdate ? loanForUpdate.note : "");
 
   useEffect(() => {
@@ -72,7 +72,7 @@ const StoreLoan = () => {
         value: parseForDb(value),
         note: note,
       };
-      showToast("Tag atualizada com sucesso!");
+      showToast("Empréstimo atualizado com sucesso!");
       dispatch(updateLoan(updatedLoan));
     }
 
@@ -83,7 +83,11 @@ const StoreLoan = () => {
     return val.replace(/\./g, "").replace(",", ".");
   }
 
-  function handleValueChange(text) {
+  function handleValueChange(text) {  
+    setValue(cleanValue(text));
+  }
+
+  function cleanValue(text) {
     let cleaned = text.replace(/[^0-9,]/g, "");
 
     if ((cleaned.match(/,/g) || []).length > 1) {
@@ -95,7 +99,7 @@ const StoreLoan = () => {
       cleaned = intPart + "," + decimalPart.slice(0, 2);
     }
 
-    setValue(cleaned);
+    return cleaned;
   }
 
   return (

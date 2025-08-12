@@ -4,6 +4,7 @@ import * as DocumentPicker from "expo-document-picker";
 import ExpenseService from "../service/expenseService";
 import TagService from "../service/tagService";
 import ExpenseTagService from "../service/expenseTagService";
+import LoanService from "../service/loanService";
 import { formatDate, showToast, isEmpty, appDetails} from "@utils";
 
 export const exportBackup = async () => {
@@ -11,6 +12,7 @@ export const exportBackup = async () => {
     const expenses = await ExpenseService.fetchAll();
     const tags = await TagService.fetchAll();
     const expensesTags = await ExpenseTagService.fetchAll();
+    const loans = await LoanService.fetchAll();
     const backupDate = formatDate(
       new Date().toISOString().split("T")[0],
       "dd/mm/yyyy"
@@ -23,6 +25,7 @@ export const exportBackup = async () => {
         expenses,
         tags,
         expensesTags,
+        loans,
       },
     };
 
@@ -80,6 +83,7 @@ export const importBackup = async () => {
     const expenses = jsonData?.data?.expenses ?? [];
     const tags = jsonData?.data?.tags ?? [];
     const expensesTags = jsonData?.data?.expensesTags ?? [];
+    const loans = jsonData?.data?.loans ?? [];
 
     if (!isEmpty(expenses)) {
       await ExpenseService.importFromBackup(expenses);
@@ -91,6 +95,10 @@ export const importBackup = async () => {
 
     if (!isEmpty(expensesTags)) {
       await ExpenseTagService.importFromBackup(expensesTags);
+    }
+
+    if (!isEmpty(loans)) {
+      await LoanService.importFromBackup(loans);
     }
 
     showToast("Backup importado com sucesso!");

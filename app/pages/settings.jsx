@@ -98,12 +98,12 @@ const Settings = () => {
         onPress={navigateToChangelog}
       />
 
-      <ListTileWithIcon
+     {/*  <ListTileWithIcon
         title="Debug"
         icon="bug-outline"
         disabled={false}
         onPress={navigateToDebug}
-      />
+      /> */}
     </PageContainer>
   );
 };
