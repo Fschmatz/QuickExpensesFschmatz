@@ -11,6 +11,7 @@ export default function Index() {
       console.log("Initializing database...");
       await DatabaseInit.initialize();
       setIsDbReady(true);
+      console.log("Database OK!");
     }
 
     initDB();

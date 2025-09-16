@@ -66,6 +66,7 @@ const KeyButton = styled.Pressable`
   margin: 5px;
   background-color: ${appColors.btnNumberBackground};
   border-radius: 40px;
+  overflow: hidden;
 `;
 
 const KeyText = styled.Text`
@@ -83,6 +84,7 @@ const DeleteKey = styled.Pressable`
   margin-top: 5px;
   margin-left: 5px;
   border-radius: 40px;
+  overflow: hidden;
 `;
 
 const ConfirmKey = styled.Pressable`
@@ -94,6 +96,7 @@ const ConfirmKey = styled.Pressable`
   margin-top: 10px;
   margin-left: 5px;
   border-radius: 40px;
+  overflow: hidden;
 `;
 
 const TotalExpensesCurrentMonthContainer = styled.TouchableOpacity`
@@ -240,8 +243,8 @@ const Home = () => {
                 onPress={() => handlePress(num.toString())}
                 android_ripple={{
                   ...appColors.androidRippleEffect,
-                  borderless: true,
-                  radius: 40,
+                  borderless: false,
+                  foreground: true,
                 }}
                 style={({ pressed }) => [
                   pressed && appColors.androidRippleColor,
@@ -258,8 +261,8 @@ const Home = () => {
               onLongPress={handleDeleteAll}
               android_ripple={{
                 ...appColors.androidRippleEffect,
-                borderless: true,
-                radius: 40,
+                borderless: false,
+                foreground: true,
               }}
               style={({ pressed }) => [pressed && appColors.androidRippleColor]}
             >
@@ -269,12 +272,13 @@ const Home = () => {
                 color={appColors.btnDeleteText}
               />
             </DeleteKey>
+
             <ConfirmKey
               onPress={handleConfirm}
               android_ripple={{
                 ...appColors.androidRippleEffect,
-                borderless: true,
-                radius: 40,
+                borderless: false,
+                foreground: true,
               }}
               style={({ pressed }) => [pressed && appColors.androidRippleColor]}
             >
