@@ -130,10 +130,10 @@ const StoreLoan = () => {
         <NoteInput
           onChangeText={setNote}
           value={note}
-          maxLength={100}
+          maxLength={250}
           placeholder=""
           multiline={true}      
-          numberOfLines={3}      
+          numberOfLines={5}      
           textAlignVertical="top" 
         />
 

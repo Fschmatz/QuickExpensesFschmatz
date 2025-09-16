@@ -28,7 +28,7 @@ const TopContainer = styled.View`
 
 const StyledInputText = styled.TextInput`
   color: ${appColors.text};
-  font-size: 65px;
+  font-size: 70px;
   font-weight: 700;
   text-align: right;
   align-self: flex-end;
@@ -74,7 +74,7 @@ const KeyText = styled.Text`
   font-weight: 600;
 `;
 
-const DeleteKey = styled.TouchableOpacity`
+const DeleteKey = styled.Pressable`
   width: 80px;
   height: 80px;
   background-color: ${appColors.btnDeleteBackground};
@@ -85,7 +85,7 @@ const DeleteKey = styled.TouchableOpacity`
   border-radius: 40px;
 `;
 
-const ConfirmKey = styled.TouchableOpacity`
+const ConfirmKey = styled.Pressable`
   width: 80px;
   height: 260px;
   background-color: ${appColors.btnConfirmBackground};
@@ -253,14 +253,31 @@ const Home = () => {
           </NumbersContainer>
 
           <ConfirmDeleteContainer>
-            <DeleteKey onPress={handleDelete} onLongPress={handleDeleteAll}>
+            <DeleteKey
+              onPress={handleDelete}
+              onLongPress={handleDeleteAll}
+              android_ripple={{
+                ...appColors.androidRippleEffect,
+                borderless: true,
+                radius: 40,
+              }}
+              style={({ pressed }) => [pressed && appColors.androidRippleColor]}
+            >
               <Ionicons
                 name="backspace-outline"
                 size={38}
                 color={appColors.btnDeleteText}
               />
             </DeleteKey>
-            <ConfirmKey onPress={handleConfirm}>
+            <ConfirmKey
+              onPress={handleConfirm}
+              android_ripple={{
+                ...appColors.androidRippleEffect,
+                borderless: true,
+                radius: 40,
+              }}
+              style={({ pressed }) => [pressed && appColors.androidRippleColor]}
+            >
               <Ionicons
                 name="checkmark"
                 size={38}
