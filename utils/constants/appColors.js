@@ -2,6 +2,7 @@ export const AppColors = {
   background: "#1C1919",
   text: "#E7D1C6",
   secondaryText: "#D1BEB4",
+  placeholderText: "#80716d",
   icons: "#E7D1C6",
   primaryContainer: "#292525",
   secondaryContainer: "#262222",

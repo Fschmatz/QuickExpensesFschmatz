@@ -8,6 +8,7 @@ import { store } from "../redux/store";
 import { HomeHeaderButtons } from "@components";
 import { appColors } from "@constants";
 import { appDetails } from "@utils";
+import { MenuProvider } from "react-native-popup-menu";
 
 export default function RootLayout() {
   NavigationBar.setBackgroundColorAsync(appColors.background);
@@ -25,9 +26,10 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <StatusBar style={"light"} />
-      <Stack>
-        <Stack.Screen
+      <MenuProvider>
+        <StatusBar style={"light"} />
+        <Stack>
+          <Stack.Screen
           name="index"
           options={{
             title: appDetails.appNameHomePage,
@@ -108,6 +110,7 @@ export default function RootLayout() {
           }}
         />
       </Stack>
+      </MenuProvider>
     </Provider>
   );
 }

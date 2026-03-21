@@ -35,8 +35,8 @@ const ValueInput = styled.TextInput`
   text-align: right;
   align-self: flex-end;
   margin-right: 5px;
-  margin-top: 25px;
-  margin-bottom: 25px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   flex: 1;
 `;
 
@@ -228,8 +228,9 @@ const Home = () => {
     <View
       style={{ flex: 1 }}
       onLayout={(e) => {
-        if (containerHeight === "auto" && e.nativeEvent.layout.height > 0) {
-          setContainerHeight(e.nativeEvent.layout.height);
+        const height = e.nativeEvent.layout.height;
+        if (containerHeight === "auto" || height > containerHeight) {
+          setContainerHeight(height);
         }
       }}
     >
@@ -258,7 +259,7 @@ const Home = () => {
 
           <NomeInput
             placeholder="Nome"
-            placeholderTextColor="#888"
+            placeholderTextColor={appColors.placeholderText}
             value={nome}
             maxLength={maxLengthName}
             onChangeText={setNome}
