@@ -4,13 +4,15 @@ import styled from "styled-components/native";
 import { appColors } from "@constants";
 import { darkenColor } from "@utils";
 
-const StyledScrollView = styled(ScrollView)``;
+const StyledScrollView = styled(ScrollView)`
+  flex: 1;
+  width: 100%;
+`;
 
 const TagsContainer = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 0px 8px;
+  gap: 6px; 
 `;
 
 const HomeTagChip = styled.TouchableOpacity`

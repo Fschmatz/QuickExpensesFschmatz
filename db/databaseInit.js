@@ -1,8 +1,9 @@
-import { initializeTables } from "./database";
+import { initializeTables, runDatabaseUpdates } from "./database";
 
 class DatabaseInit {
   static async initialize() {
     await initializeTables();
+    await runDatabaseUpdates();
   }
 }
 

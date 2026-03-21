@@ -36,7 +36,8 @@ export const initializeTables = async () => {
         `CREATE TABLE IF NOT EXISTS ${tables.EXPENSES} (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           createdDate TEXT NOT NULL,
-          value REAL NOT NULL
+          value REAL NOT NULL,
+          name TEXT
         );`
       );
 
@@ -102,6 +103,8 @@ export const initializeTables = async () => {
         ]
       );
       
+      await db.execAsync('PRAGMA user_version = 1;');
+      
       resolve();
     } catch (error) {
       console.error("Erro de inicialização do banco de dados: ", error);
@@ -119,4 +122,30 @@ export const dropAllTables = async () => {
   await db.execAsync(`DROP TABLE IF EXISTS ${tables.LOANS};`);
 };
 
-export default { getDatabase, initializeTables, dropAllTables };
+export const runDatabaseUpdates = async () => {
+  const db = await getDatabase();
+  
+  try {
+    const result = await db.getFirstAsync('PRAGMA user_version;');
+    let currentDbVersion = result.user_version;
+
+    if (currentDbVersion === 0) {
+      console.log("Running database updates... version 0 to 1");
+      
+      const tableInfo = await db.getAllAsync(`PRAGMA table_info(${tables.EXPENSES});`);
+      const hasNameColumn = tableInfo.some(column => column.name === 'name');
+      
+      if (!hasNameColumn) {
+        console.log("Adding 'name' column to 'expenses' table...");
+        await db.execAsync(`ALTER TABLE ${tables.EXPENSES} ADD COLUMN name TEXT;`);
+      }
+      
+      await db.execAsync('PRAGMA user_version = 1;');
+      console.log("Database updated to version 1.");
+    }
+  } catch (error) {
+    console.error("Erro ao atualizar o banco de dados: ", error);
+  }
+};
+
+export default { getDatabase, initializeTables, dropAllTables, runDatabaseUpdates };

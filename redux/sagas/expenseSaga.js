@@ -44,8 +44,8 @@ function* handleFetchMonthlyExpenses() {
 
 function* handleAddExpense(action) {
   try {
-    const { value, tagId } = action.payload;
-    const newExpenseId = yield call([ExpenseService, "insert"], value);
+    const { value, tagId, name } = action.payload;
+    const newExpenseId = yield call([ExpenseService, "insert"], value, name);
 
     if (newExpenseId && tagId) {
       yield put(

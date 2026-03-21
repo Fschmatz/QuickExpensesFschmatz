@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 import { appColors } from "@constants";
 import { formatDate, formatMoney } from "@utils";
 
-const CardContainer = styled.Pressable` 
+const CardContainer = styled.Pressable`
   padding: 8px 16px;
   border-radius: 12px;
 `;
@@ -18,7 +18,7 @@ const ValueText = styled.Text`
   color: ${appColors.text};
 `;
 
-const DateText = styled.Text`
+const TitleText = styled.Text`
   font-size: 14px;
   color: ${appColors.text};
 `;
@@ -31,7 +31,10 @@ const ExpenseCard = ({ expense, onDelete }) => {
       style={({ pressed }) => [pressed && appColors.androidRippleColor]}
     >
       <TopRowContainer>
-        <DateText>{formatDate(expense.createdDate, "dd/mm/yyyy")}</DateText>
+        <TitleText>
+          {formatDate(expense.createdDate, "dd/mm/yyyy")}{" "}
+          {expense.name ? "- " + expense.name : ""}
+        </TitleText>
         <ValueText>R$ {formatMoney(expense.value)}</ValueText>
       </TopRowContainer>
     </CardContainer>

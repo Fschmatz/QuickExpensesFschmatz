@@ -2,11 +2,11 @@ import { getDatabase, tables } from "../db/database";
 import { getFirstDayOfMonth, getLastDayOfMonth } from "@utils";
 
 class ExpenseDAO {
-  async insert(date, value) {
+  async insert(date, value, name) {
     const db = await getDatabase();
     await db.runAsync(
-      `INSERT INTO ${tables.EXPENSES} (createdDate, value) VALUES (?, ?);`,
-      [date, value]
+      `INSERT INTO ${tables.EXPENSES} (createdDate, value, name) VALUES (?, ?, ?);`,
+      [date, value, name || null]
     );
 
     const result = await db.runAsync(
@@ -93,6 +93,7 @@ class ExpenseDAO {
     SELECT expe.id AS expense_id, 
     expe.createdDate AS createdDate, 
     expe.value AS value,
+    expe.name AS name,
     tags.id AS tag_id, 
     tags.name AS tag_name, 
     tags.color AS tag_color, 

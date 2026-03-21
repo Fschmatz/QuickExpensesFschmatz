@@ -12,10 +12,12 @@ import {
   getTotalExpensesCurrentMonth,
 } from "@expenseDuck";
 import { useRouter } from "expo-router";
+import { View } from "react-native";
 
 const Container = styled.View`
   padding: 0px;
   flex: 1;
+  width: 100%;
   background-color: ${appColors.background};
 `;
 
@@ -26,23 +28,35 @@ const TopContainer = styled.View`
   border-radius: 40px;
 `;
 
-const StyledInputText = styled.TextInput`
+const ValueInput = styled.TextInput`
   color: ${appColors.text};
-  font-size: 70px;
+  font-size: 60px;
   font-weight: 700;
   text-align: right;
   align-self: flex-end;
   margin-right: 5px;
-  height: 64%;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  flex: 1;
+`;
+
+const NomeInput = styled.TextInput`
+  color: ${appColors.text};
+  font-size: 18px;
+  background-color: ${appColors.background};
+  border-radius: 20px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  width: 100%;
 `;
 
 const BottomContainer = styled.View`
-  flex: 1;
+  flex: 1.1;
   padding: 16px;
 `;
 
 const Keypad = styled.View`
-  justify-content: center;
+  flex: 1;
   flex-direction: row;
 `;
 
@@ -50,20 +64,22 @@ const NumbersContainer = styled.View`
   flex: 3;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: space-between;
 `;
 
 const ConfirmDeleteContainer = styled.View`
   flex: 1;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
+  margin-left: 10px;
 `;
 
 const KeyButton = styled.Pressable`
-  width: ${(props) => (props.big ? "170px" : "80px")};
-  height: 80px;
+  width: ${(props) => (props.big ? "65.75%" : "31.5%")};
+  height: 23.5%;
+  min-height: 50px;
   justify-content: center;
   align-items: center;
-  margin: 5px;
   background-color: ${appColors.btnNumberBackground};
   border-radius: 40px;
   overflow: hidden;
@@ -71,30 +87,28 @@ const KeyButton = styled.Pressable`
 
 const KeyText = styled.Text`
   color: ${appColors.text};
-  font-size: 45px;
+  font-size: 38px;
   font-weight: 600;
 `;
 
 const DeleteKey = styled.Pressable`
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  height: 23.5%;
+  min-height: 50px;
   background-color: ${appColors.btnDeleteBackground};
   justify-content: center;
   align-items: center;
-  margin-top: 5px;
-  margin-left: 5px;
+  margin-bottom: 15px;
   border-radius: 40px;
   overflow: hidden;
 `;
 
 const ConfirmKey = styled.Pressable`
-  width: 80px;
-  height: 260px;
+  width: 100%;
+  flex: 1;
   background-color: ${appColors.btnConfirmBackground};
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
-  margin-left: 5px;
   border-radius: 40px;
   overflow: hidden;
 `;
@@ -118,14 +132,15 @@ const TotalExpensesCurrentMonthText = styled.Text`
 
 const Home = () => {
   const [inputValue, setInputValue] = useState("");
+  const [nome, setNome] = useState("");
   const [selectedTag, setSelectedTag] = useState();
   const router = useRouter();
   const dispatch = useDispatch();
   const tags = useSelector(getTags);
   const totalExpensesCurrentMonth = useSelector(getTotalExpensesCurrentMonth);
-
   const numPad = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ","];
-  const maxLength = 8;
+  const maxLengthValue = 8;
+  const maxLengthName = 20;
 
   useEffect(() => {
     dispatch(fetchTags());
@@ -140,7 +155,7 @@ const Home = () => {
     const canAddValue =
       (!isAddingDot || !hasDot) &&
       !isAddingDigitAfterDot &&
-      inputValue.length < maxLength;
+      inputValue.length < maxLengthValue;
 
     if (canAddValue) {
       setInputValue((prev) => prev + value);
@@ -161,19 +176,21 @@ const Home = () => {
 
   const handleConfirm = () => {
     if (inputValue && greaterThanZero(inputValue)) {
-      insertExpense(inputValue);
+      insertExpense(inputValue, nome);
       setInputValue("");
+      setNome("");
       setSelectedTag("");
       showToast("Despesa adicionada!");
     }
   };
 
-  const insertExpense = async (inputValue) => {
+  const insertExpense = async (inputValue, nomeValue) => {
     dispatch(
       addExpense({
         value: inputValue.replace(",", "."),
         tagId: selectedTag?.id || "",
-      })
+        name: nomeValue || null,
+      }),
     );
   };
 
@@ -188,7 +205,7 @@ const Home = () => {
   const navigateToCurrentMonthDetail = () => {
     const today = new Date();
     const todayFormatted = `${today.getFullYear()}-${String(
-      today.getMonth() + 1
+      today.getMonth() + 1,
     ).padStart(2, "0")}-01`;
 
     router.push({
@@ -201,46 +218,85 @@ const Home = () => {
     const today = new Date();
     return `${String(today.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}/${today.getFullYear()}`;
   };
 
+  const [containerHeight, setContainerHeight] = useState("auto");
+
   return (
-    <Container>
-      <TopContainer>
-        <TotalExpensesCurrentMonthContainer
-          onPress={navigateToCurrentMonthDetail}
-        >
-          <TotalExpensesCurrentMonthText>
-            {getCurrentMonthYear()}
-          </TotalExpensesCurrentMonthText>
-          <TotalExpensesCurrentMonthText>
-            R$ {formatMoney(totalExpensesCurrentMonth)}
-          </TotalExpensesCurrentMonthText>
-        </TotalExpensesCurrentMonthContainer>
+    <View
+      style={{ flex: 1 }}
+      onLayout={(e) => {
+        if (containerHeight === "auto" && e.nativeEvent.layout.height > 0) {
+          setContainerHeight(e.nativeEvent.layout.height);
+        }
+      }}
+    >
+      <Container
+        style={containerHeight !== "auto" ? { minHeight: containerHeight } : {}}
+      >
+        <TopContainer>
+          <TotalExpensesCurrentMonthContainer
+            onPress={navigateToCurrentMonthDetail}
+          >
+            <TotalExpensesCurrentMonthText>
+              {getCurrentMonthYear()}
+            </TotalExpensesCurrentMonthText>
+            <TotalExpensesCurrentMonthText>
+              R$ {formatMoney(totalExpensesCurrentMonth)}
+            </TotalExpensesCurrentMonthText>
+          </TotalExpensesCurrentMonthContainer>
 
-        <StyledInputText
-          value={inputValue}
-          editable={false}
-          maxLength={maxLength}
-        />
+          <ValueInput
+            value={inputValue}
+            editable={false}
+            maxLength={maxLengthValue}
+            adjustsFontSizeToFit
+            numberOfLines={1}
+          />
 
-        <HomeTagsList
-          style={{ alignSelf: "flex-start" }}
-          tags={tags}
-          selectedTag={selectedTag}
-          onSelectTag={handleSelectTag}
-        />
-      </TopContainer>
+          <NomeInput
+            placeholder="Nome"
+            placeholderTextColor="#888"
+            value={nome}
+            maxLength={maxLengthName}
+            onChangeText={setNome}
+          />
 
-      <BottomContainer>
-        <Keypad>
-          <NumbersContainer>
-            {numPad.map((num) => (
-              <KeyButton
-                key={num}
-                big={num === "0"}
-                onPress={() => handlePress(num.toString())}
+          <HomeTagsList
+            tags={tags}
+            selectedTag={selectedTag}
+            onSelectTag={handleSelectTag}
+          />
+        </TopContainer>
+
+        <BottomContainer>
+          <Keypad>
+            <NumbersContainer>
+              {numPad.map((num) => (
+                <KeyButton
+                  key={num}
+                  big={num === "0"}
+                  onPress={() => handlePress(num.toString())}
+                  android_ripple={{
+                    ...appColors.androidRippleEffect,
+                    borderless: false,
+                    foreground: true,
+                  }}
+                  style={({ pressed }) => [
+                    pressed && appColors.androidRippleColor,
+                  ]}
+                >
+                  <KeyText>{num}</KeyText>
+                </KeyButton>
+              ))}
+            </NumbersContainer>
+
+            <ConfirmDeleteContainer>
+              <DeleteKey
+                onPress={handleDelete}
+                onLongPress={handleDeleteAll}
                 android_ripple={{
                   ...appColors.androidRippleEffect,
                   borderless: false,
@@ -250,48 +306,35 @@ const Home = () => {
                   pressed && appColors.androidRippleColor,
                 ]}
               >
-                <KeyText>{num}</KeyText>
-              </KeyButton>
-            ))}
-          </NumbersContainer>
+                <Ionicons
+                  name="backspace-outline"
+                  size={38}
+                  color={appColors.btnDeleteText}
+                />
+              </DeleteKey>
 
-          <ConfirmDeleteContainer>
-            <DeleteKey
-              onPress={handleDelete}
-              onLongPress={handleDeleteAll}
-              android_ripple={{
-                ...appColors.androidRippleEffect,
-                borderless: false,
-                foreground: true,
-              }}
-              style={({ pressed }) => [pressed && appColors.androidRippleColor]}
-            >
-              <Ionicons
-                name="backspace-outline"
-                size={38}
-                color={appColors.btnDeleteText}
-              />
-            </DeleteKey>
-
-            <ConfirmKey
-              onPress={handleConfirm}
-              android_ripple={{
-                ...appColors.androidRippleEffect,
-                borderless: false,
-                foreground: true,
-              }}
-              style={({ pressed }) => [pressed && appColors.androidRippleColor]}
-            >
-              <Ionicons
-                name="checkmark"
-                size={38}
-                color={appColors.btnConfirmText}
-              />
-            </ConfirmKey>
-          </ConfirmDeleteContainer>
-        </Keypad>
-      </BottomContainer>
-    </Container>
+              <ConfirmKey
+                onPress={handleConfirm}
+                android_ripple={{
+                  ...appColors.androidRippleEffect,
+                  borderless: false,
+                  foreground: true,
+                }}
+                style={({ pressed }) => [
+                  pressed && appColors.androidRippleColor,
+                ]}
+              >
+                <Ionicons
+                  name="checkmark"
+                  size={38}
+                  color={appColors.btnConfirmText}
+                />
+              </ConfirmKey>
+            </ConfirmDeleteContainer>
+          </Keypad>
+        </BottomContainer>
+      </Container>
+    </View>
   );
 };
 

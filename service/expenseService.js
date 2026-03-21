@@ -1,9 +1,9 @@
 import ExpenseDAO from "../dao/expenseDAO";
 
 class ExpenseService {
-  async insert(value) {
+  async insert(value, name) {
     const today = new Date().toISOString().split("T")[0];
-    return await ExpenseDAO.insert(today, value);
+    return await ExpenseDAO.insert(today, value, name);
   }
 
   async fetchAll() {
@@ -35,6 +35,7 @@ class ExpenseService {
         expense_id,
         createdDate,
         value,
+        name,
         tag_id,
         tag_name,
         tag_color,
@@ -45,6 +46,7 @@ class ExpenseService {
             id: expense_id,
             createdDate,
             value,
+            name,
             tags: [],
           });
         }
