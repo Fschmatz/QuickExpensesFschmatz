@@ -30,13 +30,13 @@ const TopContainer = styled.View`
 
 const ValueInput = styled.TextInput`
   color: ${appColors.text};
-  font-size: 60px;
+  font-size: 65px;
   font-weight: 700;
   text-align: right;
   align-self: flex-end;
   margin-right: 5px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
   flex: 1;
 `;
 
@@ -131,7 +131,7 @@ const TotalExpensesCurrentMonthText = styled.Text`
 `;
 
 const Home = () => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState("0");
   const [nome, setNome] = useState("");
   const [selectedTag, setSelectedTag] = useState();
   const router = useRouter();
@@ -148,6 +148,19 @@ const Home = () => {
   }, [dispatch]);
 
   const handlePress = (value) => {
+    if (inputValue === "" && value === ",") {
+      setInputValue("0,");
+      return;
+    }
+
+    if (inputValue === "0") {
+      if (value === "0") return;
+      if (value !== ",") {
+        setInputValue(value);
+        return;
+      }
+    }
+
     const hasDot = inputValue.includes(",");
     const decimalPart = hasDot ? inputValue.split(",")[1] : null;
     const isAddingDot = value === ",";
@@ -163,21 +176,24 @@ const Home = () => {
   };
 
   const handleDelete = () => {
-    if (inputValue) {
+    if (inputValue.length > 1) {
       setInputValue((prev) => prev.slice(0, -1));
+    } else {
+      setInputValue("0");
     }
   };
 
   const handleDeleteAll = () => {
-    if (inputValue) {
-      setInputValue("");
+    if (inputValue !== "0") {
+      setInputValue("0");
     }
   };
 
   const handleConfirm = () => {
-    if (inputValue && greaterThanZero(inputValue)) {
+    const normalizedValue = inputValue.replace(",", ".");
+    if (inputValue && greaterThanZero(normalizedValue)) {
       insertExpense(inputValue, nome);
-      setInputValue("");
+      setInputValue("0");
       setNome("");
       setSelectedTag("");
       showToast("Despesa adicionada!");
@@ -185,9 +201,10 @@ const Home = () => {
   };
 
   const insertExpense = async (inputValue, nomeValue) => {
+    const cleanNumberString = parseFloat(inputValue.replace(",", ".")).toString();
     dispatch(
       addExpense({
-        value: inputValue.replace(",", "."),
+        value: cleanNumberString,
         tagId: selectedTag?.id || "",
         name: nomeValue || null,
       }),

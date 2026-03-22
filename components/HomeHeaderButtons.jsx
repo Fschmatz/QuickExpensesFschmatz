@@ -58,13 +58,13 @@ const HomeHeaderButtons = () => {
         <MenuOptions
           customStyles={{
             optionsContainer: {
-              backgroundColor: appColors.primaryContainer,
+              backgroundColor: appColors.dialogBackground,
               borderRadius: 12,
               paddingVertical: 4,
               width: 220,
-              marginTop: 40,
+              marginTop: 35,
               marginLeft: screenWidth - 295,
-              elevation: 2,
+              elevation:2,
             },
           }}
         >
