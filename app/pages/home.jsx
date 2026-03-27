@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import styled from "styled-components/native";
 import { useDispatch, useSelector } from "react-redux";
@@ -141,6 +141,11 @@ const Home = () => {
   const numPad = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ","];
   const maxLengthValue = 8;
   const maxLengthName = 20;
+  const [containerSize, setContainerSize] = useState({
+    height: "auto",
+    width: "auto",
+  });
+  const nomeInputRef = useRef(null);
 
   useEffect(() => {
     dispatch(fetchTags());
@@ -191,17 +196,21 @@ const Home = () => {
 
   const handleConfirm = () => {
     const normalizedValue = inputValue.replace(",", ".");
+
     if (inputValue && greaterThanZero(normalizedValue)) {
       insertExpense(inputValue, nome);
       setInputValue("0");
       setNome("");
       setSelectedTag("");
+      nomeInputRef.current?.blur();
       showToast("Despesa adicionada!");
     }
   };
 
   const insertExpense = async (inputValue, nomeValue) => {
-    const cleanNumberString = parseFloat(inputValue.replace(",", ".")).toString();
+    const cleanNumberString = parseFloat(
+      inputValue.replace(",", "."),
+    ).toString();
     dispatch(
       addExpense({
         value: cleanNumberString,
@@ -239,20 +248,29 @@ const Home = () => {
     )}/${today.getFullYear()}`;
   };
 
-  const [containerHeight, setContainerHeight] = useState("auto");
-
   return (
     <View
       style={{ flex: 1 }}
       onLayout={(e) => {
-        const height = e.nativeEvent.layout.height;
-        if (containerHeight === "auto" || height > containerHeight) {
-          setContainerHeight(height);
+        const { height, width } = e.nativeEvent.layout;
+        if (containerSize.height === "auto") {
+          setContainerSize({ height, width });
+        } else {
+          const heightDiff = containerSize.height - height;
+          const widthChanged = Math.abs(containerSize.width - width) > 10;
+
+          if (widthChanged || heightDiff < 150) {
+            setContainerSize({ height, width });
+          }
         }
       }}
     >
       <Container
-        style={containerHeight !== "auto" ? { minHeight: containerHeight } : {}}
+        style={
+          containerSize.height !== "auto"
+            ? { minHeight: containerSize.height }
+            : {}
+        }
       >
         <TopContainer>
           <TotalExpensesCurrentMonthContainer
@@ -275,6 +293,7 @@ const Home = () => {
           />
 
           <NomeInput
+            ref={nomeInputRef}
             placeholder="Nome"
             placeholderTextColor={appColors.placeholderText}
             value={nome}

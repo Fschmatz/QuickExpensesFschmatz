@@ -62,7 +62,7 @@ const HomeHeaderButtons = () => {
               borderRadius: 12,
               paddingVertical: 4,
               width: 220,
-              marginTop: 35,
+              marginTop: 30,
               marginLeft: screenWidth - 295,
               elevation:2,
             },

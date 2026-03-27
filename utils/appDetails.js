@@ -1,5 +1,5 @@
 const AppDetails = {
-  appVersion: "1.2.2",
+  appVersion: "1.2.3",
   appName: "Quick Expenses Fschmatz",
   appNameHomePage: "Quick Expenses",
   repositoryLink: "https://github.com/Fschmatz/QuickExpensesFschmatz",
@@ -12,6 +12,7 @@ ${AppDetails.appVersion}
 - Home responsiva
 - Correções
 - Popup menu
+- Adicionada animação de loading para algumas páginas
 
 1.1.2
 - Nova página de empréstimos

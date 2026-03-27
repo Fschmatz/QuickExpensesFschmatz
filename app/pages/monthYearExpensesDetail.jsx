@@ -1,5 +1,5 @@
-import { Text, View } from "react-native";
-import { useEffect, useState } from "react";
+import { View, ScrollView, ActivityIndicator, Animated } from "react-native";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import {
@@ -7,6 +7,7 @@ import {
   getExpensesByMonthYear,
   deleteExpense,
   clearExpensesByMonthYear,
+  getExpensesLoading,
 } from "@expenseDuck";
 import {
   PageContainer,
@@ -70,7 +71,23 @@ const MonthYearExpensesDetail = () => {
   const expensesByMonthYear = useSelector(getExpensesByMonthYear);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [expenseToDelete, setExpenseToDelete] = useState(null);
-  const [tagExpenseMap, setTagExpenseMap] = useState(new Map());
+  const loading = useSelector(getExpensesLoading);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (!loading) {
+      fadeAnim.setValue(0);
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [loading]);
+
+  const tagExpenseMap = useMemo(() => {
+    return createTagExpenseMap(expensesByMonthYear || []);
+  }, [expensesByMonthYear]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -82,13 +99,6 @@ const MonthYearExpensesDetail = () => {
       dispatch(clearExpensesByMonthYear());
     };
   }, [dispatch, navigation]);
-
-  useEffect(() => {
-    if (expensesByMonthYear) {
-      const tagMap = createTagExpenseMap(expensesByMonthYear);
-      setTagExpenseMap(tagMap);
-    }
-  }, [expensesByMonthYear]);
 
   function createTagExpenseMap(expenses) {
     const tagExpenseMap = new Map();
@@ -140,7 +150,7 @@ const MonthYearExpensesDetail = () => {
         deleteExpense({
           expenseId: expenseToDelete.id,
           date: date,
-        })
+        }),
       );
     }
     setDialogVisible(false);
@@ -160,55 +170,79 @@ const MonthYearExpensesDetail = () => {
     }, 0);
 
   return (
-    <PageContainer>
-      <ExpensePieChart tagExpenseMap={tagExpenseMap} />
+    <PageContainer isScrollView={false}>
+      <ScrollView>
+        {loading ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              paddingTop: 100,
+            }}
+          >
+            <ActivityIndicator size="large" color={appColors.text} />
+          </View>
+        ) : (
+          <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+            <ExpensePieChart tagExpenseMap={tagExpenseMap} />
 
-      <MonthTotal>Total Mensal: R$ {formatMoney(totalAllExpenses)}</MonthTotal>
+            <MonthTotal>
+              Total Mensal: R$ {formatMoney(totalAllExpenses)}
+            </MonthTotal>
 
-      <SizedBox height={6} />
+            <SizedBox height={6} />
 
-      {Array.from(tagExpenseMap.values())
-        .sort((a, b) => a.tag.name.localeCompare(b.tag.name))
-        .map(({ tag, expenses }) => {
-          const totalTag = expenses.reduce((sum, expense) => {
-            const amount = parseFloat(expense?.value) || 0;
-            return sum + amount;
-          }, 0);
-          const percentage = ((totalTag / totalAllExpenses) * 100).toFixed(2);
+            {Array.from(tagExpenseMap.values())
+              .sort((a, b) => a.tag.name.localeCompare(b.tag.name))
+              .map(({ tag, expenses }) => {
+                const totalTag = expenses.reduce((sum, expense) => {
+                  const amount = parseFloat(expense?.value) || 0;
+                  return sum + amount;
+                }, 0);
+                const percentage = (
+                  (totalTag / totalAllExpenses) *
+                  100
+                ).toFixed(2);
 
-          return (
-            <ExpenseByTagContainer key={tag.id} borderColor={tag.color}>
-              <TopContainer>
-                <TagChip key={tag.id} tag={tag} />
+                return (
+                  <ExpenseByTagContainer key={tag.id} borderColor={tag.color}>
+                    <TopContainer>
+                      <TagChip key={tag.id} tag={tag} />
 
-                <PercentTag color={tag.color}>{percentage}%</PercentTag>
-              </TopContainer>
+                      <PercentTag color={tag.color}>{percentage}%</PercentTag>
+                    </TopContainer>
 
-              <View style={{ gap: 8 }}>
-                {expenses.map((expense) => (
-                  <ExpenseCard
-                    key={expense.id}
-                    expense={expense}
-                    onDelete={showDeleteConfirmation}
-                  />
-                ))}
-              </View>
+                    <View style={{ gap: 8 }}>
+                      {expenses.map((expense) => (
+                        <ExpenseCard
+                          key={expense.id}
+                          expense={expense}
+                          onDelete={showDeleteConfirmation}
+                        />
+                      ))}
+                    </View>
 
-              <BottomContainer>
-                <TotalTag>Total: </TotalTag>
-                <TotalTag>R$ {formatMoney(totalTag)}</TotalTag>
-              </BottomContainer>
-            </ExpenseByTagContainer>
-          );
-        })}
+                    <BottomContainer>
+                      <TotalTag>Total: </TotalTag>
+                      <TotalTag>R$ {formatMoney(totalTag)}</TotalTag>
+                    </BottomContainer>
+                  </ExpenseByTagContainer>
+                );
+              })}
 
-      <ConfirmationDialog
-        message="Deseja excluir esta despesa?"
-        visible={dialogVisible}
-        setVisible={handleCancelDelete}
-        handleConfirm={handleConfirmDelete}
-        handleCancel={handleCancelDelete}
-      />
+            <ConfirmationDialog
+              message="Deseja excluir esta despesa?"
+              visible={dialogVisible}
+              setVisible={handleCancelDelete}
+              handleConfirm={handleConfirmDelete}
+              handleCancel={handleCancelDelete}
+            />
+
+            <SizedBox height={50} />
+          </Animated.View>
+        )}
+      </ScrollView>
     </PageContainer>
   );
 };
