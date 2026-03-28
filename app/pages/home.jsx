@@ -4,7 +4,12 @@ import styled from "styled-components/native";
 import { useDispatch, useSelector } from "react-redux";
 import { appColors } from "@constants";
 import { HomeTagsList } from "@components";
-import { greaterThanZero, showToast, formatMoney } from "@utils";
+import {
+  greaterThanZero,
+  showToast,
+  formatMoney,
+  formatCurrencyInput,
+} from "@utils";
 import { fetchTags, getTags } from "@tagDuck";
 import {
   addExpense,
@@ -140,7 +145,7 @@ const Home = () => {
   const totalExpensesCurrentMonth = useSelector(getTotalExpensesCurrentMonth);
   const numPad = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ","];
   const maxLengthValue = 8;
-  const maxLengthName = 20;
+  const maxLengthName = 30;
   const [containerSize, setContainerSize] = useState({
     height: "auto",
     width: "auto",
@@ -153,31 +158,7 @@ const Home = () => {
   }, [dispatch]);
 
   const handlePress = (value) => {
-    if (inputValue === "" && value === ",") {
-      setInputValue("0,");
-      return;
-    }
-
-    if (inputValue === "0") {
-      if (value === "0") return;
-      if (value !== ",") {
-        setInputValue(value);
-        return;
-      }
-    }
-
-    const hasDot = inputValue.includes(",");
-    const decimalPart = hasDot ? inputValue.split(",")[1] : null;
-    const isAddingDot = value === ",";
-    const isAddingDigitAfterDot = hasDot && decimalPart?.length >= 2;
-    const canAddValue =
-      (!isAddingDot || !hasDot) &&
-      !isAddingDigitAfterDot &&
-      inputValue.length < maxLengthValue;
-
-    if (canAddValue) {
-      setInputValue((prev) => prev + value);
-    }
+    setInputValue((prev) => formatCurrencyInput(prev + value, maxLengthValue));
   };
 
   const handleDelete = () => {

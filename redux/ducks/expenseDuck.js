@@ -27,6 +27,9 @@ const FETCH_TOTAL_EXPENSES_CURRENT_MONTH_SUCCESS =
   "expense/fetchTotalExpensesCurrentMonthSuccess";
 const FETCH_TOTAL_EXPENSES_CURRENT_MONTH_FAILURE =
   "expense/fetchTotalExpensesCurrentMonthFailure";
+const UPDATE_EXPENSE = "expense/updateExpense";
+const UPDATE_EXPENSE_SUCCESS = "expense/updateExpenseSuccess";
+const UPDATE_EXPENSE_FAILURE = "expense/updateExpenseFailure";
 
 export const fetchExpenses = () => ({ type: FETCH_EXPENSES });
 
@@ -126,6 +129,18 @@ export const fetchTotalExpensesCurrentMonthFailure = (error) => ({
   payload: error,
 });
 
+export const updateExpense = (data) => ({
+  type: UPDATE_EXPENSE,
+  payload: data,
+});
+
+export const updateExpenseSuccess = () => ({ type: UPDATE_EXPENSE_SUCCESS });
+
+export const updateExpenseFailure = (error) => ({
+  type: UPDATE_EXPENSE_FAILURE,
+  payload: error,
+});
+
 const initialState = {
   list: [],
   monthlyList: [],
@@ -152,6 +167,7 @@ const actionHandlers = {
   [FETCH_BY_MONTH_YEAR]: setLoading,
   [CLEAR_EXPENSES_BY_MONTH_YEAR]: setLoading,
   [FETCH_TOTAL_EXPENSES_CURRENT_MONTH]: setLoading,
+  [UPDATE_EXPENSE]: setLoading,
 
   // SUCCESS
   [FETCH_EXPENSES_SUCCESS]: (state, action) => ({
@@ -182,6 +198,7 @@ const actionHandlers = {
     loading: false,
     totalExpensesCurrentMonth: action.payload,
   }),
+  [UPDATE_EXPENSE_SUCCESS]: (state) => ({ ...state, loading: false }),
 
   // FAILURE
   [FETCH_EXPENSES_FAILURE]: setError,
@@ -196,6 +213,7 @@ const actionHandlers = {
     error: action.payload,
   }),
   [FETCH_TOTAL_EXPENSES_CURRENT_MONTH_FAILURE]: setError,
+  [UPDATE_EXPENSE_FAILURE]: setError,
 };
 
 export default function expenseReducer(state = initialState, action) {
@@ -211,3 +229,6 @@ export const getExpensesByMonthYear = (state) =>
   state.expenses.expensesByMonthYear;
 export const getTotalExpensesCurrentMonth = (state) =>
   state.expenses.totalExpensesCurrentMonth;
+
+export const selectExpenseById = (id) => (state) =>
+  state.expenses.expensesByMonthYear.find((e) => e.id === Number(id));

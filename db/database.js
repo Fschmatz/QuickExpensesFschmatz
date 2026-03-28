@@ -22,11 +22,11 @@ export const initializeTables = async () => {
   return new Promise(async (resolve, reject) => {
     try {
       const checkTableExists = await db.getFirstAsync(
-        `SELECT name FROM sqlite_master WHERE type='table' AND name='${tables.TAGS}';`
+        `SELECT name FROM sqlite_master WHERE type='table' AND name='${tables.TAGS}';`,
       );
 
       // Se as tabelas existem, não continua
-      if (checkTableExists) {        
+      if (checkTableExists) {
         return resolve();
       }
 
@@ -38,7 +38,7 @@ export const initializeTables = async () => {
           createdDate TEXT NOT NULL,
           value REAL NOT NULL,
           name TEXT
-        );`
+        );`,
       );
 
       await db.execAsync(
@@ -47,7 +47,7 @@ export const initializeTables = async () => {
           name TEXT NOT NULL,
           color TEXT NOT NULL,
           icon TEXT NOT NULL
-        );`
+        );`,
       );
 
       await db.execAsync(
@@ -57,7 +57,7 @@ export const initializeTables = async () => {
           PRIMARY KEY (expense_id, tag_id),
           FOREIGN KEY (expense_id) REFERENCES expenses(id),
           FOREIGN KEY (tag_id) REFERENCES tags(id)
-        );`
+        );`,
       );
 
       await db.execAsync(
@@ -67,7 +67,7 @@ export const initializeTables = async () => {
           value REAL NOT NULL,
           note TEXT NOT NULL,
           createdDate TEXT NOT NULL
-        );`
+        );`,
       );
 
       console.log("Tabelas criadas com sucesso!");
@@ -100,11 +100,11 @@ export const initializeTables = async () => {
           "Mercado",
           "#36A348",
           "cart-outline",
-        ]
+        ],
       );
-      
-      await db.execAsync('PRAGMA user_version = 1;');
-      
+
+      await db.execAsync("PRAGMA user_version = 1;");
+
       resolve();
     } catch (error) {
       console.error("Erro de inicialização do banco de dados: ", error);
@@ -124,23 +124,27 @@ export const dropAllTables = async () => {
 
 export const runDatabaseUpdates = async () => {
   const db = await getDatabase();
-  
+
   try {
-    const result = await db.getFirstAsync('PRAGMA user_version;');
+    const result = await db.getFirstAsync("PRAGMA user_version;");
     let currentDbVersion = result.user_version;
 
     if (currentDbVersion === 0) {
       console.log("Running database updates... version 0 to 1");
-      
-      const tableInfo = await db.getAllAsync(`PRAGMA table_info(${tables.EXPENSES});`);
-      const hasNameColumn = tableInfo.some(column => column.name === 'name');
-      
+
+      const tableInfo = await db.getAllAsync(
+        `PRAGMA table_info(${tables.EXPENSES});`,
+      );
+      const hasNameColumn = tableInfo.some((column) => column.name === "name");
+
       if (!hasNameColumn) {
         console.log("Adding 'name' column to 'expenses' table...");
-        await db.execAsync(`ALTER TABLE ${tables.EXPENSES} ADD COLUMN name TEXT;`);
+        await db.execAsync(
+          `ALTER TABLE ${tables.EXPENSES} ADD COLUMN name TEXT;`,
+        );
       }
-      
-      await db.execAsync('PRAGMA user_version = 1;');
+
+      await db.execAsync("PRAGMA user_version = 1;");
       console.log("Database updated to version 1.");
     }
   } catch (error) {
@@ -148,4 +152,9 @@ export const runDatabaseUpdates = async () => {
   }
 };
 
-export default { getDatabase, initializeTables, dropAllTables, runDatabaseUpdates };
+export default {
+  getDatabase,
+  initializeTables,
+  dropAllTables,
+  runDatabaseUpdates,
+};

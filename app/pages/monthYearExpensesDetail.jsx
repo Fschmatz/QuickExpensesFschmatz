@@ -1,21 +1,21 @@
 import { View, ScrollView, ActivityIndicator, Animated } from "react-native";
 import { useEffect, useState, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocalSearchParams, useNavigation } from "expo-router";
 import {
   fetchByMonthYear,
   getExpensesByMonthYear,
-  deleteExpense,
   clearExpensesByMonthYear,
   getExpensesLoading,
+  deleteExpense,
 } from "@expenseDuck";
+import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import {
   PageContainer,
   ExpenseCard,
-  ConfirmationDialog,
   TagChip,
   ExpensePieChart,
   SizedBox,
+  ConfirmationDialog,
 } from "@components";
 import { formatDate, isEmpty, formatMoney } from "@utils";
 import { appColors } from "@constants";
@@ -67,19 +67,20 @@ const MonthTotal = styled.Text`
 const MonthYearExpensesDetail = () => {
   const { date } = useLocalSearchParams();
   const dispatch = useDispatch();
+  const router = useRouter();
   const navigation = useNavigation();
   const expensesByMonthYear = useSelector(getExpensesByMonthYear);
-  const [dialogVisible, setDialogVisible] = useState(false);
-  const [expenseToDelete, setExpenseToDelete] = useState(null);
   const loading = useSelector(getExpensesLoading);
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState(null);
 
   useEffect(() => {
     if (!loading) {
       fadeAnim.setValue(0);
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 300,
+        duration: 800,
         useNativeDriver: true,
       }).start();
     }
@@ -139,27 +140,33 @@ const MonthYearExpensesDetail = () => {
     return tagExpenseMap;
   }
 
-  const showDeleteConfirmation = (expense) => {
-    setExpenseToDelete(expense);
-    setDialogVisible(true);
+  const handlePressExpense = (expense) => {
+    router.push({
+      pathname: "/pages/storeExpense",
+      params: {
+        isUpdate: true,
+        expenseId: expense.id,
+        date: date,
+      },
+    });
+  };
+
+  const handleLongPressExpense = (expense) => {
+    setSelectedExpense(expense);
+    setIsDialogVisible(true);
   };
 
   const handleConfirmDelete = () => {
-    if (expenseToDelete !== null) {
-      dispatch(
-        deleteExpense({
-          expenseId: expenseToDelete.id,
-          date: date,
-        }),
-      );
+    if (selectedExpense) {
+      dispatch(deleteExpense({ expenseId: selectedExpense.id, date: date }));
+      setIsDialogVisible(false);
+      setSelectedExpense(null);
     }
-    setDialogVisible(false);
-    setExpenseToDelete(null);
   };
 
   const handleCancelDelete = () => {
-    setDialogVisible(false);
-    setExpenseToDelete(null);
+    setIsDialogVisible(false);
+    setSelectedExpense(null);
   };
 
   const totalAllExpenses = Array.from(tagExpenseMap.values())
@@ -206,7 +213,10 @@ const MonthYearExpensesDetail = () => {
                 ).toFixed(2);
 
                 return (
-                  <ExpenseByTagContainer key={tag.id} borderColor={tag.color}>
+                  <ExpenseByTagContainer
+                    key={tag.id || tag.name}
+                    borderColor={tag.color}
+                  >
                     <TopContainer>
                       <TagChip key={tag.id} tag={tag} />
 
@@ -214,11 +224,12 @@ const MonthYearExpensesDetail = () => {
                     </TopContainer>
 
                     <View style={{ gap: 8 }}>
-                      {expenses.map((expense) => (
+                      {expenses.map((expense, index) => (
                         <ExpenseCard
-                          key={expense.id}
+                          key={expense.id || index}
                           expense={expense}
-                          onDelete={showDeleteConfirmation}
+                          onPress={handlePressExpense}
+                          onLongPress={handleLongPressExpense}
                         />
                       ))}
                     </View>
@@ -231,18 +242,18 @@ const MonthYearExpensesDetail = () => {
                 );
               })}
 
-            <ConfirmationDialog
-              message="Deseja excluir esta despesa?"
-              visible={dialogVisible}
-              setVisible={handleCancelDelete}
-              handleConfirm={handleConfirmDelete}
-              handleCancel={handleCancelDelete}
-            />
-
             <SizedBox height={50} />
           </Animated.View>
         )}
       </ScrollView>
+
+      <ConfirmationDialog
+        visible={isDialogVisible}
+        setVisible={setIsDialogVisible}
+        message={`Deseja excluir "${selectedExpense?.name || "esta despesa"}"?`}
+        handleConfirm={handleConfirmDelete}
+        handleCancel={handleCancelDelete}
+      />
     </PageContainer>
   );
 };

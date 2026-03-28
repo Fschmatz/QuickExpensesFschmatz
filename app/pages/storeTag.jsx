@@ -108,7 +108,7 @@ const StoreTag = () => {
           placeholder=""
           value={name}
           onChangeText={setName}
-          maxLength={30}
+          maxLength={20}
           autoFocus={Boolean(isInsert)}
         />
 

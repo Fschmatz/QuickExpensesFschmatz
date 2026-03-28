@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { appColors } from "@constants";
-import { showToast } from "@utils";
+import { showToast, formatCurrencyInput, completeCurrencyZeros } from "@utils";
 import { ButtonWithIcon, Label, PageContainer, SizedBox } from "@components";
 import { selectLoanById } from "@loanSelector";
 import { createLoan } from "../../entities/loan";
@@ -30,7 +30,7 @@ const NoteInput = styled.TextInput`
   border-width: 1px;
   border-color: #d1d1d1;
   color: ${appColors.text};
-  padding: 8px;  
+  padding: 8px;
 `;
 
 const StoreLoan = () => {
@@ -40,7 +40,13 @@ const StoreLoan = () => {
   const dispatch = useDispatch();
   const loanForUpdate = isUpdate ? useSelector(selectLoanById(loanId)) : "";
   const [name, setName] = useState(isUpdate ? loanForUpdate.name : "");
-  const [value, setValue] = useState(isUpdate ? cleanValue(loanForUpdate.value.toString()) : 0);
+  const [value, setValue] = useState(
+    isUpdate
+      ? completeCurrencyZeros(
+          formatCurrencyInput(loanForUpdate.value.toString().replace(".", ",")),
+        )
+      : "0",
+  );
   const [note, setNote] = useState(isUpdate ? loanForUpdate.note : "");
 
   useEffect(() => {
@@ -83,23 +89,8 @@ const StoreLoan = () => {
     return val.replace(/\./g, "").replace(",", ".");
   }
 
-  function handleValueChange(text) {  
-    setValue(cleanValue(text));
-  }
-
-  function cleanValue(text) {
-    let cleaned = text.replace(/[^0-9,]/g, "");
-
-    if ((cleaned.match(/,/g) || []).length > 1) {
-      return;
-    }
-
-    if (cleaned.includes(",")) {
-      const [intPart, decimalPart] = cleaned.split(",");
-      cleaned = intPart + "," + decimalPart.slice(0, 2);
-    }
-
-    return cleaned;
+  function handleValueChange(text) {
+    setValue(formatCurrencyInput(text, 10));
   }
 
   return (
@@ -119,7 +110,7 @@ const StoreLoan = () => {
         <NameInput
           onChangeText={handleValueChange}
           value={value}
-          maxLength={6}
+          maxLength={10}
           placeholder=""
           keyboardType="numeric"
         />
@@ -132,9 +123,9 @@ const StoreLoan = () => {
           value={note}
           maxLength={250}
           placeholder=""
-          multiline={true}      
-          numberOfLines={5}      
-          textAlignVertical="top" 
+          multiline={true}
+          numberOfLines={5}
+          textAlignVertical="top"
         />
 
         <View style={{ marginTop: 25 }}>

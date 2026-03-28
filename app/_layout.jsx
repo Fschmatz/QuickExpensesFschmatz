@@ -30,86 +30,94 @@ export default function RootLayout() {
         <StatusBar style={"light"} />
         <Stack>
           <Stack.Screen
-          name="index"
-          options={{
-            title: appDetails.appNameHomePage,
-            headerRight: () => <HomeHeaderButtons />,
-            ...defaultHeaderScreenOptions,
-          }}
-        />
+            name="index"
+            options={{
+              title: appDetails.appNameHomePage,
+              headerRight: () => <HomeHeaderButtons />,
+              ...defaultHeaderScreenOptions,
+            }}
+          />
 
-        <Stack.Screen
-          name="pages/monthlyExpensesList"
-          options={{
-            title: "Despesas Mensais",
-            ...defaultHeaderScreenOptions,
-          }}
-        />
+          <Stack.Screen
+            name="pages/monthlyExpensesList"
+            options={{
+              title: "Despesas Mensais",
+              ...defaultHeaderScreenOptions,
+            }}
+          />
 
-        <Stack.Screen
-          name="pages/tagsList"
-          options={{
-            title: "Minhas Tags",
-            ...defaultHeaderScreenOptions,
-          }}
-        />
+          <Stack.Screen
+            name="pages/tagsList"
+            options={{
+              title: "Minhas Tags",
+              ...defaultHeaderScreenOptions,
+            }}
+          />
 
-        <Stack.Screen
-          name="pages/settings"
-          options={{
-            title: "Configurações",
-            ...defaultHeaderScreenOptions,
-          }}
-        />
+          <Stack.Screen
+            name="pages/settings"
+            options={{
+              title: "Configurações",
+              ...defaultHeaderScreenOptions,
+            }}
+          />
 
-        <Stack.Screen
-          name="pages/debug"
-          options={{
-            title: "Debug",
-            ...defaultHeaderScreenOptions,
-          }}
-        />
+          <Stack.Screen
+            name="pages/debug"
+            options={{
+              title: "Debug",
+              ...defaultHeaderScreenOptions,
+            }}
+          />
 
-        <Stack.Screen
-          name="pages/monthYearExpensesDetail"
-          options={{
-            title: "Detalhes",
-            ...defaultHeaderScreenOptions,
-          }}
-        />
+          <Stack.Screen
+            name="pages/monthYearExpensesDetail"
+            options={{
+              title: "Detalhes",
+              ...defaultHeaderScreenOptions,
+            }}
+          />
 
-        <Stack.Screen
-          name="pages/storeTag"
-          options={{
-            title: "Tag",
-            ...defaultHeaderScreenOptions,
-          }}
-        />
+          <Stack.Screen
+            name="pages/storeTag"
+            options={{
+              title: "Tag",
+              ...defaultHeaderScreenOptions,
+            }}
+          />
 
-        <Stack.Screen
-          name="pages/changelog"
-          options={{
-            title: "Changelog",
-            ...defaultHeaderScreenOptions,
-          }}
-        />
+          <Stack.Screen
+            name="pages/changelog"
+            options={{
+              title: "Changelog",
+              ...defaultHeaderScreenOptions,
+            }}
+          />
 
-        <Stack.Screen
-          name="pages/storeLoan"
-          options={{
-            title: "Empréstimo",
-            ...defaultHeaderScreenOptions,
-          }}
-        />
+          <Stack.Screen
+            name="pages/storeLoan"
+            options={{
+              title: "Empréstimo",
+              ...defaultHeaderScreenOptions,
+            }}
+          />
 
-        <Stack.Screen
-          name="pages/loansList"
-          options={{
-            title: "Empréstimos",
-            ...defaultHeaderScreenOptions,
-          }}
-        />
-      </Stack>
+          <Stack.Screen
+            name="pages/loansList"
+            options={{
+              title: "Empréstimos",
+              ...defaultHeaderScreenOptions,
+            }}
+          />
+
+          <Stack.Screen
+            name="pages/storeExpense"
+            options={{
+              title: "Despesa",
+              ...defaultHeaderScreenOptions,
+            }}
+          />
+        </Stack>
       </MenuProvider>
     </Provider>
   );

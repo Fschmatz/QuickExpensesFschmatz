@@ -6,11 +6,11 @@ class ExpenseDAO {
     const db = await getDatabase();
     await db.runAsync(
       `INSERT INTO ${tables.EXPENSES} (createdDate, value, name) VALUES (?, ?, ?);`,
-      [date, value, name || null]
+      [date, value, name || null],
     );
 
     const result = await db.runAsync(
-      `SELECT last_insert_rowid() as lastInsertRowId;`
+      `SELECT last_insert_rowid() as lastInsertRowId;`,
     );
 
     return result.lastInsertRowId;
@@ -28,7 +28,7 @@ class ExpenseDAO {
        SUM(value) AS value
        FROM ${tables.EXPENSES}
        GROUP BY substr(createdDate, 1, 7)
-       ORDER BY createdDate DESC;`
+       ORDER BY createdDate DESC;`,
     );
   }
 
@@ -41,11 +41,11 @@ class ExpenseDAO {
     const db = await getDatabase();
 
     await db.runAsync("BEGIN TRANSACTION");
-    
+
     try {
       await db.runAsync(
         `DELETE FROM ${tables.EXPENSES_TAGS} WHERE expense_id = ?;`,
-        [id]
+        [id],
       );
 
       await db.runAsync(`DELETE FROM ${tables.EXPENSES} WHERE id = ?;`, [id]);
@@ -63,11 +63,11 @@ class ExpenseDAO {
 
   async update(expense) {
     const db = await getDatabase();
-    await db.execAsync(
+    await db.runAsync(
       `UPDATE ${tables.EXPENSES} 
-       SET createdDate = ?, value = ?
+       SET value = ?, name = ?
        WHERE id = ?;`,
-      [expense.date, expense.value, expense.id]
+      [expense.value, expense.name || null, expense.id],
     );
   }
 
@@ -136,11 +136,11 @@ class ExpenseDAO {
     const db = await getDatabase();
     const currentDate = new Date();
     const currentYearMonth = currentDate.toISOString().slice(0, 7);
-    
+
     const query = `SELECT SUM(value) AS value
        FROM ${tables.EXPENSES}
        WHERE substr(createdDate, 1, 7) = ?`;
-    
+
     return await db.getFirstAsync(query, [currentYearMonth]);
   }
 }

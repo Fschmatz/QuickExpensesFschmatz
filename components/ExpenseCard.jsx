@@ -3,7 +3,7 @@ import { appColors } from "@constants";
 import { formatDate, formatMoney } from "@utils";
 
 const CardContainer = styled.Pressable`
-  padding: 8px 16px;
+  padding: 6px 16px;
   border-radius: 12px;
 `;
 
@@ -23,17 +23,23 @@ const TitleText = styled.Text`
   color: ${appColors.text};
 `;
 
-const ExpenseCard = ({ expense, onDelete }) => {
+const ExpenseCard = ({ expense, onPress, onLongPress }) => {
   return (
     <CardContainer
-      onLongPress={() => onDelete(expense)}
+      onPress={() => onPress(expense)}
+      onLongPress={() => onLongPress(expense)}
       android_ripple={appColors.androidRippleEffect}
       style={({ pressed }) => [pressed && appColors.androidRippleColor]}
     >
       <TopRowContainer>
         <TitleText>
           {formatDate(expense.createdDate, "dd/mm/yyyy")}{" "}
-          {expense.name ? "- " + expense.name : ""}
+          {expense.name
+            ? "- " +
+              (expense.name.length > 15
+                ? expense.name.substring(0, 15) + "..."
+                : expense.name)
+            : ""}
         </TitleText>
         <ValueText>R$ {formatMoney(expense.value)}</ValueText>
       </TopRowContainer>

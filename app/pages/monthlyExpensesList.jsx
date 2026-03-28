@@ -24,7 +24,7 @@ const MonthlyExpensesList = () => {
       fadeAnim.setValue(0);
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 300,
+        duration: 800,
         useNativeDriver: true,
       }).start();
     }

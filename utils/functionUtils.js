@@ -70,11 +70,65 @@ export const getLastDayOfMonth = (dateString) => {
   return `${year}-${month.toString().padStart(2, "0")}-${lastDay}`;
 };
 
+export const formatCurrencyInput = (text, maxLength = 8) => {
+  if (text === "," || text === ".") {
+    return "0,";
+  }
+
+  let cleaned = text.replace(/\./g, ",").replace(/[^0-9,]/g, "");
+
+  if (cleaned.startsWith("0") && cleaned.length > 1 && cleaned[1] !== ",") {
+    cleaned = cleaned.replace(/^0+/, "");
+  }
+
+  if (cleaned === "") {
+    cleaned = "0";
+  }
+
+  const commaIndex = cleaned.indexOf(",");
+  if (commaIndex !== -1) {
+    const beforeComma = cleaned.substring(0, commaIndex);
+    let afterComma = cleaned.substring(commaIndex + 1).replace(/,/g, "");
+    afterComma = afterComma.substring(0, 2);
+    cleaned = beforeComma + "," + afterComma;
+  }
+
+  if (cleaned.length > maxLength) {
+    return cleaned.substring(0, maxLength);
+  }
+
+  return cleaned;
+};
+
+export const completeCurrencyZeros = (text) => {
+  if (!text || text === "0" || text === "0,") return "0,00";
+
+  const normalized = text.replace(/\./g, ",");
+  const commaIndex = normalized.indexOf(",");
+
+  if (commaIndex === -1) {
+    return normalized + ",00";
+  }
+
+  const parts = normalized.split(",");
+  const beforeComma = parts[0] || "0";
+  let afterComma = parts[1] || "";
+
+  if (afterComma.length === 0) {
+    afterComma = "00";
+  } else if (afterComma.length === 1) {
+    afterComma += "0";
+  }
+
+  return beforeComma + "," + afterComma;
+};
+
 export const isEmpty = (array) => !array || array.length === 0;
 
 export default {
   formatDate,
   darkenColor,
+  brightenColor,
   equalsZero,
   greaterThanZero,
   lessThanZero,
@@ -83,4 +137,6 @@ export default {
   getFirstDayOfMonth,
   getLastDayOfMonth,
   isEmpty,
+  formatCurrencyInput,
+  completeCurrencyZeros,
 };

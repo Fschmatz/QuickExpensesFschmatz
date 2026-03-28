@@ -12,7 +12,7 @@ const StyledScrollView = styled(ScrollView)`
 const TagsContainer = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 6px; 
+  gap: 6px;
 `;
 
 const HomeTagChip = styled.TouchableOpacity`
@@ -30,11 +30,20 @@ const ChipText = styled.Text`
   font-weight: 500;
 `;
 
-const HomeTagsList = ({ tags, selectedTag, onSelectTag }) => {
+const HomeTagsList = ({
+  tags,
+  selectedTag,
+  onSelectTag,
+  isStoreExpensePage = false,
+}) => {
   const isSelected = (tagId) => selectedTag?.id === tagId;
 
   const getBackgroundColor = (tag) =>
-    isSelected(tag.id) ? safeDarkenColor(tag.color, 40) : appColors.background;
+    isSelected(tag.id)
+      ? safeDarkenColor(tag.color, 40)
+      : isStoreExpensePage
+        ? appColors.btnNumberBackground
+        : appColors.background;
 
   const getTextColor = (tag) =>
     isSelected(tag.id) ? appColors.text : tag.color;
@@ -55,22 +64,26 @@ const HomeTagsList = ({ tags, selectedTag, onSelectTag }) => {
     return darkened;
   };
 
-  return (
-    <StyledScrollView>
-      <TagsContainer>
-        {tags.map((tag) => (
-          <HomeTagChip
-            key={tag.id}
-            backgroundColor={getBackgroundColor(tag)}
-            onPress={() => onSelectTag(tag)}
-            activeOpacity={0.5}
-          >
-            <Ionicons name={tag.icon} size={18} color={getTextColor(tag)} />
-            <ChipText>{tag.name}</ChipText>
-          </HomeTagChip>
-        ))}
-      </TagsContainer>
-    </StyledScrollView>
+  const content = (
+    <TagsContainer>
+      {tags.map((tag) => (
+        <HomeTagChip
+          key={tag.id}
+          backgroundColor={getBackgroundColor(tag)}
+          onPress={() => onSelectTag(tag)}
+          activeOpacity={0.5}
+        >
+          <Ionicons name={tag.icon} size={18} color={getTextColor(tag)} />
+          <ChipText>{tag.name}</ChipText>
+        </HomeTagChip>
+      ))}
+    </TagsContainer>
+  );
+
+  return isStoreExpensePage ? (
+    content
+  ) : (
+    <StyledScrollView>{content}</StyledScrollView>
   );
 };
 

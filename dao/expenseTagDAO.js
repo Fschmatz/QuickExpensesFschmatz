@@ -5,7 +5,7 @@ class ExpenseTagDAO {
     const db = await getDatabase();
     await db.runAsync(
       `INSERT INTO ${tables.EXPENSES_TAGS} (expense_id, tag_id) VALUES (?, ?);`,
-      [expenseId, tagId]
+      [expenseId, tagId],
     );
   }
 
@@ -16,7 +16,7 @@ class ExpenseTagDAO {
        FROM ${tables.TAGS} t
        INNER JOIN ${tables.EXPENSES_TAGS} et ON et.tag_id = t.id
        WHERE et.expense_id = ?;`,
-      [expense.id]
+      [expense.id],
     );
   }
 
@@ -27,7 +27,7 @@ class ExpenseTagDAO {
        FROM ${tables.EXPENSES} e
        INNER JOIN ${tables.EXPENSES_TAGS} et ON et.expense_id = e.id
        WHERE et.tag_id = ?;`,
-      [tag.id]
+      [tag.id],
     );
   }
 
@@ -36,9 +36,12 @@ class ExpenseTagDAO {
     return await db.getAllAsync(`SELECT * FROM ${tables.EXPENSES_TAGS};`);
   }
 
-  async deleteAll() {
+  async deleteByExpenseId(expenseId) {
     const db = await getDatabase();
-    await db.runAsync(`DELETE FROM ${tables.EXPENSES_TAGS};`);
+    await db.runAsync(
+      `DELETE FROM ${tables.EXPENSES_TAGS} WHERE expense_id = ?;`,
+      [expenseId],
+    );
   }
 
   async importFromBackup(expensesTags) {

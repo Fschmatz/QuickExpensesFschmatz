@@ -16,12 +16,15 @@ import {
   fetchExpenses,
   fetchMonthlyExpenses,
   fetchByMonthYear,
+  fetchTotalExpensesCurrentMonthSuccess,
+  fetchTotalExpensesCurrentMonthFailure,
+  updateExpenseSuccess,
+  updateExpenseFailure,
   clearExpensesByMonthYearSuccess,
   clearExpensesByMonthYearFailure,
-  fetchTotalExpensesCurrentMonthSuccess,
-  fetchTotalExpensesCurrentMonthFailure
 } from "@expenseDuck";
 import { addExpenseTag } from "@expenseTagDuck";
+import ExpenseTagService from "../../service/expenseTagService";
 import { fetchTotalExpensesCurrentMonth } from "../ducks/expenseDuck";
 
 function* handleFetchExpenses() {
@@ -52,7 +55,7 @@ function* handleAddExpense(action) {
         addExpenseTag({
           expenseId: newExpenseId,
           tagId: tagId,
-        })
+        }),
       );
     }
 
@@ -62,6 +65,33 @@ function* handleAddExpense(action) {
     yield put(fetchTotalExpensesCurrentMonth());
   } catch (error) {
     yield put(addExpenseFailure(error.toString()));
+  }
+}
+
+function* handleUpdateExpense(action) {
+  try {
+    const { id, value, tagId, name, date } = action.payload;
+    yield call([ExpenseService, "update"], { id, value, name });
+
+    yield call([ExpenseTagService, "deleteByExpenseId"], id);
+
+    if (tagId) {
+      yield put(
+        addExpenseTag({
+          expenseId: id,
+          tagId: tagId,
+        }),
+      );
+    }
+
+    yield put(updateExpenseSuccess());
+    yield put(fetchMonthlyExpenses());
+    yield put(fetchTotalExpensesCurrentMonth());
+    if (date) {
+      yield put(fetchByMonthYear(date));
+    }
+  } catch (error) {
+    yield put(updateExpenseFailure(error.toString()));
   }
 }
 
@@ -94,7 +124,7 @@ function* handleFetchByMonthYear(action) {
   try {
     const monthlyExpenses = yield call(
       [ExpenseService, "fetchByMonthYear"],
-      action.payload
+      action.payload,
     );
     yield put(fetchByMonthYearSuccess(monthlyExpenses));
   } catch (error) {
@@ -103,7 +133,7 @@ function* handleFetchByMonthYear(action) {
 }
 
 function* handleClearExpenses() {
-  try {  
+  try {
     yield put(clearExpensesByMonthYearSuccess());
   } catch (error) {
     yield put(clearExpensesByMonthYearFailure(error.toString()));
@@ -112,7 +142,10 @@ function* handleClearExpenses() {
 
 function* handleFetchTotalExpensesCurrentMonth() {
   try {
-    const totalExpensesCurrentMonth = yield call([ExpenseService, "fetchTotalExpensesCurrentMonth"]);
+    const totalExpensesCurrentMonth = yield call([
+      ExpenseService,
+      "fetchTotalExpensesCurrentMonth",
+    ]);
     yield put(fetchTotalExpensesCurrentMonthSuccess(totalExpensesCurrentMonth));
   } catch (error) {
     yield put(fetchTotalExpensesCurrentMonthFailure(error.toString()));
@@ -127,5 +160,9 @@ export default function* expenseSaga() {
   yield takeLatest("expense/deleteAllExpenses", handleDeleteAllExpenses);
   yield takeLatest("expense/fetchByMonthYear", handleFetchByMonthYear);
   yield takeLatest("expense/clearExpensesByMonthYear", handleClearExpenses);
-  yield takeLatest("expense/fetchTotalExpensesCurrentMonth", handleFetchTotalExpensesCurrentMonth);
+  yield takeLatest(
+    "expense/fetchTotalExpensesCurrentMonth",
+    handleFetchTotalExpensesCurrentMonth,
+  );
+  yield takeLatest("expense/updateExpense", handleUpdateExpense);
 }
