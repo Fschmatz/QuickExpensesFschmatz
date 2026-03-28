@@ -22,22 +22,23 @@ import { appColors } from "@constants";
 import styled from "styled-components/native";
 
 const ExpenseByTagContainer = styled.View`
+  background-color: ${appColors.primaryContainer};
+  border-left-color: ${(props) => props.borderColor};
+  border-left-width: 6px;
   border-radius: 16px;
-  border-color: ${(props) => props.borderColor};
-  border-width: 1px;
-  padding: 8px 0 16px 0;
-  margin: 8px 0;
+  padding: 8px 8px 12px 8px;
+  margin: 6px 0;
 `;
 
 const PercentTag = styled.Text`
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: ${(props) => props.color};
 `;
 
 const TotalTag = styled.Text`
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: ${appColors.text};
 `;
 
@@ -45,16 +46,16 @@ const TopContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-right: 16px;
+  margin-right: 8px;
 `;
 
 const BottomContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-right: 16px;
-  margin-top: 12px;
-  margin-left: 16px;
+  margin-right: 8px;
+  margin-top: 4px;
+  margin-left: 4px;
 `;
 
 const MonthTotal = styled.Text`
@@ -178,7 +179,10 @@ const MonthYearExpensesDetail = () => {
 
   return (
     <PageContainer isScrollView={false}>
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
         {loading ? (
           <View
             style={{
@@ -198,7 +202,7 @@ const MonthYearExpensesDetail = () => {
               Total Mensal: R$ {formatMoney(totalAllExpenses)}
             </MonthTotal>
 
-            <SizedBox height={6} />
+            <SizedBox height={4} />
 
             {Array.from(tagExpenseMap.values())
               .sort((a, b) => a.tag.name.localeCompare(b.tag.name))
@@ -223,7 +227,7 @@ const MonthYearExpensesDetail = () => {
                       <PercentTag color={tag.color}>{percentage}%</PercentTag>
                     </TopContainer>
 
-                    <View style={{ gap: 8 }}>
+                    <View>
                       {expenses.map((expense, index) => (
                         <ExpenseCard
                           key={expense.id || index}

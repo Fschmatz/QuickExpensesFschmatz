@@ -46,6 +46,8 @@ const MonthlyExpensesList = () => {
       ) : (
         <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
           <FlatList
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ gap: 8, paddingBottom: 75 }}
             data={monthlyExpenses}
             keyExtractor={(item) => item.date.toString()}

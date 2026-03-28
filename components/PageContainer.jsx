@@ -22,6 +22,8 @@ const PageContainer = ({
 }) => {
   return isScrollView ? (
     <ContainerScrollView
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
       padding={containerPadding}
       contentContainerStyle={{
         flexGrow: 1,
