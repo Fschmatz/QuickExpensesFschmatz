@@ -10,7 +10,7 @@ const IconButton = ({
   size = 24,
   color = appColors.text,
   onPress,
-  hitSlop = 8,
+  hitSlop = 15,
   disabled = false,
   style,
 }) => {

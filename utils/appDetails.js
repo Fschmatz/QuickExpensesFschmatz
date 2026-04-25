@@ -1,7 +1,7 @@
 const AppDetails = {
-  appVersion: "1.2.5",
+  appVersion: "1.2.6",
   appName: "Quick Expenses Fschmatz",
-  appNameHomePage: "Quick Expenses",
+  appNameHomePage: " Quick Expenses",
   repositoryLink: "https://github.com/Fschmatz/QuickExpensesFschmatz",
   backupFileName: "quick_expenses_backup",
 };

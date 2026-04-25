@@ -37,6 +37,7 @@ const ListTileWithIcon = ({
       activeOpacity={0.7}
       android_ripple={appColors.androidRippleEffect}
       style={({ pressed }) => [pressed && appColors.androidRippleColor]}
+      unstable_pressDelay={100}
     >
       {icon && <Icon name={icon} size={24} color={iconColor} />}
       <Title

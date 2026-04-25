@@ -17,8 +17,7 @@ const Container = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 6px;
-  margin-right: -6px;
+  gap: 12px;
 `;
 
 const OptionRow = styled.View`
@@ -43,8 +42,12 @@ const HomeHeaderButtons = () => {
 
   return (
     <Container>
-      <IconButton icon="receipt-outline" onPress={navigateToMonthlyExpenses} style={{marginRight: 8}}/>
-      
+      <IconButton
+        icon="receipt-outline"
+        onPress={navigateToMonthlyExpenses}
+        style={{ marginRight: 8 }}
+      />
+
       <Menu>
         <MenuTrigger
           customStyles={{
@@ -64,7 +67,7 @@ const HomeHeaderButtons = () => {
               width: 220,
               marginTop: 30,
               marginLeft: screenWidth - 295,
-              elevation:2,
+              elevation: 2,
             },
           }}
         >
@@ -76,13 +79,21 @@ const HomeHeaderButtons = () => {
           </MenuOption>
           <MenuOption onSelect={navigateToTags}>
             <OptionRow>
-              <Ionicons name="pricetags-outline" size={22} color={appColors.text} />
+              <Ionicons
+                name="pricetags-outline"
+                size={22}
+                color={appColors.text}
+              />
               <MenuOptionText>Tags</MenuOptionText>
             </OptionRow>
           </MenuOption>
           <MenuOption onSelect={navigateToSettings}>
             <OptionRow>
-              <Ionicons name="settings-outline" size={22} color={appColors.text} />
+              <Ionicons
+                name="settings-outline"
+                size={22}
+                color={appColors.text}
+              />
               <MenuOptionText>Configurações</MenuOptionText>
             </OptionRow>
           </MenuOption>

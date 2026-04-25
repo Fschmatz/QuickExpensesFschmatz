@@ -46,15 +46,15 @@ const LoanTile = ({ loan, onDelete, onEdit }) => {
       onPress={() => onEdit(loan)}
       android_ripple={appColors.androidRippleEffect}
       style={({ pressed }) => [pressed && appColors.androidRippleColor]}
+      unstable_pressDelay={100}
     >
-     
       <Row>
         <LoanName>{loan.name}</LoanName>
         <ValueText>R$ {formatMoney(loan.value)}</ValueText>
       </Row>
-    
+
       {loan.note ? <LoanNote>{loan.note}</LoanNote> : null}
-     
+
       <Row style={{ marginTop: 8 }}>
         <DateText>{formatDate(loan.createdDate, "dd/mm/yyyy")}</DateText>
         <IconButton

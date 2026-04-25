@@ -17,7 +17,7 @@ import {
   getTotalExpensesCurrentMonth,
 } from "@expenseDuck";
 import { useRouter } from "expo-router";
-import { View } from "react-native";
+import { View, useWindowDimensions } from "react-native";
 
 const Container = styled.View`
   padding: 0px;
@@ -35,13 +35,13 @@ const TopContainer = styled.View`
 
 const ValueInput = styled.TextInput`
   color: ${appColors.text};
-  font-size: 65px;
+  font-size: ${(props) => props.fontSize}px;
   font-weight: 700;
   text-align: right;
   align-self: flex-end;
   margin-right: 5px;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-top: 1%;
+  margin-bottom: 2%;
   flex: 1;
 `;
 
@@ -139,6 +139,8 @@ const Home = () => {
   const [inputValue, setInputValue] = useState("0");
   const [nome, setNome] = useState("");
   const [selectedTag, setSelectedTag] = useState();
+  const { height } = useWindowDimensions();
+  const responsiveFontSize = Math.min(height * 0.08, 65);
   const router = useRouter();
   const dispatch = useDispatch();
   const tags = useSelector(getTags);
@@ -269,6 +271,7 @@ const Home = () => {
             value={inputValue}
             editable={false}
             maxLength={maxLengthValue}
+            fontSize={responsiveFontSize}
             adjustsFontSizeToFit
             numberOfLines={1}
           />
