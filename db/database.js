@@ -14,6 +14,7 @@ export const tables = {
   TAGS: "tags",
   EXPENSES_TAGS: "expenses_tags",
   LOANS: "loans",
+  APP_PARAMETERS: "app_parameters",
 };
 
 export const initializeTables = async () => {
@@ -70,6 +71,13 @@ export const initializeTables = async () => {
         );`,
       );
 
+      await db.execAsync(
+        `CREATE TABLE IF NOT EXISTS ${tables.APP_PARAMETERS} (
+          key TEXT PRIMARY KEY,
+          value TEXT NOT NULL
+        );`,
+      );
+
       console.log("Tabelas criadas com sucesso!");
       console.log("Inserindo valores padrão...");
 
@@ -103,7 +111,7 @@ export const initializeTables = async () => {
         ],
       );
 
-      await db.execAsync("PRAGMA user_version = 1;");
+      await db.execAsync("PRAGMA user_version = 2;");
 
       resolve();
     } catch (error) {
@@ -120,6 +128,7 @@ export const dropAllTables = async () => {
   await db.execAsync(`DROP TABLE IF EXISTS ${tables.EXPENSES};`);
   await db.execAsync(`DROP TABLE IF EXISTS ${tables.TAGS};`);
   await db.execAsync(`DROP TABLE IF EXISTS ${tables.LOANS};`);
+  await db.execAsync(`DROP TABLE IF EXISTS ${tables.APP_PARAMETERS};`);
 };
 
 export const runDatabaseUpdates = async () => {
@@ -146,6 +155,20 @@ export const runDatabaseUpdates = async () => {
 
       await db.execAsync("PRAGMA user_version = 1;");
       console.log("Database updated to version 1.");
+      currentDbVersion = 1;
+    }
+
+    if (currentDbVersion === 1) {
+      console.log("Running database updates... version 1 to 2");
+      await db.execAsync(
+        `CREATE TABLE IF NOT EXISTS ${tables.APP_PARAMETERS} (
+          key TEXT PRIMARY KEY,
+          value TEXT NOT NULL
+        );`,
+      );
+      await db.execAsync("PRAGMA user_version = 2;");
+      console.log("Database updated to version 2.");
+      currentDbVersion = 2;
     }
   } catch (error) {
     console.error("Erro ao atualizar o banco de dados: ", error);

@@ -5,6 +5,9 @@ import ExpenseService from "../service/expenseService";
 import TagService from "../service/tagService";
 import ExpenseTagService from "../service/expenseTagService";
 import LoanService from "../service/loanService";
+import AppParameterService from "../service/appParameterService";
+import { store } from "../redux/store";
+import { updateLastBackupDate } from "@appParameterDuck";
 import { formatDate, showToast, isEmpty, appDetails} from "@utils";
 
 export const exportBackup = async () => {
@@ -13,6 +16,7 @@ export const exportBackup = async () => {
     const tags = await TagService.fetchAll();
     const expensesTags = await ExpenseTagService.fetchAll();
     const loans = await LoanService.fetchAll();
+    const appParameters = await AppParameterService.getAll();
     const backupDate = formatDate(
       new Date().toISOString().split("T")[0],
       "dd/mm/yyyy"
@@ -26,6 +30,7 @@ export const exportBackup = async () => {
         tags,
         expensesTags,
         loans,
+        appParameters,
       },
     };
 
@@ -51,6 +56,8 @@ export const exportBackup = async () => {
         dialogTitle: "Salvar backup",
         UTI: "public.json",
       });
+
+      store.dispatch(updateLastBackupDate());
 
       showToast("Backup salvo!");
     }
@@ -84,6 +91,7 @@ export const importBackup = async () => {
     const tags = jsonData?.data?.tags ?? [];
     const expensesTags = jsonData?.data?.expensesTags ?? [];
     const loans = jsonData?.data?.loans ?? [];
+    const appParameters = jsonData?.data?.appParameters ?? {};
 
     if (!isEmpty(expenses)) {
       await ExpenseService.importFromBackup(expenses);
@@ -99,6 +107,12 @@ export const importBackup = async () => {
 
     if (!isEmpty(loans)) {
       await LoanService.importFromBackup(loans);
+    }
+
+    if (!isEmpty(appParameters)) {
+      for (const [key, value] of Object.entries(appParameters)) {
+        await AppParameterService.update(key, value);
+      }
     }
 
     showToast("Backup importado com sucesso!");

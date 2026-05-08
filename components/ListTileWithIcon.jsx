@@ -12,15 +12,27 @@ const Container = styled(Pressable)`
 
 const Icon = styled(Ionicons)``;
 
+const TextContainer = styled.View`
+  flex-direction: column;
+  margin-left: ${(props) => props.marginLeft || "0px"};
+  flex: 1;
+`;
+
 const Title = styled.Text`
   font-size: 16px;
   font-weight: ${(props) => (props.boldText ? "500" : "400")};
-  margin-left: ${(props) => props.marginLeft || "0px"};
   color: ${(props) => props.color || appColors.text};
+`;
+
+const Subtitle = styled.Text`
+  font-size: 14px;
+  color: ${appColors.placeholderText};
+  margin-top: 2px;
 `;
 
 const ListTileWithIcon = ({
   title,
+  subtitle,
   icon,
   iconColor = appColors.text,
   titleColor = appColors.text,
@@ -40,13 +52,15 @@ const ListTileWithIcon = ({
       unstable_pressDelay={100}
     >
       {icon && <Icon name={icon} size={24} color={iconColor} />}
-      <Title
-        color={titleColor}
-        marginLeft={icon ? "16px" : "0px"}
-        boldText={boldText}
-      >
-        {title}
-      </Title>
+      <TextContainer marginLeft={icon ? "16px" : "0px"}>
+        <Title
+          color={titleColor}
+          boldText={boldText}
+        >
+          {title}
+        </Title>
+        {subtitle && <Subtitle>{subtitle}</Subtitle>}
+      </TextContainer>
     </Container>
   );
 };

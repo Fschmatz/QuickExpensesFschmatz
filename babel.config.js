@@ -24,6 +24,10 @@ module.exports = function (api) {
 
             "@tagSelector": "./redux/selectors/tagSelector.js",
             "@loanSelector": "./redux/selectors/loanSelector.js",
+
+            "@appParameterDuck": "./redux/ducks/appParameterDuck.js",
+            "@appParameterSaga": "./redux/sagas/appParameterSaga.js",
+            "@appParameterSelector": "./redux/selectors/appParameterSelector.js",
           },
         },
       ],

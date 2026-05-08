@@ -1,12 +1,15 @@
+import { useEffect } from "react";
 import { Linking } from "react-native";
 import styled from "styled-components/native";
 import { useNavigation } from "expo-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { appDetails } from "@utils";
 import { appColors } from "@constants";
 import { PageContainer, ListTileWithIcon, Separator } from "@components";
 import { exportBackup, importBackup } from "../../db/backup";
 import { fetchTags } from "@tagDuck";
+import { fetchAppParameters } from "@appParameterDuck";
+import { selectAppParameterByKey } from "@appParameterSelector";
 
 const CurrentVersionContainer = styled.View`
   width: 100%;
@@ -16,7 +19,7 @@ const CurrentVersionContainer = styled.View`
   align-items: center;
   border-radius: 12px;
   margin-top: 8px;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
 `;
 
 const CurrentVersionText = styled.Text`
@@ -28,6 +31,12 @@ const CurrentVersionText = styled.Text`
 const Settings = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const lastBackupDate = useSelector(selectAppParameterByKey("lastBackupDate"));
+
+  useEffect(() => {
+    dispatch(fetchAppParameters());
+  }, [dispatch]);
+
   const navigateToChangelog = () => navigation.navigate("pages/changelog");
   const navigateToDebug = () => navigation.navigate("pages/debug");
 
@@ -52,7 +61,7 @@ const Settings = () => {
         </CurrentVersionText>
       </CurrentVersionContainer>
 
-      <Separator />
+      {/* <Separator /> */}
 
       <ListTileWithIcon
         title="Backup"
@@ -63,6 +72,9 @@ const Settings = () => {
 
       <ListTileWithIcon
         title="Exportar"
+        subtitle={
+          lastBackupDate ? `Último backup: ${lastBackupDate}` : undefined
+        }
         icon="push-outline"
         disabled={false}
         onPress={handleExportBackup}
@@ -98,7 +110,7 @@ const Settings = () => {
         onPress={navigateToChangelog}
       />
 
-     {/*  <ListTileWithIcon
+      {/*  <ListTileWithIcon
         title="Debug"
         icon="bug-outline"
         disabled={false}

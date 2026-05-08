@@ -10,7 +10,7 @@ const FAB = styled(TouchableOpacity)`
   background-color: ${appColors.btnConfirmBackground};
   width: 56px;
   height: 56px;
-  border-radius: 30px;
+  border-radius: 16px;
   justify-content: center;
   align-items: center;
 `;

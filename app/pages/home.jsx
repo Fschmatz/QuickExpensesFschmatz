@@ -41,7 +41,7 @@ const ValueInput = styled.TextInput`
   align-self: flex-end;
   margin-right: 5px;
   margin-top: 1%;
-  margin-bottom: 2%;
+  margin-bottom: 1.8%;
   flex: 1;
 `;
 
@@ -86,7 +86,7 @@ const KeyButton = styled.Pressable`
   justify-content: center;
   align-items: center;
   background-color: ${appColors.btnNumberBackground};
-  border-radius: 40px;
+  border-radius: 50px;
   overflow: hidden;
 `;
 
@@ -104,7 +104,7 @@ const DeleteKey = styled.Pressable`
   justify-content: center;
   align-items: center;
   margin-bottom: 15px;
-  border-radius: 40px;
+  border-radius: 50px;
   overflow: hidden;
 `;
 
@@ -114,7 +114,7 @@ const ConfirmKey = styled.Pressable`
   background-color: ${appColors.btnConfirmBackground};
   justify-content: center;
   align-items: center;
-  border-radius: 40px;
+  border-radius: 50px;
   overflow: hidden;
 `;
 
