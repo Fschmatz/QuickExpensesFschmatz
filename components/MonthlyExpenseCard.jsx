@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import { useRouter } from "expo-router";
 import { appColors } from "@constants";
-import { formatDate, formatMoney } from "@utils";
+import { getMonthName, formatMoney } from "@utils";
 
 const CardContainer = styled.Pressable`
   background-color: ${appColors.primaryContainer};
@@ -45,7 +45,7 @@ const MonthlyExpenseCard = ({ monthlyExpense }) => {
       unstable_pressDelay={100}
     >
       <CardContent>
-        <DateText>{formatDate(monthlyExpense.date, "mm/yyyy")}</DateText>
+        <DateText>{getMonthName(monthlyExpense.date)}</DateText>
         <ValueText>R$ {formatMoney(monthlyExpense.value)}</ValueText>
       </CardContent>
     </CardContainer>

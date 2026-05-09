@@ -7,7 +7,7 @@ const Container = styled(Pressable)`
   flex-direction: row;
   align-items: center;
   padding: ${(props) => props.padding || "0px"};
-  border-radius: 12px;
+  padding: 16px;
 `;
 
 const Icon = styled(Ionicons)``;
@@ -36,14 +36,12 @@ const ListTileWithIcon = ({
   icon,
   iconColor = appColors.text,
   titleColor = appColors.text,
-  padding = "16px 0px",
   onPress,
   disabled = true,
   boldText = false,
 }) => {
   return (
     <Container
-      padding={padding}
       onPress={onPress}
       disabled={disabled}
       activeOpacity={0.7}
@@ -53,10 +51,7 @@ const ListTileWithIcon = ({
     >
       {icon && <Icon name={icon} size={24} color={iconColor} />}
       <TextContainer marginLeft={icon ? "16px" : "0px"}>
-        <Title
-          color={titleColor}
-          boldText={boldText}
-        >
+        <Title color={titleColor} boldText={boldText}>
           {title}
         </Title>
         {subtitle && <Subtitle>{subtitle}</Subtitle>}

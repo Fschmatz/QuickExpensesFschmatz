@@ -1,21 +1,29 @@
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import Home from "./pages/home";
 import DatabaseInit from "../db/databaseInit";
 import { PageContainer } from "@components";
+import { fetchAppParameters } from "@appParameterDuck";
 
 export default function Index() {
   const [isDbReady, setIsDbReady] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    async function initDB() {
+    async function initApp() {
       console.log("Initializing database...");
+
       await DatabaseInit.initialize();
-      setIsDbReady(true);
+
       console.log("Database OK!");
+
+      setIsDbReady(true);
+
+      dispatch(fetchAppParameters());
     }
 
-    initDB();
-  }, []);
+    initApp();
+  }, [dispatch]);
 
   if (!isDbReady) {
     return <PageContainer />;

@@ -5,21 +5,24 @@ import { useNavigation } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
 import { appDetails } from "@utils";
 import { appColors } from "@constants";
-import { PageContainer, ListTileWithIcon, Separator } from "@components";
+import {
+  PageContainer,
+  ListTileWithIcon,
+  Separator,
+  SettingsSwitch,
+} from "@components";
 import { exportBackup, importBackup } from "../../db/backup";
 import { fetchTags } from "@tagDuck";
 import { fetchAppParameters } from "@appParameterDuck";
 import { selectAppParameterByKey } from "@appParameterSelector";
 
 const CurrentVersionContainer = styled.View`
-  width: 100%;
   height: 50px;
   background-color: ${appColors.btnDeleteBackground};
   justify-content: center;
   align-items: center;
   border-radius: 12px;
-  margin-top: 8px;
-  margin-bottom: 10px;
+  margin: 8px 16px 10px 16px;
 `;
 
 const CurrentVersionText = styled.Text`
@@ -54,14 +57,28 @@ const Settings = () => {
   };
 
   return (
-    <PageContainer>
+    <PageContainer containerPadding="8px 0px">
       <CurrentVersionContainer>
         <CurrentVersionText>
           {appDetails.appName} v{appDetails.appVersion}
         </CurrentVersionText>
       </CurrentVersionContainer>
 
-      {/* <Separator /> */}
+      <ListTileWithIcon
+        title="Geral"
+        titleColor={appColors.btnDeleteText}
+        iconColor={appColors.btnDeleteText}
+        boldText={true}
+      />
+
+      <SettingsSwitch
+        title="Mostrar total anual"
+        subtitle="Exibe o total anual na página das despesas mensais"
+        parameterKey="showTotalYear"
+        defaultValue={false}
+      />
+
+      <Separator />
 
       <ListTileWithIcon
         title="Backup"

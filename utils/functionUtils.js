@@ -125,6 +125,29 @@ export const completeCurrencyZeros = (text) => {
 
 export const isEmpty = (array) => !array || array.length === 0;
 
+export const getMonthName = (monthStr) => {
+  if (!monthStr) return "";
+
+  const months = [
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro",
+  ];
+
+  const [year, month] = monthStr.split("-");
+
+  return `${months[parseInt(month) - 1]}`;
+};
+
 export default {
   formatDate,
   darkenColor,
@@ -139,4 +162,5 @@ export default {
   isEmpty,
   formatCurrencyInput,
   completeCurrencyZeros,
+  getMonthName,
 };

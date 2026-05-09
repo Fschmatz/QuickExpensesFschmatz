@@ -9,6 +9,7 @@ import {
   showToast,
   formatMoney,
   formatCurrencyInput,
+  getMonthName,
 } from "@utils";
 import { fetchTags, getTags } from "@tagDuck";
 import {
@@ -41,7 +42,7 @@ const ValueInput = styled.TextInput`
   align-self: flex-end;
   margin-right: 5px;
   margin-top: 1%;
-  margin-bottom: 1.8%;
+  margin-bottom: 1.7%;
   flex: 1;
 `;
 
@@ -140,7 +141,7 @@ const Home = () => {
   const [nome, setNome] = useState("");
   const [selectedTag, setSelectedTag] = useState();
   const { height } = useWindowDimensions();
-  const responsiveFontSize = Math.min(height * 0.08, 65);
+  const responsiveFontSize = Math.min(height * 0.08, 70);
   const router = useRouter();
   const dispatch = useDispatch();
   const tags = useSelector(getTags);
@@ -225,10 +226,9 @@ const Home = () => {
 
   const getCurrentMonthYear = () => {
     const today = new Date();
-    return `${String(today.getMonth() + 1).padStart(
-      2,
-      "0",
-    )}/${today.getFullYear()}`;
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    return `${getMonthName(`${year}-${month}`)}/${year}`;
   };
 
   return (

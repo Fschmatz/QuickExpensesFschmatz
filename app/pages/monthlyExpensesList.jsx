@@ -1,4 +1,10 @@
-import { FlatList, View, ActivityIndicator, Animated, ScrollView } from "react-native";
+import {
+  FlatList,
+  View,
+  ActivityIndicator,
+  Animated,
+  ScrollView,
+} from "react-native";
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MonthlyExpenseCard, PageContainer } from "@components";
@@ -9,10 +15,13 @@ import {
 } from "@expenseDuck";
 import { appColors } from "@constants";
 import styled from "styled-components/native";
+import { formatMoney } from "@utils";
+import { selectAppParameterByKeyAsBoolean } from "@appParameterSelector";
 
 const YearChip = styled.Pressable`
   padding: 8px 16px;
   border-radius: 50px;
+  overflow: hidden;
   background-color: ${(props) =>
     props.selected
       ? appColors.btnConfirmBackground
@@ -26,10 +35,37 @@ const YearText = styled.Text`
   font-size: 16px;
 `;
 
+const TotalCardContainer = styled.View`
+  border-width: 1px;
+  border-color: ${appColors.btnDeleteBackground};
+  padding: 16px 16px;
+  border-radius: 16px;
+  margin: 0px 16px 8px 16px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const TotalLabel = styled.Text`
+  font-size: 12px;
+  color: ${appColors.btnDeleteText};
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+`;
+
+const TotalValue = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
+  color: ${appColors.btnDeleteText};
+`;
+
 const MonthlyExpensesList = () => {
   const dispatch = useDispatch();
   const monthlyExpenses = useSelector(getMonthlyExpenses);
   const loading = useSelector(getExpensesLoading);
+  const showTotalYear = useSelector(
+    selectAppParameterByKeyAsBoolean("showTotalYear", false),
+  );
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const currentYear = new Date().getFullYear().toString();
   const [selectedYear, setSelectedYear] = useState(currentYear);
@@ -64,6 +100,10 @@ const MonthlyExpensesList = () => {
     );
   }, [monthlyExpenses, selectedYear]);
 
+  const yearlyTotal = useMemo(() => {
+    return filteredExpenses.reduce((sum, expense) => sum + expense.value, 0);
+  }, [filteredExpenses]);
+
   return (
     <PageContainer isScrollView={false} containerPadding="0">
       {loading ? (
@@ -79,6 +119,13 @@ const MonthlyExpensesList = () => {
         </View>
       ) : (
         <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+          {showTotalYear && (
+            <TotalCardContainer>
+              <TotalLabel>Total de {selectedYear}</TotalLabel>
+              <TotalValue>R$ {formatMoney(yearlyTotal)}</TotalValue>
+            </TotalCardContainer>
+          )}
+
           <FlatList
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
@@ -103,7 +150,14 @@ const MonthlyExpensesList = () => {
                     key={year}
                     selected={year === selectedYear}
                     onPress={() => setSelectedYear(year)}
-                    android_ripple={appColors.androidRippleEffect}
+                    android_ripple={{
+                      ...appColors.androidRippleEffect,
+                      borderless: false,
+                      foreground: true,
+                    }}
+                    style={({ pressed }) => [
+                      pressed && appColors.androidRippleColor,
+                    ]}
                   >
                     <YearText selected={year === selectedYear}>{year}</YearText>
                   </YearChip>

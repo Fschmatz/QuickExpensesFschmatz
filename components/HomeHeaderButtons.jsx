@@ -9,7 +9,6 @@ import {
   MenuTrigger,
 } from "react-native-popup-menu";
 import { appColors } from "@constants";
-import IconButton from "./IconButton";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -42,20 +41,8 @@ const HomeHeaderButtons = () => {
 
   return (
     <Container>
-      <IconButton
-        icon="receipt-outline"
-        onPress={navigateToMonthlyExpenses}
-        style={{ marginRight: 8 }}
-      />
-
       <Menu>
-        <MenuTrigger
-          customStyles={{
-            triggerWrapper: {
-              padding: 8,
-            },
-          }}
-        >
+        <MenuTrigger customStyles={{}}>
           <Ionicons name="ellipsis-vertical" size={24} color={appColors.text} />
         </MenuTrigger>
         <MenuOptions
@@ -65,12 +52,22 @@ const HomeHeaderButtons = () => {
               borderRadius: 12,
               paddingVertical: 4,
               width: 220,
-              marginTop: 30,
-              marginLeft: screenWidth - 295,
+              marginTop: 25,
+              marginLeft: screenWidth - 255,
               elevation: 2,
             },
           }}
         >
+          <MenuOption onSelect={navigateToMonthlyExpenses}>
+            <OptionRow>
+              <Ionicons
+                name="receipt-outline"
+                size={22}
+                color={appColors.text}
+              />
+              <MenuOptionText>Despesas Mensais</MenuOptionText>
+            </OptionRow>
+          </MenuOption>
           <MenuOption onSelect={navigateToLoans}>
             <OptionRow>
               <Ionicons name="cash-outline" size={22} color={appColors.text} />

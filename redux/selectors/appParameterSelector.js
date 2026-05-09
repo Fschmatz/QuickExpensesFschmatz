@@ -9,3 +9,7 @@ export const selectAppParameterByKey = (key, defaultValue = null) => (state) => 
   const params = getAppParameters(state);
   return params[key] !== undefined ? params[key] : defaultValue;
 };
+
+export const selectAppParameterByKeyAsBoolean = (key, defaultValue = true) => (state) => {
+  return parseBool(selectAppParameterByKey(key, defaultValue)(state));
+};
