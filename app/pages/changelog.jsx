@@ -7,7 +7,7 @@ import { DefaultPageContainer } from "@components";
 const Changelog = () => {
   const theme = useTheme();
   return (
-    <DefaultPageContainer>
+    <DefaultPageContainer style={{ paddingHorizontal: 16 }}>
       <View>
         <Text variant="bodyLarge" style={{ color: theme.colors.onBackground }}>
           {appDetails.changelog}

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { useTheme, Button } from "react-native-paper";
-import { TextInput, KeyboardAvoidingView } from "react-native";
+import { useTheme, Button, Text } from "react-native-paper";
+import { TextInput, KeyboardAvoidingView, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import { showToast, formatCurrencyInput, completeCurrencyZeros } from "@utils";
-import { HomeTagsList, DefaultPageContainer } from "@components";
+import { HomeTagsList, DefaultPageContainer, SizedBox } from "@components";
 import { fetchTags, getTags } from "@tagDuck";
 import { addExpense, updateExpense, selectExpenseById } from "@expenseDuck";
 
@@ -104,7 +104,7 @@ const StoreExpense = () => {
   }
 
   return (
-    <DefaultPageContainer>
+    <DefaultPageContainer style={{ paddingHorizontal: 16 }}>
       <KeyboardAvoidingView behavior={"height"}>
         <Text
           variant="bodyLarge"
@@ -120,7 +120,7 @@ const StoreExpense = () => {
           maxLength={30}
         />
 
-        <View style={{ height: 10 }} />
+        <SizedBox height="24" />
 
         <Text
           variant="bodyLarge"
@@ -137,7 +137,7 @@ const StoreExpense = () => {
           keyboardType="numeric"
         />
 
-        <View style={{ height: 10 }} />
+        <SizedBox height="24" />
 
         <Text
           variant="bodyLarge"
@@ -145,7 +145,9 @@ const StoreExpense = () => {
         >
           Tags:
         </Text>
-        <View style={{ height: 5 }} />
+
+        <SizedBox height="5" />
+
         <HomeTagsList
           tags={tags}
           selectedTag={selectedTag}
@@ -153,11 +155,11 @@ const StoreExpense = () => {
           isStoreExpensePage={true}
         />
 
-        <View style={{ height: 10 }} />
+        <SizedBox height="24" />
 
         <Button
           mode="contained"
-          icon="save-outline"
+          icon="content-save-outline"
           buttonColor={theme.colors.primary}
           textColor={theme.colors.onPrimary}
           onPress={handleSaveExpense}

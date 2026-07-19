@@ -1,4 +1,4 @@
-import { Pressable } from "react-native";
+import { Pressable, View } from "react-native";
 import { useTheme } from "react-native-paper";
 import { Surface, Text } from "react-native-paper";
 import { useRouter } from "expo-router";
@@ -16,11 +16,11 @@ const MonthlyExpenseCard = ({ monthlyExpense }) => {
   };
 
   return (
-    <Surface
+    <View
       style={{
         borderRadius: 12,
         marginHorizontal: 16,
-        backgroundColor: theme.colors.surfaceContainerLow,
+        backgroundColor: theme.colors.elevation.level3,
       }}
       elevation={0}
     >
@@ -35,11 +35,18 @@ const MonthlyExpenseCard = ({ monthlyExpense }) => {
             justifyContent: "space-between",
             alignItems: "center",
           },
-          pressed && { opacity: 0.6, backgroundColor: theme.colors.onSurface },
+          pressed && {
+            opacity: 0.6,
+            backgroundColor: theme.colors.onSurface,
+            borderRadius: 12,
+          },
         ]}
         unstable_pressDelay={100}
       >
-        <Text variant="titleMedium" style={{ color: theme.colors.onBackground }}>
+        <Text
+          variant="titleMedium"
+          style={{ color: theme.colors.onBackground }}
+        >
           {getMonthName(monthlyExpense.date)}
         </Text>
         <Text
@@ -49,7 +56,7 @@ const MonthlyExpenseCard = ({ monthlyExpense }) => {
           R$ {formatMoney(monthlyExpense.value)}
         </Text>
       </Pressable>
-    </Surface>
+    </View>
   );
 };
 

@@ -17,6 +17,7 @@ import {
   ExpensePieChart,
   ConfirmationDialog,
   DefaultPageContainer,
+  SizedBox,
 } from "@components";
 import { formatDate, isEmpty, formatMoney } from "@utils";
 
@@ -125,8 +126,8 @@ const MonthYearExpensesDetail = () => {
     }, 0);
 
   return (
-    <View>
-      <DefaultPageContainer>
+    <>
+      <DefaultPageContainer style={{ paddingHorizontal: 16 }}>
         {loading ? (
           <View
             style={{
@@ -140,7 +141,11 @@ const MonthYearExpensesDetail = () => {
           </View>
         ) : (
           <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+            <SizedBox height="12" />
+
             <ExpensePieChart tagExpenseMap={tagExpenseMap} />
+
+            <SizedBox height="12" />
 
             <Text
               style={{
@@ -153,7 +158,7 @@ const MonthYearExpensesDetail = () => {
               Total Mensal: R$ {formatMoney(totalAllExpenses)}
             </Text>
 
-            <View style={{ height: 4 }} />
+            <SizedBox height="12" />
 
             {Array.from(tagExpenseMap.values())
               .sort((a, b) => a.tag.name.localeCompare(b.tag.name))
@@ -171,7 +176,7 @@ const MonthYearExpensesDetail = () => {
                   <View
                     key={tag.id || tag.name}
                     style={{
-                      backgroundColor: theme.colors.surfaceContainerLow,
+                      backgroundColor: theme.colors.elevation.level2,
                       borderLeftColor: tag.color,
                       borderLeftWidth: 6,
                       borderRadius: 16,
@@ -244,7 +249,7 @@ const MonthYearExpensesDetail = () => {
                 );
               })}
 
-            <View style={{ height: 50 }} />
+            <SizedBox height="50" />
           </Animated.View>
         )}
       </DefaultPageContainer>
@@ -252,11 +257,11 @@ const MonthYearExpensesDetail = () => {
       <ConfirmationDialog
         visible={isDialogVisible}
         setVisible={setIsDialogVisible}
-        message={`Deseja excluir "${selectedExpense?.name || "esta despesa"}"?`}
+        message={`Deseja excluir "${selectedExpense?.name || "a despesa selecionada"}"?`}
         handleConfirm={handleConfirmDelete}
         handleCancel={handleCancelDelete}
       />
-    </View>
+    </>
   );
 };
 

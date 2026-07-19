@@ -11,3 +11,4 @@ export { default as SettingsSwitch } from "./SettingsSwitch";
 export { default as TagChip } from "./TagChip";
 export { default as TagTile } from "./TagTile";
 export { default as DefaultPageContainer } from "./DefaultPageContainer";
+export { default as SizedBox } from "./SizedBox";

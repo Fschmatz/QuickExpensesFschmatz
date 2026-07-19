@@ -1,4 +1,4 @@
-import * as FileSystem from "expo-file-system";
+import { File, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import * as DocumentPicker from "expo-document-picker";
 import ExpenseService from "../service/expenseService";
@@ -8,7 +8,13 @@ import LoanService from "../service/loanService";
 import AppParameterService from "../service/appParameterService";
 import { store } from "../redux/store";
 import { updateLastBackupDate } from "@appParameterDuck";
-import { formatDate, showToast, isEmpty, appDetails} from "@utils";
+import {
+  formatDate,
+  formatDateForBackup,
+  showToast,
+  isEmpty,
+  appDetails,
+} from "@utils";
 
 export const exportBackup = async () => {
   try {
@@ -19,7 +25,7 @@ export const exportBackup = async () => {
     const appParameters = await AppParameterService.getAll();
     const backupDate = formatDate(
       new Date().toISOString().split("T")[0],
-      "dd/mm/yyyy"
+      "dd/mm/yyyy",
     );
 
     const backupData = {
@@ -37,21 +43,17 @@ export const exportBackup = async () => {
     //console.log(JSON.stringify(backupData));
 
     const jsonData = JSON.stringify(backupData, null, 2);
-    const filename = `${appDetails.backupFileName}.json`;
-    const filePath = `${FileSystem.cacheDirectory}${filename}`;
+    const filename = `${appDetails.backupFileName}_${formatDateForBackup()}.json`;
 
-    await FileSystem.writeAsStringAsync(filePath, jsonData, {
-      encoding: FileSystem.EncodingType.UTF8,
-    });
+    const file = new File(Paths.cache, filename);
+    file.write(jsonData);
 
-    const fileInfo = await FileSystem.getInfoAsync(filePath);
-
-    if (!fileInfo.exists) {
+    if (!file.exists) {
       showToast("Erro ao criar arquivo de backup!");
     }
 
     if (await Sharing.isAvailableAsync()) {
-      await Sharing.shareAsync(filePath, {
+      await Sharing.shareAsync(file.uri, {
         mimeType: "application/json",
         dialogTitle: "Salvar backup",
         UTI: "public.json",
@@ -62,6 +64,7 @@ export const exportBackup = async () => {
       showToast("Backup salvo!");
     }
   } catch (error) {
+    console.log(error);
     showToast("Erro ao exportar backup!");
   }
 };

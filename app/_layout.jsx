@@ -19,7 +19,7 @@ export default function RootLayout() {
     colors: {
       ...MD3DarkTheme.colors,
       ...theme.dark,
-     /*  elevation: {
+      /*  elevation: {
         ...MD3DarkTheme.colors.elevation,
         level0: "transparent",
         level1: theme.dark.surfaceContainerLow,
@@ -84,14 +84,6 @@ export default function RootLayout() {
             name="pages/settings"
             options={{
               title: "Configurações",
-              ...defaultHeaderScreenOptions,
-            }}
-          />
-
-          <Stack.Screen
-            name="pages/debug"
-            options={{
-              title: "Debug",
               ...defaultHeaderScreenOptions,
             }}
           />

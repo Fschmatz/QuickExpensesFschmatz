@@ -66,7 +66,12 @@ const MonthlyExpensesList = () => {
   }, [filteredExpenses]);
 
   return (
-    <DefaultPageContainer>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.colors.background,
+      }}
+    >
       {loading ? (
         <View
           style={{
@@ -84,7 +89,7 @@ const MonthlyExpensesList = () => {
             <View
               style={{
                 borderWidth: 1,
-                borderColor: theme.colors.errorContainer,
+                borderColor: theme.colors.tertiaryContainer,
                 padding: 16,
                 borderRadius: 16,
                 margin: 16,
@@ -96,7 +101,7 @@ const MonthlyExpensesList = () => {
               <Text
                 style={{
                   fontSize: 12,
-                  color: theme.colors.onErrorContainer,
+                  color: theme.colors.onTertiaryContainer,
                   fontWeight: "600",
                   marginBottom: 6,
                   letterSpacing: 0.5,
@@ -108,7 +113,7 @@ const MonthlyExpensesList = () => {
                 style={{
                   fontSize: 24,
                   fontWeight: "bold",
-                  color: theme.colors.onErrorContainer,
+                  color: theme.colors.onTertiaryContainer,
                 }}
               >
                 R$ {formatMoney(yearlyTotal)}
@@ -180,7 +185,7 @@ const MonthlyExpensesList = () => {
           />
         </Animated.View>
       )}
-    </DefaultPageContainer>
+    </View>
   );
 };
 

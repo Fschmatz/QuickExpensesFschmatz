@@ -1,5 +1,5 @@
 const AppDetails = {
-  appVersion: "2.0.0",
+  appVersion: "2.0.1",
   appName: "Quick Expenses Fschmatz",
   appNameHomePage: " Quick Expenses",
   repositoryLink: "https://github.com/Fschmatz/QuickExpensesFschmatz",
@@ -17,7 +17,7 @@ ${AppDetails.appVersion}
 - Total do ano na listagem mensal
 
 1.2.6
-- Adicionado nome as despesas
+- Adicionar nome as despesas
 - Home responsiva
 - Correções
 - Popup menu

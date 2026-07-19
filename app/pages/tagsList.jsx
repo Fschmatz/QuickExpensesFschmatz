@@ -4,7 +4,7 @@ import { FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "expo-router";
 import { useTheme, FAB, Divider } from "react-native-paper";
-import { ConfirmationDialog, TagTile, DefaultPageContainer } from "@components";
+import { ConfirmationDialog, TagTile } from "@components";
 import { deleteTag, getTags } from "@tagDuck";
 
 const TagsList = () => {
@@ -48,9 +48,17 @@ const TagsList = () => {
   };
 
   return (
-    <DefaultPageContainer>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.colors.background,
+        paddingHorizontal: 16,
+      }}
+    >
       <FlatList
+        style={{ flex: 1 }}
         contentContainerStyle={{ gap: 8, paddingBottom: 75 }}
+        showsVerticalScrollIndicator={false}
         data={tags}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
@@ -72,7 +80,7 @@ const TagsList = () => {
       />
 
       <FAB
-        icon="add-outline"
+        icon="plus"
         onPress={goToStoreTagForInsert}
         style={{
           position: "absolute",
@@ -84,7 +92,7 @@ const TagsList = () => {
         }}
         color={theme.colors.onPrimary}
       />
-    </DefaultPageContainer>
+    </View>
   );
 };
 

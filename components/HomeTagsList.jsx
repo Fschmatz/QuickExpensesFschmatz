@@ -33,7 +33,7 @@ const HomeTagsList = ({
     isSelected(tag.id)
       ? safeDarkenColor(tag.color, 40)
       : isStoreExpensePage
-        ? theme.colors.surfaceVariant
+        ? theme.colors.elevation.level2
         : theme.colors.background;
 
   const getTextColor = (tag) =>

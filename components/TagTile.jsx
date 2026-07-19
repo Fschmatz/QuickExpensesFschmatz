@@ -6,14 +6,18 @@ import IconButton from "./IconButton";
 
 const TagTile = ({ tag, onDelete, onEdit }) => {
   const theme = useTheme();
+
   return (
     <View
       style={{
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: 16,
-        marginTop: 8,
+        marginBottom: 4,
+        marginTop: 4,
         paddingHorizontal: 16,
+        paddingVertical: 8,
+        backgroundColor: theme.colors.elevation.level3,
+        borderRadius: 12,
       }}
     >
       <Ionicons
@@ -25,7 +29,10 @@ const TagTile = ({ tag, onDelete, onEdit }) => {
 
       <Text
         variant="titleMedium"
-        style={{ flex: 1, color: theme.colors.onBackground, fontWeight: "bold" }}
+        style={{
+          flex: 1,
+          color: theme.colors.onBackground,
+        }}
       >
         {tag.name}
       </Text>

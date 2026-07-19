@@ -15,6 +15,18 @@ export const formatDate = (dateString, format) => {
   }
 };
 
+export const formatDateForBackup = () => {
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2, "0");
+  const mm = String(now.getMonth() + 1).padStart(2, "0");
+  const yyyy = now.getFullYear();
+  const hh = String(now.getHours()).padStart(2, "0");
+  const min = String(now.getMinutes()).padStart(2, "0");
+  const ss = String(now.getSeconds()).padStart(2, "0");
+
+  return `${dd}_${mm}_${yyyy}_${hh}${min}${ss}`;
+};
+
 export const darkenColor = (color, percent) => {
   let num = parseInt(color.replace("#", ""), 16),
     amt = Math.round(2.55 * percent),

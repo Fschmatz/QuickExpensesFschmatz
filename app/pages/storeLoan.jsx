@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useTheme, Button } from "react-native-paper";
+import { useTheme, Button, Text } from "react-native-paper";
 import { TextInput, KeyboardAvoidingView, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
@@ -141,7 +141,7 @@ const StoreLoan = () => {
         <View style={{ marginTop: 25 }}>
           <Button
             mode="contained"
-            icon="save-outline"
+           icon="content-save-outline"
             buttonColor={theme.colors.primary}
             textColor={theme.colors.onPrimary}
             onPress={handleSaveLoan}

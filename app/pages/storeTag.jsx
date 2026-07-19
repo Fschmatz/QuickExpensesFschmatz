@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useTheme, Button } from "react-native-paper";
+import { useTheme, Button, Text } from "react-native-paper";
 import {
   TextInput,
   TouchableOpacity,
@@ -10,12 +10,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import ColorPicker, { Panel1, HueSlider } from "reanimated-color-picker";
+import { runOnJS } from "react-native-reanimated";
 import { tagIcons } from "@constants";
 import { showToast } from "@utils";
 import { addTag, updateTag } from "@tagDuck";
 import { selectTagById } from "@tagSelector";
 import { createTag } from "../../entities/tag";
-import { DefaultPageContainer } from "@components";
+import { DefaultPageContainer, SizedBox } from "@components";
 
 const inputStyle = {
   backgroundColor: "transparent",
@@ -33,7 +34,7 @@ const StoreTag = () => {
   const navigation = useNavigation();
   const router = useRouter();
   const dispatch = useDispatch();
-  const tagForUpdate = isUpdate ? useSelector(selectTagById(tagId)) : "";
+  const tagForUpdate = useSelector(selectTagById(tagId));
   const [name, setName] = useState(isUpdate ? tagForUpdate.name : "");
   const [selectedColor, setSelectedColor] = useState(
     isUpdate ? tagForUpdate.color : "#6dda78",
@@ -83,11 +84,12 @@ const StoreTag = () => {
   };
 
   const handleSelectColor = ({ hex }) => {
-    setSelectedColor(hex);
+    "worklet";
+    runOnJS(setSelectedColor)(hex);
   };
 
   return (
-    <DefaultPageContainer>
+    <DefaultPageContainer style={{ paddingHorizontal: 16 }}>
       <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
         <Text
           variant="bodyLarge"
@@ -104,7 +106,7 @@ const StoreTag = () => {
           autoFocus={Boolean(isInsert)}
         />
 
-        <View style={{ height: 10 }} />
+        <SizedBox height="24" />
 
         <Text
           variant="bodyLarge"
@@ -118,7 +120,7 @@ const StoreTag = () => {
           <HueSlider style={{ marginTop: 15 }} />
         </ColorPicker>
 
-        <View style={{ height: 10 }} />
+        <SizedBox height="24" />
 
         <Text
           variant="bodyLarge"
@@ -147,7 +149,15 @@ const StoreTag = () => {
                   selectedIcon === icon ? theme.colors.primary : "transparent",
               }}
             >
-              <Ionicons name={icon} size={32} color={theme.colors.onPrimary} />
+              <Ionicons
+                name={icon}
+                size={32}
+                color={
+                  selectedIcon === icon
+                    ? theme.colors.onPrimary
+                    : theme.colors.onBackground
+                }
+              />
             </TouchableOpacity>
           ))}
         </View>
@@ -155,7 +165,7 @@ const StoreTag = () => {
         <View style={{ marginTop: 25 }}>
           <Button
             mode="contained"
-            icon="save-outline"
+            icon="content-save-outline"
             buttonColor={theme.colors.primary}
             textColor={theme.colors.onPrimary}
             onPress={handleCreateTag}
