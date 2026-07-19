@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Stack } from "expo-router";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SystemUI from "expo-system-ui";
@@ -6,27 +7,52 @@ import * as SplashScreen from "expo-splash-screen";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
 import { HomeHeaderButtons } from "@components";
-import { appColors } from "@constants";
 import { appDetails } from "@utils";
-import { MenuProvider } from "react-native-popup-menu";
+import { PaperProvider, MD3DarkTheme } from "react-native-paper";
+import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
 
 export default function RootLayout() {
-  NavigationBar.setBackgroundColorAsync(appColors.background);
-  SystemUI.setBackgroundColorAsync(appColors.background);
+  const { theme } = useMaterial3Theme({ fallbackSourceColor: "#3E5682" });
+
+  const paperTheme = {
+    ...MD3DarkTheme,
+    colors: {
+      ...MD3DarkTheme.colors,
+      ...theme.dark,
+     /*  elevation: {
+        ...MD3DarkTheme.colors.elevation,
+        level0: "transparent",
+        level1: theme.dark.surfaceContainerLow,
+        level2: theme.dark.surfaceContainer,
+        level3: theme.dark.surfaceContainerHigh,
+      }, */
+    },
+  };
+
+  useEffect(() => {
+    if (NavigationBar?.setBackgroundColorAsync) {
+      NavigationBar.setBackgroundColorAsync(theme.dark.background).catch(
+        () => {},
+      );
+    }
+    if (SystemUI?.setBackgroundColorAsync) {
+      SystemUI.setBackgroundColorAsync(theme.dark.background).catch(() => {});
+    }
+  }, [theme.dark.background]);
 
   SplashScreen.setOptions({
     duration: 400,
   });
 
   const defaultHeaderScreenOptions = {
-    headerTintColor: appColors.text,
-    headerStyle: { backgroundColor: appColors.background },
+    headerTintColor: theme.dark.onBackground,
+    headerStyle: { backgroundColor: theme.dark.background },
     headerShadowVisible: false,
   };
 
   return (
     <Provider store={store}>
-      <MenuProvider>
+      <PaperProvider theme={paperTheme}>
         <StatusBar style={"light"} />
         <Stack>
           <Stack.Screen
@@ -118,7 +144,7 @@ export default function RootLayout() {
             }}
           />
         </Stack>
-      </MenuProvider>
+      </PaperProvider>
     </Provider>
   );
 }

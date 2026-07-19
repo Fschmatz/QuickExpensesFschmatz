@@ -1,6 +1,8 @@
 import { View, ScrollView, ActivityIndicator, Animated } from "react-native";
+import { useTheme } from "react-native-paper";
 import { useEffect, useState, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Text } from "react-native-paper";
 import {
   fetchByMonthYear,
   getExpensesByMonthYear,
@@ -10,62 +12,16 @@ import {
 } from "@expenseDuck";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import {
-  PageContainer,
   ExpenseCard,
   TagChip,
   ExpensePieChart,
-  SizedBox,
   ConfirmationDialog,
+  DefaultPageContainer,
 } from "@components";
 import { formatDate, isEmpty, formatMoney } from "@utils";
-import { appColors } from "@constants";
-import styled from "styled-components/native";
-
-const ExpenseByTagContainer = styled.View`
-  background-color: ${appColors.primaryContainer};
-  border-left-color: ${(props) => props.borderColor};
-  border-left-width: 6px;
-  border-radius: 16px;
-  padding: 8px 8px 12px 8px;
-  margin: 6px 0;
-`;
-
-const PercentTag = styled.Text`
-  font-size: 14px;
-  font-weight: 600;
-  color: ${(props) => props.color};
-`;
-
-const TotalTag = styled.Text`
-  font-size: 14px;
-  font-weight: 600;
-  color: ${appColors.text};
-`;
-
-const TopContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-right: 8px;
-`;
-
-const BottomContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-right: 8px;
-  margin-top: 4px;
-  margin-left: 4px;
-`;
-
-const MonthTotal = styled.Text`
-  font-size: 18px;
-  text-align: center;
-  font-weight: 500;
-  color: ${appColors.text};
-`;
 
 const MonthYearExpensesDetail = () => {
+  const theme = useTheme();
   const { date } = useLocalSearchParams();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -114,14 +70,9 @@ const MonthYearExpensesDetail = () => {
 
       expense.tags.forEach((tag) => {
         const tagId = tag.id;
-
         if (!tagExpenseMap.has(tagId)) {
-          tagExpenseMap.set(tagId, {
-            tag: tag,
-            expenses: [],
-          });
+          tagExpenseMap.set(tagId, { tag: tag, expenses: [] });
         }
-
         tagExpenseMap.get(tagId).expenses.push(expense);
       });
     });
@@ -131,7 +82,7 @@ const MonthYearExpensesDetail = () => {
         tag: {
           id: "99999",
           name: "zzz_",
-          color: appColors.text,
+          color: theme.colors.onBackground,
           icon: "pricetag-outline",
         },
         expenses: untaggedExpenses,
@@ -144,11 +95,7 @@ const MonthYearExpensesDetail = () => {
   const handlePressExpense = (expense) => {
     router.push({
       pathname: "/pages/storeExpense",
-      params: {
-        isUpdate: true,
-        expenseId: expense.id,
-        date: date,
-      },
+      params: { isUpdate: true, expenseId: expense.id, date: date },
     });
   };
 
@@ -178,11 +125,8 @@ const MonthYearExpensesDetail = () => {
     }, 0);
 
   return (
-    <PageContainer isScrollView={false}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      >
+    <View>
+      <DefaultPageContainer>
         {loading ? (
           <View
             style={{
@@ -192,17 +136,24 @@ const MonthYearExpensesDetail = () => {
               paddingTop: 100,
             }}
           >
-            <ActivityIndicator size="large" color={appColors.text} />
+            <ActivityIndicator size="large" color={theme.colors.onBackground} />
           </View>
         ) : (
           <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
             <ExpensePieChart tagExpenseMap={tagExpenseMap} />
 
-            <MonthTotal>
+            <Text
+              style={{
+                fontSize: 18,
+                textAlign: "center",
+                fontWeight: "500",
+                color: theme.colors.onBackground,
+              }}
+            >
               Total Mensal: R$ {formatMoney(totalAllExpenses)}
-            </MonthTotal>
+            </Text>
 
-            <SizedBox height={4} />
+            <View style={{ height: 4 }} />
 
             {Array.from(tagExpenseMap.values())
               .sort((a, b) => a.tag.name.localeCompare(b.tag.name))
@@ -217,15 +168,37 @@ const MonthYearExpensesDetail = () => {
                 ).toFixed(2);
 
                 return (
-                  <ExpenseByTagContainer
+                  <View
                     key={tag.id || tag.name}
-                    borderColor={tag.color}
+                    style={{
+                      backgroundColor: theme.colors.surfaceContainerLow,
+                      borderLeftColor: tag.color,
+                      borderLeftWidth: 6,
+                      borderRadius: 16,
+                      padding: 8,
+                      paddingBottom: 12,
+                      marginVertical: 6,
+                    }}
                   >
-                    <TopContainer>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        marginRight: 8,
+                      }}
+                    >
                       <TagChip key={tag.id} tag={tag} />
-
-                      <PercentTag color={tag.color}>{percentage}%</PercentTag>
-                    </TopContainer>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: "600",
+                          color: tag.color,
+                        }}
+                      >
+                        {percentage}%
+                      </Text>
+                    </View>
 
                     <View>
                       {expenses.map((expense, index) => (
@@ -238,18 +211,43 @@ const MonthYearExpensesDetail = () => {
                       ))}
                     </View>
 
-                    <BottomContainer>
-                      <TotalTag>Total: </TotalTag>
-                      <TotalTag>R$ {formatMoney(totalTag)}</TotalTag>
-                    </BottomContainer>
-                  </ExpenseByTagContainer>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        marginRight: 8,
+                        marginTop: 4,
+                        marginLeft: 4,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: "600",
+                          color: theme.colors.onBackground,
+                        }}
+                      >
+                        Total:
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: "600",
+                          color: theme.colors.onBackground,
+                        }}
+                      >
+                        R$ {formatMoney(totalTag)}
+                      </Text>
+                    </View>
+                  </View>
                 );
               })}
 
-            <SizedBox height={50} />
+            <View style={{ height: 50 }} />
           </Animated.View>
         )}
-      </ScrollView>
+      </DefaultPageContainer>
 
       <ConfirmationDialog
         visible={isDialogVisible}
@@ -258,7 +256,7 @@ const MonthYearExpensesDetail = () => {
         handleConfirm={handleConfirmDelete}
         handleCancel={handleCancelDelete}
       />
-    </PageContainer>
+    </View>
   );
 };
 

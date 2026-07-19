@@ -1,22 +1,19 @@
-import styled from "styled-components/native";
-import { appColors } from "@constants";
+import { View, ScrollView } from "react-native";
+import { useTheme } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { appDetails } from "@utils";
-import { PageContainer } from "@components";
-
-const ChangelogContainer = styled.View``;
-
-const StyledText = styled.Text`
-  color: ${appColors.text};
-  font-size: 16px;
-`;
+import { DefaultPageContainer } from "@components";
 
 const Changelog = () => {
+  const theme = useTheme();
   return (
-    <PageContainer>
-      <ChangelogContainer>
-        <StyledText>{appDetails.changelog}</StyledText>
-      </ChangelogContainer>
-    </PageContainer>
+    <DefaultPageContainer>
+      <View>
+        <Text variant="bodyLarge" style={{ color: theme.colors.onBackground }}>
+          {appDetails.changelog}
+        </Text>
+      </View>
+    </DefaultPageContainer>
   );
 };
 

@@ -1,33 +1,11 @@
-import styled from "styled-components/native";
+import { Pressable } from "react-native";
+import { useTheme } from "react-native-paper";
+import { Surface, Text } from "react-native-paper";
 import { useRouter } from "expo-router";
-import { appColors } from "@constants";
 import { getMonthName, formatMoney } from "@utils";
 
-const CardContainer = styled.Pressable`
-  background-color: ${appColors.primaryContainer};
-  padding: 16px;
-  border-radius: 12px;
-  margin: 0px 16px;
-`;
-
-const CardContent = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const ValueText = styled.Text`
-  font-size: 18px;
-  font-weight: bold;
-  color: ${appColors.text};
-`;
-
-const DateText = styled.Text`
-  font-size: 16px;
-  color: ${appColors.text};
-`;
-
 const MonthlyExpenseCard = ({ monthlyExpense }) => {
+  const theme = useTheme();
   const router = useRouter();
 
   const navigateToMonthlyExpenseDetail = (date) => {
@@ -38,17 +16,40 @@ const MonthlyExpenseCard = ({ monthlyExpense }) => {
   };
 
   return (
-    <CardContainer
-      onPress={() => navigateToMonthlyExpenseDetail(monthlyExpense.date)}
-      android_ripple={appColors.androidRippleEffect}
-      style={({ pressed }) => [pressed && appColors.androidRippleColor]}
-      unstable_pressDelay={100}
+    <Surface
+      style={{
+        borderRadius: 12,
+        marginHorizontal: 16,
+        backgroundColor: theme.colors.surfaceContainerLow,
+      }}
+      elevation={0}
     >
-      <CardContent>
-        <DateText>{getMonthName(monthlyExpense.date)}</DateText>
-        <ValueText>R$ {formatMoney(monthlyExpense.value)}</ValueText>
-      </CardContent>
-    </CardContainer>
+      <Pressable
+        onPress={() => navigateToMonthlyExpenseDetail(monthlyExpense.date)}
+        android_ripple={{ color: "rgba(255, 255, 255, 0.2)" }}
+        style={({ pressed }) => [
+          {
+            padding: 16,
+            borderRadius: 12,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          },
+          pressed && { opacity: 0.6, backgroundColor: theme.colors.onSurface },
+        ]}
+        unstable_pressDelay={100}
+      >
+        <Text variant="titleMedium" style={{ color: theme.colors.onBackground }}>
+          {getMonthName(monthlyExpense.date)}
+        </Text>
+        <Text
+          variant="titleLarge"
+          style={{ color: theme.colors.onBackground, fontWeight: "bold" }}
+        >
+          R$ {formatMoney(monthlyExpense.value)}
+        </Text>
+      </Pressable>
+    </Surface>
   );
 };
 

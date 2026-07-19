@@ -1,5 +1,5 @@
 const AppDetails = {
-  appVersion: "1.3.2",
+  appVersion: "2.0.0",
   appName: "Quick Expenses Fschmatz",
   appNameHomePage: " Quick Expenses",
   repositoryLink: "https://github.com/Fschmatz/QuickExpensesFschmatz",
@@ -8,6 +8,10 @@ const AppDetails = {
 
 AppDetails.changelog = `
 ${AppDetails.appVersion}
+- Update Expo 57
+- Material You
+
+1.3.2
 - Adicionado AppParameters
 - Filtros de ano na listagem mensal
 - Total do ano na listagem mensal

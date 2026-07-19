@@ -1,102 +1,103 @@
+import { View, Dimensions } from "react-native";
+import { useTheme } from "react-native-paper";
 import { useNavigation } from "expo-router";
-import { Dimensions } from "react-native";
-import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-} from "react-native-popup-menu";
-import { appColors } from "@constants";
+import { Menu, Divider } from "react-native-paper";
+import { useState } from "react";
 
 const { width: screenWidth } = Dimensions.get("window");
 
-const Container = styled.View`
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-`;
-
-const OptionRow = styled.View`
-  flex-direction: row;
-  align-items: center;
-  padding: 10px 12px;
-  gap: 12px;
-`;
-
-const MenuOptionText = styled.Text`
-  font-size: 16px;
-  color: ${appColors.text};
-`;
-
 const HomeHeaderButtons = () => {
+  const theme = useTheme();
   const navigation = useNavigation();
-  const navigateToMonthlyExpenses = () =>
-    navigation.navigate("pages/monthlyExpensesList");
-  const navigateToTags = () => navigation.navigate("pages/tagsList");
-  const navigateToSettings = () => navigation.navigate("pages/settings");
-  const navigateToLoans = () => navigation.navigate("pages/loansList");
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
+
+  const navigate = (route) => {
+    closeMenu();
+    navigation.navigate(route);
+  };
 
   return (
-    <Container>
-      <Menu>
-        <MenuTrigger customStyles={{}}>
-          <Ionicons name="ellipsis-vertical" size={24} color={appColors.text} />
-        </MenuTrigger>
-        <MenuOptions
-          customStyles={{
-            optionsContainer: {
-              backgroundColor: appColors.dialogBackground,
-              borderRadius: 12,
-              paddingVertical: 4,
-              width: 220,
-              marginTop: 25,
-              marginLeft: screenWidth - 255,
-              elevation: 2,
-            },
-          }}
-        >
-          <MenuOption onSelect={navigateToMonthlyExpenses}>
-            <OptionRow>
-              <Ionicons
-                name="receipt-outline"
-                size={22}
-                color={appColors.text}
-              />
-              <MenuOptionText>Despesas Mensais</MenuOptionText>
-            </OptionRow>
-          </MenuOption>
-          <MenuOption onSelect={navigateToLoans}>
-            <OptionRow>
-              <Ionicons name="cash-outline" size={22} color={appColors.text} />
-              <MenuOptionText>Empréstimos</MenuOptionText>
-            </OptionRow>
-          </MenuOption>
-          <MenuOption onSelect={navigateToTags}>
-            <OptionRow>
-              <Ionicons
-                name="pricetags-outline"
-                size={22}
-                color={appColors.text}
-              />
-              <MenuOptionText>Tags</MenuOptionText>
-            </OptionRow>
-          </MenuOption>
-          <MenuOption onSelect={navigateToSettings}>
-            <OptionRow>
-              <Ionicons
-                name="settings-outline"
-                size={22}
-                color={appColors.text}
-              />
-              <MenuOptionText>Configurações</MenuOptionText>
-            </OptionRow>
-          </MenuOption>
-        </MenuOptions>
+    <View
+      style={{
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 12,
+      }}
+    >
+      <Menu
+        visible={menuVisible}
+        onDismiss={closeMenu}
+        contentStyle={{
+          backgroundColor: theme.colors.elevation.level5,
+          borderRadius: 20,
+          marginTop: -50,
+          marginLeft: screenWidth - 250,
+          elevation: 2,
+        }}
+        anchor={
+          <Ionicons
+            name="ellipsis-vertical"
+            size={24}
+            color={theme.colors.onBackground}
+            onPress={openMenu}
+          />
+        }
+      >
+        <Menu.Item
+          leadingIcon={({ size }) => (
+            <Ionicons
+              name="receipt-outline"
+              size={size}
+              color={theme.colors.onBackground}
+            />
+          )}
+          onPress={() => navigate("pages/monthlyExpensesList")}
+          title="Despesas Mensais"
+          titleStyle={{ color: theme.colors.onBackground }}
+        />
+        <Menu.Item
+          leadingIcon={({ size }) => (
+            <Ionicons
+              name="cash-outline"
+              size={size}
+              color={theme.colors.onBackground}
+            />
+          )}
+          onPress={() => navigate("pages/loansList")}
+          title="Empréstimos"
+          titleStyle={{ color: theme.colors.onBackground }}
+        />
+        <Menu.Item
+          leadingIcon={({ size }) => (
+            <Ionicons
+              name="pricetags-outline"
+              size={size}
+              color={theme.colors.onBackground}
+            />
+          )}
+          onPress={() => navigate("pages/tagsList")}
+          title="Tags"
+          titleStyle={{ color: theme.colors.onBackground }}
+        />
+        <Menu.Item
+          leadingIcon={({ size }) => (
+            <Ionicons
+              name="settings-outline"
+              size={size}
+              color={theme.colors.onBackground}
+            />
+          )}
+          onPress={() => navigate("pages/settings")}
+          title="Configurações"
+          titleStyle={{ color: theme.colors.onBackground }}
+        />
       </Menu>
-    </Container>
+    </View>
   );
 };
 

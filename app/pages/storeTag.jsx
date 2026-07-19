@@ -1,48 +1,34 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components/native";
-import { TouchableOpacity, KeyboardAvoidingView, View } from "react-native";
+import { useTheme, Button } from "react-native-paper";
+import {
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  View,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
-import { useRouter, useLocalSearchParams } from "expo-router";
+import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import ColorPicker, { Panel1, HueSlider } from "reanimated-color-picker";
-import { appColors, tagIcons } from "@constants";
+import { tagIcons } from "@constants";
 import { showToast } from "@utils";
-import { ButtonWithIcon, Label, PageContainer, SizedBox } from "@components";
 import { addTag, updateTag } from "@tagDuck";
 import { selectTagById } from "@tagSelector";
 import { createTag } from "../../entities/tag";
+import { DefaultPageContainer } from "@components";
 
-const NameInput = styled.TextInput`
-  background-color: transparent;
-  border-radius: 4px;
-  font-size: 16px;
-  height: 50px;
-  border-width: 1px;
-  border-color: #d1d1d1;
-  color: ${appColors.text};
-  padding: 8px;
-`;
-
-const IconsContainer = styled.View`
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  justify-content: center;
-`;
-
-const IconButton = styled(TouchableOpacity)`
-  border-radius: 50px;
-  padding: 10px;
-  ${({ selected }) =>
-    selected &&
-    `
-    background-color: ${appColors.btnConfirmBackground};
-  `}
-`;
+const inputStyle = {
+  backgroundColor: "transparent",
+  borderRadius: 4,
+  fontSize: 16,
+  height: 50,
+  borderWidth: 1,
+  borderColor: "#d1d1d1",
+  padding: 8,
+};
 
 const StoreTag = () => {
+  const theme = useTheme();
   const { isInsert = false, isUpdate = false, tagId } = useLocalSearchParams();
   const navigation = useNavigation();
   const router = useRouter();
@@ -50,10 +36,10 @@ const StoreTag = () => {
   const tagForUpdate = isUpdate ? useSelector(selectTagById(tagId)) : "";
   const [name, setName] = useState(isUpdate ? tagForUpdate.name : "");
   const [selectedColor, setSelectedColor] = useState(
-    isUpdate ? tagForUpdate.color : "#6dda78"
+    isUpdate ? tagForUpdate.color : "#6dda78",
   );
   const [selectedIcon, setSelectedIcon] = useState(
-    isUpdate ? tagForUpdate.icon : "bag-outline"
+    isUpdate ? tagForUpdate.icon : "bag-outline",
   );
 
   useEffect(() => {
@@ -101,10 +87,16 @@ const StoreTag = () => {
   };
 
   return (
-    <PageContainer>
+    <DefaultPageContainer>
       <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
-        <Label>Nome:</Label>
-        <NameInput
+        <Text
+          variant="bodyLarge"
+          style={{ color: theme.colors.onBackground, marginBottom: 8 }}
+        >
+          Nome:
+        </Text>
+        <TextInput
+          style={[inputStyle, { color: theme.colors.onBackground }]}
           placeholder=""
           value={name}
           onChangeText={setName}
@@ -112,46 +104,69 @@ const StoreTag = () => {
           autoFocus={Boolean(isInsert)}
         />
 
-        <SizedBox height={10} />
+        <View style={{ height: 10 }} />
 
-        <Label>Cor:</Label>
+        <Text
+          variant="bodyLarge"
+          style={{ color: theme.colors.onBackground, marginBottom: 8 }}
+        >
+          Cor:
+        </Text>
 
         <ColorPicker value={selectedColor} onComplete={handleSelectColor}>
           <Panel1 />
           <HueSlider style={{ marginTop: 15 }} />
         </ColorPicker>
 
-        <SizedBox height={10} />
+        <View style={{ height: 10 }} />
 
-        <Label>Ícone:</Label>
+        <Text
+          variant="bodyLarge"
+          style={{ color: theme.colors.onBackground, marginBottom: 8 }}
+        >
+          Ícone:
+        </Text>
 
-        <IconsContainer>
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            gap: 8,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           {tagIcons.map((icon, index) => (
-            <IconButton
+            <TouchableOpacity
               key={index}
-              selected={selectedIcon === icon}
               onPress={() => setSelectedIcon(icon)}
+              style={{
+                borderRadius: 50,
+                padding: 10,
+                backgroundColor:
+                  selectedIcon === icon ? theme.colors.primary : "transparent",
+              }}
             >
-              <Ionicons
-                name={icon}
-                size={32}
-                color={appColors.btnConfirmText}
-              />
-            </IconButton>
+              <Ionicons name={icon} size={32} color={theme.colors.onPrimary} />
+            </TouchableOpacity>
           ))}
-        </IconsContainer>
+        </View>
 
         <View style={{ marginTop: 25 }}>
-          <ButtonWithIcon
-            icon={"save-outline"}
-            bgColor={appColors.btnConfirmBackground}
-            textColor={appColors.btnConfirmText}
-            text={"Salvar"}
+          <Button
+            mode="contained"
+            icon="save-outline"
+            buttonColor={theme.colors.primary}
+            textColor={theme.colors.onPrimary}
             onPress={handleCreateTag}
-          />
+            style={{ borderRadius: 25 }}
+            labelStyle={{ fontSize: 16, fontWeight: "500" }}
+          >
+            Salvar
+          </Button>
         </View>
       </KeyboardAvoidingView>
-    </PageContainer>
+    </DefaultPageContainer>
   );
 };
 

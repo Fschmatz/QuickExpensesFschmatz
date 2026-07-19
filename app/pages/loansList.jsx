@@ -1,17 +1,15 @@
+import { View } from "react-native";
 import { useState, useEffect } from "react";
 import { FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "expo-router";
-import {
-  ConfirmationDialog,
-  PageContainer,
-  SizedBox,
-  FloatingActionButton,
-} from "@components";
+import { ConfirmationDialog, DefaultPageContainer } from "@components";
 import { deleteLoan, getLoans, fetchLoans } from "@loanDuck";
 import LoanTile from "../../components/LoanTile";
+import { useTheme, FAB } from "react-native-paper";
 
 const LoansList = () => {
+  const theme = useTheme();
   const router = useRouter();
   const dispatch = useDispatch();
   const loans = useSelector(getLoans);
@@ -55,7 +53,7 @@ const LoansList = () => {
   };
 
   return (
-    <PageContainer isScrollView={false} containerPadding="0">
+    <DefaultPageContainer>
       <FlatList
         contentContainerStyle={{ gap: 8, paddingBottom: 75 }}
         data={loans}
@@ -67,7 +65,7 @@ const LoansList = () => {
             onEdit={goToStoreLoanForUpdate}
           />
         )}
-        ItemSeparatorComponent={() =>   <SizedBox height={2} />}
+        ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
       />
 
       <ConfirmationDialog
@@ -78,11 +76,20 @@ const LoansList = () => {
         handleCancel={handleCancelDelete}
       />
 
-      <FloatingActionButton
-        icon={"add-outline"}
+      <FAB
+        icon="add-outline"
         onPress={goToStoreLoanForInsert}
+        style={{
+          position: "absolute",
+          margin: 16,
+          right: 0,
+          bottom: 0,
+          borderRadius: 16,
+          backgroundColor: theme.colors.primary,
+        }}
+        color={theme.colors.onPrimary}
       />
-    </PageContainer>
+    </DefaultPageContainer>
   );
 };
 

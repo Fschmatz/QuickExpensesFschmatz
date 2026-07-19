@@ -1,33 +1,25 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components/native";
-import { KeyboardAvoidingView, View } from "react-native";
+import { useTheme, Button } from "react-native-paper";
+import { TextInput, KeyboardAvoidingView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
-import { useRouter, useLocalSearchParams } from "expo-router";
-import { appColors } from "@constants";
+import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import { showToast, formatCurrencyInput, completeCurrencyZeros } from "@utils";
-import {
-  ButtonWithIcon,
-  Label,
-  PageContainer,
-  SizedBox,
-  HomeTagsList,
-} from "@components";
+import { HomeTagsList, DefaultPageContainer } from "@components";
 import { fetchTags, getTags } from "@tagDuck";
 import { addExpense, updateExpense, selectExpenseById } from "@expenseDuck";
 
-const NameInput = styled.TextInput`
-  background-color: transparent;
-  border-radius: 4px;
-  font-size: 16px;
-  height: 50px;
-  border-width: 1px;
-  border-color: #d1d1d1;
-  color: ${appColors.text};
-  padding: 8px;
-`;
+const inputStyle = {
+  backgroundColor: "transparent",
+  borderRadius: 4,
+  fontSize: 16,
+  height: 50,
+  borderWidth: 1,
+  borderColor: "#d1d1d1",
+  padding: 8,
+};
 
 const StoreExpense = () => {
+  const theme = useTheme();
   const {
     isInsert = false,
     isUpdate = false,
@@ -112,20 +104,32 @@ const StoreExpense = () => {
   }
 
   return (
-    <PageContainer>
+    <DefaultPageContainer>
       <KeyboardAvoidingView behavior={"height"}>
-        <Label>Nome:</Label>
-        <NameInput
+        <Text
+          variant="bodyLarge"
+          style={{ color: theme.colors.onBackground, marginBottom: 8 }}
+        >
+          Nome:
+        </Text>
+        <TextInput
+          style={[inputStyle, { color: theme.colors.onBackground }]}
           placeholder=""
           value={name}
           onChangeText={setName}
           maxLength={30}
         />
 
-        <SizedBox height={10} />
+        <View style={{ height: 10 }} />
 
-        <Label>Valor:</Label>
-        <NameInput
+        <Text
+          variant="bodyLarge"
+          style={{ color: theme.colors.onBackground, marginBottom: 8 }}
+        >
+          Valor:
+        </Text>
+        <TextInput
+          style={[inputStyle, { color: theme.colors.onBackground }]}
           onChangeText={handleValueChange}
           value={value}
           maxLength={10}
@@ -133,10 +137,15 @@ const StoreExpense = () => {
           keyboardType="numeric"
         />
 
-        <SizedBox height={10} />
+        <View style={{ height: 10 }} />
 
-        <Label>Tags:</Label>
-        <SizedBox height={5} />
+        <Text
+          variant="bodyLarge"
+          style={{ color: theme.colors.onBackground, marginBottom: 8 }}
+        >
+          Tags:
+        </Text>
+        <View style={{ height: 5 }} />
         <HomeTagsList
           tags={tags}
           selectedTag={selectedTag}
@@ -144,17 +153,21 @@ const StoreExpense = () => {
           isStoreExpensePage={true}
         />
 
-        <SizedBox height={10} />
+        <View style={{ height: 10 }} />
 
-        <ButtonWithIcon
-          icon={"save-outline"}
-          bgColor={appColors.btnConfirmBackground}
-          textColor={appColors.btnConfirmText}
-          text={"Salvar"}
+        <Button
+          mode="contained"
+          icon="save-outline"
+          buttonColor={theme.colors.primary}
+          textColor={theme.colors.onPrimary}
           onPress={handleSaveExpense}
-        />
+          style={{ borderRadius: 25 }}
+          labelStyle={{ fontSize: 16, fontWeight: "500" }}
+        >
+          Salvar
+        </Button>
       </KeyboardAvoidingView>
-    </PageContainer>
+    </DefaultPageContainer>
   );
 };
 

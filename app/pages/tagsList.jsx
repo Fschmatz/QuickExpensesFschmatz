@@ -1,17 +1,14 @@
+import { View } from "react-native";
 import { useState } from "react";
 import { FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "expo-router";
-import {
-  ConfirmationDialog,
-  TagTile,
-  PageContainer,
-  Separator,
-  FloatingActionButton,
-} from "@components";
+import { useTheme, FAB, Divider } from "react-native-paper";
+import { ConfirmationDialog, TagTile, DefaultPageContainer } from "@components";
 import { deleteTag, getTags } from "@tagDuck";
 
 const TagsList = () => {
+  const theme = useTheme();
   const router = useRouter();
   const dispatch = useDispatch();
   const tags = useSelector(getTags);
@@ -51,7 +48,7 @@ const TagsList = () => {
   };
 
   return (
-    <PageContainer isScrollView={false} containerPadding='0'>
+    <DefaultPageContainer>
       <FlatList
         contentContainerStyle={{ gap: 8, paddingBottom: 75 }}
         data={tags}
@@ -63,7 +60,7 @@ const TagsList = () => {
             onEdit={goToStoreTagForUpdate}
           />
         )}
-        ItemSeparatorComponent={() => <Separator />}
+        ItemSeparatorComponent={() => <Divider style={{ opacity: 0.1 }} />}
       />
 
       <ConfirmationDialog
@@ -74,11 +71,20 @@ const TagsList = () => {
         handleCancel={handleCancelDelete}
       />
 
-      <FloatingActionButton
-        icon={"add-outline"}
+      <FAB
+        icon="add-outline"
         onPress={goToStoreTagForInsert}
+        style={{
+          position: "absolute",
+          margin: 16,
+          right: 0,
+          bottom: 0,
+          borderRadius: 16,
+          backgroundColor: theme.colors.primary,
+        }}
+        color={theme.colors.onPrimary}
       />
-    </PageContainer>
+    </DefaultPageContainer>
   );
 };
 

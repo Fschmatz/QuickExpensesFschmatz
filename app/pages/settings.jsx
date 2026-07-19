@@ -1,37 +1,22 @@
 import { useEffect } from "react";
-import { Linking } from "react-native";
-import styled from "styled-components/native";
+import { Divider, useTheme } from "react-native-paper";
+import { Linking, View, ScrollView } from "react-native";
+import { Text } from "react-native-paper";
 import { useNavigation } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
 import { appDetails } from "@utils";
-import { appColors } from "@constants";
 import {
-  PageContainer,
   ListTileWithIcon,
-  Separator,
   SettingsSwitch,
+  DefaultPageContainer,
 } from "@components";
 import { exportBackup, importBackup } from "../../db/backup";
 import { fetchTags } from "@tagDuck";
 import { fetchAppParameters } from "@appParameterDuck";
 import { selectAppParameterByKey } from "@appParameterSelector";
 
-const CurrentVersionContainer = styled.View`
-  height: 50px;
-  background-color: ${appColors.btnDeleteBackground};
-  justify-content: center;
-  align-items: center;
-  border-radius: 12px;
-  margin: 8px 16px 10px 16px;
-`;
-
-const CurrentVersionText = styled.Text`
-  color: ${appColors.btnDeleteText};
-  font-size: 16px;
-  font-weight: 600;
-`;
-
 const Settings = () => {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const lastBackupDate = useSelector(selectAppParameterByKey("lastBackupDate"));
@@ -57,17 +42,34 @@ const Settings = () => {
   };
 
   return (
-    <PageContainer containerPadding="8px 0px">
-      <CurrentVersionContainer>
-        <CurrentVersionText>
+    <DefaultPageContainer>
+      <View
+        style={{
+          height: 75,
+          backgroundColor: theme.colors.tertiaryContainer,
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: 25,
+          marginHorizontal: 16,
+          marginBottom: 10,
+          marginTop: 8,
+        }}
+      >
+        <Text
+          style={{
+            color: theme.colors.onTertiaryContainer,
+            fontSize: 16,
+            fontWeight: "600",
+          }}
+        >
           {appDetails.appName} v{appDetails.appVersion}
-        </CurrentVersionText>
-      </CurrentVersionContainer>
+        </Text>
+      </View>
 
       <ListTileWithIcon
         title="Geral"
-        titleColor={appColors.btnDeleteText}
-        iconColor={appColors.btnDeleteText}
+        titleColor={theme.colors.onPrimaryContainer}
+        iconColor={theme.colors.onPrimaryContainer}
         boldText={true}
       />
 
@@ -78,12 +80,12 @@ const Settings = () => {
         defaultValue={false}
       />
 
-      <Separator />
+      {/* <Divider style={{ opacity: 0.1 }} /> */}
 
       <ListTileWithIcon
         title="Backup"
-        titleColor={appColors.btnDeleteText}
-        iconColor={appColors.btnDeleteText}
+        titleColor={theme.colors.onPrimaryContainer}
+        iconColor={theme.colors.onPrimaryContainer}
         boldText={true}
       />
 
@@ -104,12 +106,10 @@ const Settings = () => {
         onPress={handleImportBackup}
       />
 
-      <Separator />
-
       <ListTileWithIcon
         title="Sobre"
-        titleColor={appColors.btnDeleteText}
-        iconColor={appColors.btnDeleteText}
+        titleColor={theme.colors.onPrimaryContainer}
+        iconColor={theme.colors.onPrimaryContainer}
         boldText={true}
       />
 
@@ -133,7 +133,7 @@ const Settings = () => {
         disabled={false}
         onPress={navigateToDebug}
       /> */}
-    </PageContainer>
+    </DefaultPageContainer>
   );
 };
 

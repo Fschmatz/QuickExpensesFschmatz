@@ -1,5 +1,5 @@
-import { ConfirmDialog } from "react-native-simple-dialogs";
-import { appColors } from "@constants";
+import { Dialog, Portal, Button, Text } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 
 const ConfirmationDialog = ({
   message,
@@ -8,49 +8,34 @@ const ConfirmationDialog = ({
   handleConfirm,
   handleCancel,
 }) => {
+  const theme = useTheme();
   return (
-    <ConfirmDialog
-      title="Confirmar"
-      message={message}
-      visible={visible}
-      onTouchOutside={setVisible}
-      positiveButton={{
-        title: "Sim",
-        onPress: handleConfirm,
-        titleStyle: {
-          color: appColors.text,
-        },
-        style: {
-          textTransform: "none",
-        },
-      }}
-      negativeButton={{
-        title: "Não",
-        onPress: handleCancel,
-        titleStyle: {
-          color: appColors.text,
-        },
-        style: {
-          textTransform: "none",
-        },
-      }}
-      dialogStyle={{
-        backgroundColor: appColors.dialogBackground,
-        borderRadius: 16,
-        paddingLeft: 0,
-        paddingRight: 8,
-        paddingBottom: 8,
-      }}
-      titleStyle={{
-        color: appColors.text,
-        fontWeight: "bold",
-        fontSize: 18,
-      }}
-      messageStyle={{
-        color: appColors.text,
-        fontSize: 16,
-      }}
-    />
+    <Portal>
+      <Dialog
+        visible={visible}
+        onDismiss={setVisible}
+        style={{ backgroundColor: theme.colors.surfaceContainerHigh, borderRadius: 16 }}
+      >
+        <Dialog.Title style={{ color: theme.colors.onBackground }}>Confirmar</Dialog.Title>
+        <Dialog.Content>
+          <Text style={{ color: theme.colors.onBackground, fontSize: 16 }}>{message}</Text>
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button
+            onPress={handleCancel}
+            textColor={theme.colors.onBackground}
+          >
+            Não
+          </Button>
+          <Button
+            onPress={handleConfirm}
+            textColor={theme.colors.onBackground}
+          >
+            Sim
+          </Button>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
   );
 };
 

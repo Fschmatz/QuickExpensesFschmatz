@@ -1,33 +1,10 @@
 import React from "react";
-import { Switch, Pressable } from "react-native";
+import { useTheme } from "react-native-paper";
+import { Switch } from "react-native";
+import { List } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components/native";
-import { appColors } from "@constants";
 import { setAppParameter } from "@appParameterDuck";
 import { selectAppParameterByKeyAsBoolean } from "@appParameterSelector";
-
-const Container = styled(Pressable)`
-  flex-direction: row;
-  align-items: center;
-  padding: 16px;
-  justify-content: space-between; 
-`;
-
-const TextContainer = styled.View`
-  flex: 1;
-  margin-right: 16px;
-`;
-
-const Title = styled.Text`
-  font-size: 16px;
-  color: ${appColors.text};
-`;
-
-const Subtitle = styled.Text`
-  font-size: 14px;
-  color: ${appColors.placeholderText};
-  margin-top: 2px;
-`;
 
 const SettingsSwitch = ({
   title,
@@ -35,6 +12,7 @@ const SettingsSwitch = ({
   parameterKey,
   defaultValue = true,
 }) => {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const value = useSelector(
     selectAppParameterByKeyAsBoolean(parameterKey, defaultValue),
@@ -45,27 +23,25 @@ const SettingsSwitch = ({
   };
 
   return (
-    <Container
+    <List.Item
+      title={title}
+      description={subtitle || null}
+      titleStyle={{ color: theme.colors.onBackground, fontSize: 16 }}
+      descriptionStyle={{ color: theme.colors.outline, fontSize: 14 }}
       onPress={() => onToggle(!value)}
-      android_ripple={appColors.androidRippleEffect}
-      activeOpacity={0.7}
-      style={({ pressed }) => [pressed && appColors.androidRippleColor]}
-      unstable_pressDelay={100}
-    >
-      <TextContainer>
-        <Title>{title}</Title>
-        {subtitle && <Subtitle>{subtitle}</Subtitle>}
-      </TextContainer>
-      <Switch
-        value={value}
-        onValueChange={onToggle}
-        trackColor={{
-          false: appColors.primaryContainer,
-          true: appColors.btnConfirmBackground,
-        }}
-        thumbColor={value ? appColors.text : "#f4f3f4"}
-      />
-    </Container>
+      right={() => (
+        <Switch
+          value={value}
+          onValueChange={onToggle}
+          trackColor={{
+            false: theme.colors.surfaceContainerLow,
+            true: theme.colors.primary,
+          }}
+          thumbColor={value ? theme.colors.onBackground : "#f4f3f4"}
+        />
+      )}
+      style={{ paddingHorizontal: 0 }}
+    />
   );
 };
 
