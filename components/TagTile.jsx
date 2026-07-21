@@ -12,8 +12,7 @@ const TagTile = ({ tag, onDelete, onEdit }) => {
       style={{
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: 4,
-        marginTop: 4,
+
         paddingHorizontal: 16,
         paddingVertical: 8,
         backgroundColor: theme.colors.elevation.level3,
@@ -42,7 +41,7 @@ const TagTile = ({ tag, onDelete, onEdit }) => {
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
-          gap: 20,
+          gap: 15,
         }}
       >
         <IconButton

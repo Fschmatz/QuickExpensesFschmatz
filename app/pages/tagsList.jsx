@@ -68,7 +68,7 @@ const TagsList = () => {
             onEdit={goToStoreTagForUpdate}
           />
         )}
-        ItemSeparatorComponent={() => <Divider style={{ opacity: 0.1 }} />}
+        //ItemSeparatorComponent={() => <Divider style={{ opacity: 0.1 }} />}
       />
 
       <ConfirmationDialog

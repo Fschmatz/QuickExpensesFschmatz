@@ -1,5 +1,6 @@
 import { ScrollView } from "react-native";
 import { useTheme } from "react-native-paper";
+import { SizedBox } from "@components";
 
 const DefaultPageContainer = ({ children, style }) => {
   const theme = useTheme();
@@ -17,6 +18,7 @@ const DefaultPageContainer = ({ children, style }) => {
       showsHorizontalScrollIndicator={false}
     >
       {children}
+      <SizedBox height={50} />
     </ScrollView>
   );
 };

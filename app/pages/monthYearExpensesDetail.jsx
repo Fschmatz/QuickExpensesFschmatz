@@ -248,8 +248,6 @@ const MonthYearExpensesDetail = () => {
                   </View>
                 );
               })}
-
-            <SizedBox height="50" />
           </Animated.View>
         )}
       </DefaultPageContainer>

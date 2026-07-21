@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { TextInput, View, Pressable, useWindowDimensions } from "react-native";
 import { Text } from "react-native-paper";
-import { HomeTagsList } from "@components";
+import { HomeTagsList, SizedBox } from "@components";
 import {
   greaterThanZero,
   showToast,
@@ -117,11 +117,13 @@ const Home = () => {
       style={{ flex: 1 }}
       onLayout={(e) => {
         const { height, width } = e.nativeEvent.layout;
+
         if (containerSize.height === "auto") {
           setContainerSize({ height, width });
         } else {
           const heightDiff = containerSize.height - height;
           const widthChanged = Math.abs(containerSize.width - width) > 10;
+
           if (widthChanged || heightDiff < 150) {
             setContainerSize({ height, width });
           }
@@ -220,7 +222,8 @@ const Home = () => {
             onChangeText={setNome}
             style={{
               color: theme.colors.onBackground,
-              fontSize: 18,
+              fontSize: 16,
+              fontWeight: "500",
               backgroundColor: theme.colors.background,
               borderRadius: 20,
               paddingHorizontal: 20,
@@ -346,6 +349,7 @@ const Home = () => {
             </View>
           </View>
         </View>
+        <SizedBox height={12} />
       </View>
     </View>
   );

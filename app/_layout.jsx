@@ -75,7 +75,7 @@ export default function RootLayout() {
           <Stack.Screen
             name="pages/tagsList"
             options={{
-              title: "Minhas Tags",
+              title: "Tags",
               ...defaultHeaderScreenOptions,
             }}
           />

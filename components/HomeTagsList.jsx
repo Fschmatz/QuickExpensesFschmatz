@@ -57,6 +57,8 @@ const HomeTagsList = ({
           style={{
             backgroundColor: getBackgroundColor(tag),
             borderRadius: 50,
+            paddingLeft: 5,
+            paddingRight: 0,
           }}
           textStyle={{
             color: theme.colors.onBackground,
@@ -73,7 +75,13 @@ const HomeTagsList = ({
   return isStoreExpensePage ? (
     content
   ) : (
-    <ScrollView style={{ flex: 1, width: "100%" }}>{content}</ScrollView>
+    <ScrollView
+      style={{ flex: 1, width: "100%" }}
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
+    >
+      {content}
+    </ScrollView>
   );
 };
 

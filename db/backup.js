@@ -82,10 +82,10 @@ export const importBackup = async () => {
 
     const file = result.assets[0];
 
-    if (!file.name || file.name !== `${appDetails.backupFileName}.json`) {
+    /*if (!file.name || file.name !== `${appDetails.backupFileName}.json`) {
       showToast("Arquivo inválido!");
       return;
-    }
+    } */
 
     const response = await fetch(file.uri);
     const text = await response.text();

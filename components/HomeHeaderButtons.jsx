@@ -2,7 +2,7 @@ import { View, Dimensions } from "react-native";
 import { useTheme } from "react-native-paper";
 import { useNavigation } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Menu, Divider } from "react-native-paper";
+import { Menu } from "react-native-paper";
 import { useState } from "react";
 
 const { width: screenWidth } = Dimensions.get("window");
@@ -35,9 +35,10 @@ const HomeHeaderButtons = () => {
         contentStyle={{
           backgroundColor: theme.colors.elevation.level5,
           borderRadius: 20,
-          marginTop: -50,
-          marginLeft: screenWidth - 250,
+          marginTop: -49,
+          marginLeft: screenWidth - 235,
           elevation: 2,
+          paddingHorizontal: 8,
         }}
         anchor={
           <Ionicons

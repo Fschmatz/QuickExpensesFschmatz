@@ -2,7 +2,7 @@
   "expo": {
     "name": "Quick Expenses Fschmatz",
     "slug": "QuickExpensesFschmatz",
-    "version": "1.1.1",
+    "version": "2.0.3",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",

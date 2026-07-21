@@ -158,7 +158,7 @@ const MonthlyExpensesList = () => {
                         backgroundColor:
                           year === selectedYear
                             ? theme.colors.primary
-                            : theme.colors.surfaceContainerLow,
+                            : theme.colors.elevation.level3,
                       },
                       pressed && {
                         opacity: 0.6,
