@@ -21,7 +21,7 @@ const TagTile = ({ tag, onDelete, onEdit }) => {
     >
       <Ionicons
         name={tag.icon}
-        size={24}
+        size={22}
         color={tag.color}
         style={{ marginRight: 16 }}
       />
@@ -45,11 +45,13 @@ const TagTile = ({ tag, onDelete, onEdit }) => {
         }}
       >
         <IconButton
+          size={22}
           icon="create-outline"
           onPress={() => onEdit(tag)}
           style={{ padding: 0, margin: 0 }}
         />
         <IconButton
+          size={22}
           icon="trash-outline"
           onPress={() => onDelete(tag)}
           style={{ padding: 0, margin: 0 }}

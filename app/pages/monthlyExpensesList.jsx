@@ -91,7 +91,7 @@ const MonthlyExpensesList = () => {
                 borderWidth: 1,
                 borderColor: theme.colors.tertiaryContainer,
                 padding: 16,
-                borderRadius: 16,
+                borderRadius: 20,
                 margin: 16,
                 marginBottom: 8,
                 alignItems: "center",
@@ -124,7 +124,7 @@ const MonthlyExpensesList = () => {
           <FlatList
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ gap: 8, paddingBottom: 75 }}
+            contentContainerStyle={{ gap: 8, paddingBottom: 50 }}
             data={filteredExpenses}
             keyExtractor={(item) => item.date.toString()}
             renderItem={({ item }) => (

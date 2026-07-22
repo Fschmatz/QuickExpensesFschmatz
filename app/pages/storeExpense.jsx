@@ -104,7 +104,7 @@ const StoreExpense = () => {
   }
 
   return (
-    <DefaultPageContainer style={{ paddingHorizontal: 16 }}>
+    <DefaultPageContainer>
       <KeyboardAvoidingView behavior={"height"}>
         <Text
           variant="bodyLarge"

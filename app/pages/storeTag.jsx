@@ -89,7 +89,7 @@ const StoreTag = () => {
   };
 
   return (
-    <DefaultPageContainer style={{ paddingHorizontal: 16 }}>
+    <DefaultPageContainer>
       <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
         <Text
           variant="bodyLarge"

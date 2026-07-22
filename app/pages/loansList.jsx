@@ -53,7 +53,13 @@ const LoansList = () => {
   };
 
   return (
-    <DefaultPageContainer>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.colors.background,
+        paddingHorizontal: 16,
+      }}
+    >
       <FlatList
         contentContainerStyle={{ gap: 8, paddingBottom: 75 }}
         data={loans}
@@ -77,7 +83,7 @@ const LoansList = () => {
       />
 
       <FAB
-        icon="add-outline"
+        icon="plus"
         onPress={goToStoreLoanForInsert}
         style={{
           position: "absolute",
@@ -89,7 +95,7 @@ const LoansList = () => {
         }}
         color={theme.colors.onPrimary}
       />
-    </DefaultPageContainer>
+    </View>
   );
 };
 

@@ -47,7 +47,7 @@ const StoreLoan = () => {
     });
   }, [navigation]);
 
-  const handleCreateTag = () => {
+  const handleSaveLoan = () => {
     if (!name.trim()) {
       showToast("Informe um nome!");
       return;
@@ -141,7 +141,7 @@ const StoreLoan = () => {
         <View style={{ marginTop: 25 }}>
           <Button
             mode="contained"
-           icon="content-save-outline"
+            icon="content-save-outline"
             buttonColor={theme.colors.primary}
             textColor={theme.colors.onPrimary}
             onPress={handleSaveLoan}

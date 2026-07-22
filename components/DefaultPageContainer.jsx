@@ -11,6 +11,7 @@ const DefaultPageContainer = ({ children, style }) => {
         {
           flex: 1,
           backgroundColor: theme.colors.background,
+          paddingHorizontal: 16,
         },
         style,
       ]}

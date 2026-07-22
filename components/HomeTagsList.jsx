@@ -50,14 +50,14 @@ const HomeTagsList = ({
       {tags.map((tag) => (
         <Chip
           key={tag.id}
-          icon={({ size }) => (
-            <Ionicons name={tag.icon} size={size} color={getTextColor(tag)} />
+          icon={() => (
+            <Ionicons name={tag.icon} size={16} color={getTextColor(tag)} />
           )}
           onPress={() => onSelectTag(tag)}
           style={{
             backgroundColor: getBackgroundColor(tag),
             borderRadius: 50,
-            paddingLeft: 5,
+            paddingLeft: 4,
             paddingRight: 0,
           }}
           textStyle={{

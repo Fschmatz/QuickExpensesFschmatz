@@ -38,7 +38,6 @@ const HomeHeaderButtons = () => {
           marginTop: -49,
           marginLeft: screenWidth - 235,
           elevation: 2,
-          paddingHorizontal: 8,
         }}
         anchor={
           <Ionicons

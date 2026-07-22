@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Divider, useTheme } from "react-native-paper";
+import { useTheme, Card } from "react-native-paper";
 import { Linking, View, ScrollView } from "react-native";
 import { Text } from "react-native-paper";
 import { useNavigation } from "expo-router";
@@ -9,6 +9,7 @@ import {
   ListTileWithIcon,
   SettingsSwitch,
   DefaultPageContainer,
+  CardList,
 } from "@components";
 import { exportBackup, importBackup } from "../../db/backup";
 import { fetchTags } from "@tagDuck";
@@ -50,7 +51,6 @@ const Settings = () => {
           justifyContent: "center",
           alignItems: "center",
           borderRadius: 25,
-          marginHorizontal: 16,
           marginBottom: 10,
           marginTop: 8,
         }}
@@ -62,7 +62,16 @@ const Settings = () => {
             fontWeight: "600",
           }}
         >
-          {appDetails.appName} v{appDetails.appVersion}
+          {appDetails.appName}
+        </Text>
+        <Text
+          style={{
+            color: theme.colors.onTertiaryContainer,
+            fontSize: 14,
+            fontWeight: "600",
+          }}
+        >
+          v{appDetails.appVersion}
         </Text>
       </View>
 
@@ -73,14 +82,14 @@ const Settings = () => {
         boldText={true}
       />
 
-      <SettingsSwitch
-        title="Mostrar total anual"
-        subtitle="Exibe o total anual na página das despesas mensais"
-        parameterKey="showTotalYear"
-        defaultValue={false}
-      />
-
-      {/* <Divider style={{ opacity: 0.1 }} /> */}
+      <CardList>
+        <SettingsSwitch
+          title="Mostrar total anual"
+          subtitle="Exibe o total anual na página das despesas mensais"
+          parameterKey="showTotalYear"
+          defaultValue={false}
+        />
+      </CardList>
 
       <ListTileWithIcon
         title="Backup"
@@ -89,22 +98,24 @@ const Settings = () => {
         boldText={true}
       />
 
-      <ListTileWithIcon
-        title="Exportar"
-        subtitle={
-          lastBackupDate ? `Último backup: ${lastBackupDate}` : undefined
-        }
-        icon="push-outline"
-        disabled={false}
-        onPress={handleExportBackup}
-      />
+      <CardList>
+        <ListTileWithIcon
+          title="Exportar"
+          subtitle={
+            lastBackupDate ? `Último backup: ${lastBackupDate}` : undefined
+          }
+          icon="push-outline"
+          disabled={false}
+          onPress={handleExportBackup}
+        />
 
-      <ListTileWithIcon
-        title="Importar"
-        icon="download-outline"
-        disabled={false}
-        onPress={handleImportBackup}
-      />
+        <ListTileWithIcon
+          title="Importar"
+          icon="download-outline"
+          disabled={false}
+          onPress={handleImportBackup}
+        />
+      </CardList>
 
       <ListTileWithIcon
         title="Sobre"
@@ -113,26 +124,21 @@ const Settings = () => {
         boldText={true}
       />
 
-      <ListTileWithIcon
-        title="Ver código-fonte no GitHub"
-        icon="link-outline"
-        disabled={false}
-        onPress={handleOpenGitHubRepo}
-      />
+      <CardList>
+        <ListTileWithIcon
+          title="Ver código-fonte no GitHub"
+          icon="link-outline"
+          disabled={false}
+          onPress={handleOpenGitHubRepo}
+        />
 
-      <ListTileWithIcon
-        title="Changelog"
-        icon="document-text-outline"
-        disabled={false}
-        onPress={navigateToChangelog}
-      />
-
-      {/*  <ListTileWithIcon
-        title="Debug"
-        icon="bug-outline"
-        disabled={false}
-        onPress={navigateToDebug}
-      /> */}
+        <ListTileWithIcon
+          title="Changelog"
+          icon="document-text-outline"
+          disabled={false}
+          onPress={navigateToChangelog}
+        />
+      </CardList>
     </DefaultPageContainer>
   );
 };

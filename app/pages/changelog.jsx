@@ -7,7 +7,7 @@ import { DefaultPageContainer, SizedBox } from "@components";
 const Changelog = () => {
   const theme = useTheme();
   return (
-    <DefaultPageContainer style={{ paddingHorizontal: 16 }}>
+    <DefaultPageContainer>
       <View>
         <SizedBox height={8} />
 

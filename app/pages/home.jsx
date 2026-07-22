@@ -349,7 +349,7 @@ const Home = () => {
             </View>
           </View>
         </View>
-        <SizedBox height={12} />
+        <SizedBox height={16} />
       </View>
     </View>
   );

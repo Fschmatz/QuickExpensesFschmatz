@@ -18,19 +18,23 @@ const MonthlyExpenseCard = ({ monthlyExpense }) => {
   return (
     <View
       style={{
-        borderRadius: 12,
         marginHorizontal: 16,
         backgroundColor: theme.colors.elevation.level3,
+        borderRadius: 20,
       }}
       elevation={0}
     >
       <Pressable
         onPress={() => navigateToMonthlyExpenseDetail(monthlyExpense.date)}
-        android_ripple={{ color: "rgba(255, 255, 255, 0.2)" }}
+        android_ripple={{
+          ...{ color: "rgba(255, 255, 255, 0.2)" },
+          borderless: false,
+          foreground: true,
+        }}
         style={({ pressed }) => [
           {
             padding: 16,
-            borderRadius: 12,
+            borderRadius: 20,
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
@@ -38,7 +42,7 @@ const MonthlyExpenseCard = ({ monthlyExpense }) => {
           pressed && {
             opacity: 0.6,
             backgroundColor: theme.colors.onSurface,
-            borderRadius: 12,
+            borderRadius: 20,
           },
         ]}
         unstable_pressDelay={100}
@@ -50,7 +54,7 @@ const MonthlyExpenseCard = ({ monthlyExpense }) => {
           {getMonthName(monthlyExpense.date)}
         </Text>
         <Text
-          variant="titleLarge"
+          variant="titleMedium"
           style={{ color: theme.colors.onBackground, fontWeight: "bold" }}
         >
           R$ {formatMoney(monthlyExpense.value)}

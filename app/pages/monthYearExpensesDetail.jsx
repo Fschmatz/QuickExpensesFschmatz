@@ -1,8 +1,8 @@
 import { View, ScrollView, ActivityIndicator, Animated } from "react-native";
 import { useTheme } from "react-native-paper";
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Text } from "react-native-paper";
+import { Text, Divider } from "react-native-paper";
 import {
   fetchByMonthYear,
   getExpensesByMonthYear,
@@ -127,7 +127,7 @@ const MonthYearExpensesDetail = () => {
 
   return (
     <>
-      <DefaultPageContainer style={{ paddingHorizontal: 16 }}>
+      <DefaultPageContainer>
         {loading ? (
           <View
             style={{
@@ -176,13 +176,10 @@ const MonthYearExpensesDetail = () => {
                   <View
                     key={tag.id || tag.name}
                     style={{
-                      backgroundColor: theme.colors.elevation.level2,
-                      borderLeftColor: tag.color,
-                      borderLeftWidth: 6,
-                      borderRadius: 16,
-                      padding: 8,
+                      backgroundColor: theme.colors.elevation.level5,
+                      borderRadius: 20,
                       paddingBottom: 12,
-                      marginVertical: 6,
+                      marginVertical: 8,
                     }}
                   >
                     <View
@@ -190,14 +187,15 @@ const MonthYearExpensesDetail = () => {
                         flexDirection: "row",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        marginRight: 8,
+                        marginRight: 12,
+                        marginLeft: 4,
+                        marginVertical: 8,
                       }}
                     >
-                      <TagChip key={tag.id} tag={tag} />
+                      <TagChip key={tag.id} tag={tag} bgColor="transparent" />
                       <Text
+                        variant="titleMedium"
                         style={{
-                          fontSize: 14,
-                          fontWeight: "600",
                           color: tag.color,
                         }}
                       >
@@ -205,14 +203,32 @@ const MonthYearExpensesDetail = () => {
                       </Text>
                     </View>
 
-                    <View>
+                    <Divider
+                      style={{
+                        backgroundColor: theme.colors.background,
+                        height: 1,
+                      }}
+                    />
+
+                    <View
+                      style={{
+                        backgroundColor: theme.colors.elevation.level3,
+                      }}
+                    >
                       {expenses.map((expense, index) => (
-                        <ExpenseCard
-                          key={expense.id || index}
-                          expense={expense}
-                          onPress={handlePressExpense}
-                          onLongPress={handleLongPressExpense}
-                        />
+                        <Fragment key={expense.id || index}>
+                          <ExpenseCard
+                            expense={expense}
+                            onPress={handlePressExpense}
+                            onLongPress={handleLongPressExpense}
+                          />
+                          <Divider
+                            style={{
+                              backgroundColor: theme.colors.background,
+                              height: 1,
+                            }}
+                          />
+                        </Fragment>
                       ))}
                     </View>
 
@@ -221,24 +237,21 @@ const MonthYearExpensesDetail = () => {
                         flexDirection: "row",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        marginRight: 8,
-                        marginTop: 4,
-                        marginLeft: 4,
+                        marginTop: 8,
+                        marginHorizontal: 12,
                       }}
                     >
                       <Text
+                        variant="titleMedium"
                         style={{
-                          fontSize: 14,
-                          fontWeight: "600",
                           color: theme.colors.onBackground,
                         }}
                       >
                         Total:
                       </Text>
                       <Text
+                        variant="titleMedium"
                         style={{
-                          fontSize: 14,
-                          fontWeight: "600",
                           color: theme.colors.onBackground,
                         }}
                       >

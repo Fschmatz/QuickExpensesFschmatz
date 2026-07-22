@@ -12,9 +12,7 @@ const ExpenseCard = ({ expense, onPress, onLongPress }) => {
       android_ripple={{ color: "rgba(255, 255, 255, 0.2)" }}
       style={({ pressed }) => [
         {
-          padding: 8,
-          paddingLeft: 4,
-          borderRadius: 12,
+          marginVertical: 6,
         },
         pressed && { opacity: 0.6, backgroundColor: theme.colors.onSurface },
       ]}
@@ -25,9 +23,11 @@ const ExpenseCard = ({ expense, onPress, onLongPress }) => {
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
+          marginVertical: 8,
+          marginHorizontal: 12,
         }}
       >
-        <Text variant="bodySmall" style={{ color: theme.colors.onBackground }}>
+        <Text variant="bodyMedium" style={{ color: theme.colors.onBackground }}>
           {formatDate(expense.createdDate, "dd/mm/yyyy")}{" "}
           {expense.name
             ? "- " +
@@ -36,7 +36,7 @@ const ExpenseCard = ({ expense, onPress, onLongPress }) => {
                 : expense.name)
             : ""}
         </Text>
-        <Text variant="bodySmall" style={{ color: theme.colors.onBackground }}>
+        <Text variant="bodyMedium" style={{ color: theme.colors.onBackground }}>
           R$ {formatMoney(expense.value)}
         </Text>
       </View>
