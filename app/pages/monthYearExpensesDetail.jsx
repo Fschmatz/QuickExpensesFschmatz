@@ -1,4 +1,4 @@
-import { View, ScrollView, ActivityIndicator, Animated } from "react-native";
+import { View, ScrollView, ActivityIndicator } from "react-native";
 import { useTheme } from "react-native-paper";
 import { useEffect, useState, useMemo, useRef, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +19,8 @@ import {
 } from "@components";
 import { formatDate, isEmpty, formatMoney } from "@utils";
 
+import Animated, { runOnJS, FadeIn } from "react-native-reanimated";
+
 const MonthYearExpensesDetail = () => {
   const theme = useTheme();
   const { date } = useLocalSearchParams();
@@ -27,18 +29,6 @@ const MonthYearExpensesDetail = () => {
   const navigation = useNavigation();
   const expensesByMonthYear = useSelector(getExpensesByMonthYear);
   const loading = useSelector(getExpensesLoading);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    if (!loading) {
-      fadeAnim.setValue(0);
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [loading]);
 
   const tagExpenseMap = useMemo(() => {
     return createTagExpenseMap(expensesByMonthYear || []);
@@ -77,8 +67,8 @@ const MonthYearExpensesDetail = () => {
     if (!isEmpty(untaggedExpenses)) {
       tagExpenseMap.set("untagged", {
         tag: {
-          id: "99999",
-          name: "zzz_",
+          id: "untagged",
+          name: "Sem Tag",
           color: theme.colors.onBackground,
           icon: "pricetag-outline",
         },
@@ -115,10 +105,10 @@ const MonthYearExpensesDetail = () => {
               paddingTop: 100,
             }}
           >
-            <ActivityIndicator size="large" color={theme.colors.onBackground} />
+            {/*  <ActivityIndicator size="large" color={theme.colors.onBackground} /> */}
           </View>
         ) : (
-          <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+          <Animated.View entering={FadeIn.duration(400)}>
             <SizedBox height="12" />
 
             <ExpensePieChart tagExpenseMap={tagExpenseMap} />
@@ -139,7 +129,11 @@ const MonthYearExpensesDetail = () => {
             <SizedBox height="12" />
 
             {Array.from(tagExpenseMap.values())
-              .sort((a, b) => a.tag.name.localeCompare(b.tag.name))
+              .sort((a, b) => {
+                if (a.tag.id === "untagged") return 1;
+                if (b.tag.id === "untagged") return -1;
+                return a.tag.name.localeCompare(b.tag.name);
+              })
               .map(({ tag, expenses }) => {
                 const totalTag = expenses.reduce((sum, expense) => {
                   const amount = parseFloat(expense?.value) || 0;

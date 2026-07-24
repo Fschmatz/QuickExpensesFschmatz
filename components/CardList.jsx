@@ -1,4 +1,5 @@
 import React from "react";
+import { View } from "react-native";
 import { useTheme, Divider, Card } from "react-native-paper";
 
 const CardList = ({ children, style, mode = "contained" }) => {
@@ -13,20 +14,20 @@ const CardList = ({ children, style, mode = "contained" }) => {
           elevation: 0,
           borderRadius: 20,
           overflow: "hidden",
-          backgroundColor: theme.colors.elevation.level3,
+          backgroundColor: theme?.colors?.elevation?.level3 || theme?.colors?.surfaceVariant || theme?.colors?.surface,
         },
         style,
       ]}
     >
       {childArray.map((child, index) => (
-        <React.Fragment key={index}>
+        <View key={index}>
           {child}
           {index < childArray.length - 1 && (
             <Divider
-              style={{ backgroundColor: theme.colors.background, height: 1 }}
+              style={{ backgroundColor: theme?.colors?.background || "#00000020", height: 1 }}
             />
           )}
-        </React.Fragment>
+        </View>
       ))}
     </Card>
   );

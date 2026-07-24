@@ -12,6 +12,7 @@ ${AppDetails.appVersion}
 - Update React Native
 - Material You
 - Várias atualizações na interface
+- Tema claro
 `;
 
 AppDetails.changelog = `

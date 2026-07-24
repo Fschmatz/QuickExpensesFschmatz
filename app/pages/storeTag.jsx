@@ -89,26 +89,26 @@ const StoreTag = () => {
   return (
     <DefaultPageContainer>
       {isReady ? (
-        <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
-          <TextInput
-            label="Nome"
-            mode="outlined"
-            value={name}
-            onChangeText={setName}
-            maxLength={20}
-            autoFocus={Boolean(isInsert)}
-          />
+        <Animated.View entering={FadeIn.duration(400)}>
+          <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
+            <TextInput
+              label="Nome"
+              mode="outlined"
+              value={name}
+              onChangeText={setName}
+              maxLength={20}
+              autoFocus={Boolean(isInsert)}
+            />
 
-          <SizedBox height="24" />
+            <SizedBox height="24" />
 
-          <Text
-            variant="bodyLarge"
-            style={{ color: theme.colors.onBackground, marginBottom: 8 }}
-          >
-            Cor:
-          </Text>
+            <Text
+              variant="bodyLarge"
+              style={{ color: theme.colors.onBackground, marginBottom: 8 }}
+            >
+              Cor:
+            </Text>
 
-          <Animated.View entering={FadeIn.duration(400)}>
             <ColorPicker value={selectedColor} onComplete={handleSelectColor}>
               <Panel1 />
               <HueSlider style={{ marginTop: 15 }} />
@@ -157,22 +157,22 @@ const StoreTag = () => {
                 </TouchableOpacity>
               ))}
             </View>
-          </Animated.View>
 
-          <View style={{ marginTop: 25 }}>
-            <Button
-              mode="contained"
-              icon="content-save-outline"
-              buttonColor={theme.colors.primary}
-              textColor={theme.colors.onPrimary}
-              onPress={handleCreateTag}
-              style={{ borderRadius: 25 }}
-              labelStyle={{ fontSize: 16, fontWeight: "500" }}
-            >
-              Salvar
-            </Button>
-          </View>
-        </KeyboardAvoidingView>
+            <View style={{ marginTop: 25 }}>
+              <Button
+                mode="contained"
+                icon="content-save-outline"
+                buttonColor={theme.colors.primary}
+                textColor={theme.colors.onPrimary}
+                onPress={handleCreateTag}
+                style={{ borderRadius: 25 }}
+                labelStyle={{ fontSize: 16, fontWeight: "500" }}
+              >
+                Salvar
+              </Button>
+            </View>
+          </KeyboardAvoidingView>
+        </Animated.View>
       ) : (
         <View
           style={{
@@ -182,7 +182,7 @@ const StoreTag = () => {
             marginTop: 50,
           }}
         >
-          <ActivityIndicator size="large" color={theme.colors.primary} />
+          {/*  <ActivityIndicator size="large" color={theme.colors.primary} /> */}
         </View>
       )}
     </DefaultPageContainer>

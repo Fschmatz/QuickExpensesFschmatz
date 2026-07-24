@@ -14,3 +14,4 @@ export { default as DefaultPageContainer } from "./DefaultPageContainer";
 export { default as SizedBox } from "./SizedBox";
 export { default as CardList } from "./CardList";
 export { default as ExpensesDetailCard } from "./ExpensesDetailCard";
+export { default as SettingsThemeSegmented } from "./SettingsThemeSegmented";

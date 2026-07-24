@@ -4,8 +4,6 @@ import { Ionicons } from "@expo/vector-icons";
 
 const TagChip = ({ tag, bgColor }) => {
   const theme = useTheme();
-  {/* Pequeno truque para deixar os Sem Tag por ultimo nos detalhes */}
-  const name = tag.name === "zzz_" ? "Sem Tag" : tag.name;
 
   return (
     <Chip
@@ -18,7 +16,7 @@ const TagChip = ({ tag, bgColor }) => {
       }}
       textStyle={{ color: theme.colors.onBackground, fontSize: 14, fontWeight: "500" }}
     >
-      {name}
+      {tag.name}
     </Chip>
   );
 };
