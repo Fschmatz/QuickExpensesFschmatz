@@ -57,13 +57,17 @@ const HomeTagsList = ({
           style={{
             backgroundColor: getBackgroundColor(tag),
             borderRadius: 50,
-            paddingLeft: 4,
+          }}
+          contentStyle={{
+            paddingLeft: 6,
             paddingRight: 0,
           }}
           textStyle={{
             color: theme.colors.onBackground,
             fontSize: 14,
             fontWeight: "500",
+            marginRight: 12,
+            marginLeft: 8,
           }}
         >
           {tag.name}

@@ -1,9 +1,8 @@
 import { useEffect, useState, useRef } from "react";
-import { useTheme } from "react-native-paper";
+import { useTheme, Text, TouchableRipple } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { TextInput, View, Pressable, useWindowDimensions } from "react-native";
-import { Text } from "react-native-paper";
 import { HomeTagsList, SizedBox } from "@components";
 import {
   greaterThanZero,
@@ -153,44 +152,49 @@ const Home = () => {
           }}
         >
           {/* Total mensal */}
-          <Pressable
-            onPress={navigateToCurrentMonthDetail}
-            style={({ pressed }) => [
-              {
-                width: "100%",
-                flexDirection: "row",
-                alignSelf: "center",
-                justifyContent: "space-between",
-                backgroundColor: theme.colors.background,
-                borderRadius: 50,
-                paddingHorizontal: 24,
-                paddingVertical: 12,
-              },
-              pressed && {
-                opacity: 0.6,
-                backgroundColor: theme.colors.onSurface,
-              },
-            ]}
+          <View
+            style={{
+              width: "100%",
+              borderRadius: 25,
+              overflow: "hidden",
+            }}
           >
-            <Text
+            <TouchableRipple
+              onPress={navigateToCurrentMonthDetail}
               style={{
-                color: theme.colors.onBackground,
-                fontSize: 16,
-                fontWeight: "500",
+                backgroundColor: theme.colors.background,
               }}
             >
-              {getCurrentMonthYear()}
-            </Text>
-            <Text
-              style={{
-                color: theme.colors.onBackground,
-                fontSize: 16,
-                fontWeight: "500",
-              }}
-            >
-              R$ {formatMoney(totalExpensesCurrentMonth)}
-            </Text>
-          </Pressable>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingHorizontal: 24,
+                  paddingVertical: 12,
+                  width: "100%",
+                }}
+              >
+                <Text
+                  style={{
+                    color: theme.colors.onBackground,
+                    fontSize: 16,
+                    fontWeight: "500",
+                  }}
+                >
+                  {getCurrentMonthYear()}
+                </Text>
+                <Text
+                  style={{
+                    color: theme.colors.onBackground,
+                    fontSize: 16,
+                    fontWeight: "500",
+                  }}
+                >
+                  R$ {formatMoney(totalExpensesCurrentMonth)}
+                </Text>
+              </View>
+            </TouchableRipple>
+          </View>
 
           {/* Value Input */}
           <TextInput
@@ -225,7 +229,7 @@ const Home = () => {
               fontSize: 16,
               fontWeight: "500",
               backgroundColor: theme.colors.background,
-              borderRadius: 20,
+              borderRadius: 25,
               paddingHorizontal: 20,
               paddingVertical: 10,
               marginBottom: 10,
@@ -254,98 +258,93 @@ const Home = () => {
               }}
             >
               {numPad.map((num) => (
-                <Pressable
+                <View
                   key={num}
-                  onPress={() => handlePress(num.toString())}
-                  style={({ pressed }) => [
-                    {
-                      width: num === "0" ? "65.75%" : "31.5%",
-                      height: "23.5%",
-                      minHeight: 50,
+                  style={{
+                    width: num === "0" ? "65.75%" : "31.5%",
+                    height: "23.5%",
+                    minHeight: 50,
+                    borderRadius: 50,
+                    overflow: "hidden",
+                  }}
+                >
+                  <TouchableRipple
+                    onPress={() => handlePress(num.toString())}
+                    style={{
+                      flex: 1,
                       justifyContent: "center",
                       alignItems: "center",
                       backgroundColor: theme.colors.secondaryContainer,
-                      borderRadius: 50,
-                      overflow: "hidden",
-                    },
-                    pressed && {
-                      opacity: 0.6,
-                      backgroundColor: theme.colors.onSecondaryContainer,
-                    },
-                  ]}
-                >
-                  <Text
-                    style={{
-                      color: theme.colors.onBackground,
-                      fontSize: 38,
-                      fontWeight: "600",
                     }}
                   >
-                    {num}
-                  </Text>
-                </Pressable>
+                    <Text
+                      style={{
+                        color: theme.colors.onBackground,
+                        fontSize: 38,
+                        fontWeight: "600",
+                      }}
+                    >
+                      {num}
+                    </Text>
+                  </TouchableRipple>
+                </View>
               ))}
             </View>
 
             {/* Delete + Confirm */}
             <View style={{ flex: 1, flexDirection: "column", marginLeft: 10 }}>
-              <Pressable
-                onPress={handleDelete}
-                onLongPress={handleDeleteAll}
-                style={({ pressed }) => [
-                  {
-                    width: "100%",
-                    height: "23.5%",
-                    minHeight: 50,
+              <View
+                style={{
+                  width: "100%",
+                  height: "23.5%",
+                  minHeight: 50,
+                  marginBottom: 15,
+                  borderRadius: 50,
+                  overflow: "hidden",
+                }}
+              >
+                <TouchableRipple
+                  onPress={handleDelete}
+                  onLongPress={handleDeleteAll}
+                  style={{
+                    flex: 1,
                     backgroundColor: theme.colors.tertiaryContainer,
                     justifyContent: "center",
                     alignItems: "center",
-                    marginBottom: 15,
-                    borderRadius: 50,
-                    overflow: "hidden",
-                  },
-                  pressed && {
-                    opacity: 0.6,
-                    backgroundColor: theme.colors.onSurface,
-                  },
-                ]}
-              >
-                <Ionicons
-                  name="backspace-outline"
-                  size={38}
-                  color={theme.colors.onTertiaryContainer}
-                />
-              </Pressable>
+                  }}
+                >
+                  <Ionicons
+                    name="backspace-outline"
+                    size={38}
+                    color={theme.colors.onTertiaryContainer}
+                  />
+                </TouchableRipple>
+              </View>
 
-              <Pressable
-                onPress={handleConfirm}
-                android_ripple={{
-                  ...{ color: "rgba(255, 255, 255, 0.2)" },
-                  borderless: false,
-                  foreground: true,
+              <View
+                style={{
+                  width: "100%",
+                  flex: 1,
+                  borderRadius: 50,
+                  overflow: "hidden",
                 }}
-                style={({ pressed }) => [
-                  {
-                    width: "100%",
+              >
+                <TouchableRipple
+                  onPress={handleConfirm}
+                  style={{
                     flex: 1,
                     backgroundColor: theme.colors.primary,
                     justifyContent: "center",
                     alignItems: "center",
-                    borderRadius: 50,
-                    overflow: "hidden",
-                  },
-                  pressed && {
-                    opacity: 0.6,
-                    backgroundColor: theme.colors.onSurface,
-                  },
-                ]}
-              >
-                <Ionicons
-                  name="checkmark"
-                  size={38}
-                  color={theme.colors.onPrimary}
-                />
-              </Pressable>
+                  }}
+                >
+                  <Ionicons
+                    name="checkmark"
+                    size={38}
+                    color={theme.colors.onPrimary}
+                  />
+                </TouchableRipple>
+              </View>
             </View>
           </View>
         </View>

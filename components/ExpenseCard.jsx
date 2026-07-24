@@ -1,33 +1,26 @@
-import { View, Pressable } from "react-native";
-import { useTheme } from "react-native-paper";
-import { Text } from "react-native-paper";
+import { View } from "react-native";
+import { useTheme, Text, TouchableRipple } from "react-native-paper";
 import { formatDate, formatMoney } from "@utils";
 
-const ExpenseCard = ({ expense, onPress, onLongPress }) => {
+const ExpenseCard = ({ expense, onPress }) => {
   const theme = useTheme();
+
   return (
-    <Pressable
+    <TouchableRipple
       onPress={() => onPress(expense)}
-      onLongPress={() => onLongPress(expense)}
-      android_ripple={{ color: "rgba(255, 255, 255, 0.2)" }}
-      style={({ pressed }) => [
-        {
-          marginVertical: 6,
-        },
-        pressed && { opacity: 0.6, backgroundColor: theme.colors.onSurface },
-      ]}
-      unstable_pressDelay={100}
+      style={{
+        paddingVertical: 12,
+        paddingHorizontal: 12,
+      }}
     >
       <View
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
-          marginVertical: 8,
-          marginHorizontal: 12,
         }}
       >
-        <Text variant="bodyMedium" style={{ color: theme.colors.onBackground }}>
+        <Text variant="titleSmall" style={{ color: theme.colors.onBackground }}>
           {formatDate(expense.createdDate, "dd/mm/yyyy")}{" "}
           {expense.name
             ? "- " +
@@ -36,11 +29,12 @@ const ExpenseCard = ({ expense, onPress, onLongPress }) => {
                 : expense.name)
             : ""}
         </Text>
-        <Text variant="bodyMedium" style={{ color: theme.colors.onBackground }}>
+
+        <Text variant="titleSmall" style={{ color: theme.colors.onBackground }}>
           R$ {formatMoney(expense.value)}
         </Text>
       </View>
-    </Pressable>
+    </TouchableRipple>
   );
 };
 

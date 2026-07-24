@@ -14,23 +14,25 @@ const ConfirmationDialog = ({
       <Dialog
         visible={visible}
         onDismiss={setVisible}
-        style={{ backgroundColor: theme.colors.surfaceContainerHigh, borderRadius: 16 }}
+        style={{
+          backgroundColor: theme.colors.elevation.level3,
+          borderRadius: 20,
+          elevation: 0,
+        }}
       >
-        <Dialog.Title style={{ color: theme.colors.onBackground }}>Confirmar</Dialog.Title>
+        <Dialog.Title style={{ color: theme.colors.onBackground }}>
+          Confirmar
+        </Dialog.Title>
         <Dialog.Content>
-          <Text style={{ color: theme.colors.onBackground, fontSize: 16 }}>{message}</Text>
+          <Text style={{ color: theme.colors.onBackground, fontSize: 16 }}>
+            {message}
+          </Text>
         </Dialog.Content>
         <Dialog.Actions>
-          <Button
-            onPress={handleCancel}
-            textColor={theme.colors.onBackground}
-          >
+          <Button onPress={handleCancel} textColor={theme.colors.onBackground}>
             Não
           </Button>
-          <Button
-            onPress={handleConfirm}
-            textColor={theme.colors.onBackground}
-          >
+          <Button onPress={handleConfirm} textColor={theme.colors.onBackground}>
             Sim
           </Button>
         </Dialog.Actions>

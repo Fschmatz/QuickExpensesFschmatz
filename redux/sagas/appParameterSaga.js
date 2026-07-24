@@ -7,6 +7,7 @@ import {
   setAppParameterFailure,
   fetchAppParameters,
 } from "../ducks/appParameterDuck";
+import { appParameters } from "@constants";
 
 function* handleFetchAppParameters() {
   try {
@@ -32,7 +33,7 @@ function* handleUpdateLastBackupDate() {
   try {
     const now = new Date();
     const formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-    yield call(AppParameterService.update, 'lastBackupDate', formattedDate);
+    yield call(AppParameterService.update, appParameters.lastBackupDateParameter, formattedDate);
     yield put(setAppParameterSuccess());
     yield put(fetchAppParameters());
   } catch (error) {

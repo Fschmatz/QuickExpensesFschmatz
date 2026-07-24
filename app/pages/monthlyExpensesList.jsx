@@ -4,12 +4,10 @@ import {
   ActivityIndicator,
   Animated,
   ScrollView,
-  Pressable,
 } from "react-native";
 import { useEffect, useRef, useState, useMemo } from "react";
-import { useTheme } from "react-native-paper";
+import { useTheme, Text, TouchableRipple } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import { Text } from "react-native-paper";
 import { MonthlyExpenseCard, DefaultPageContainer } from "@components";
 import {
   fetchMonthlyExpenses,
@@ -18,6 +16,7 @@ import {
 } from "@expenseDuck";
 import { formatMoney } from "@utils";
 import { selectAppParameterByKeyAsBoolean } from "@appParameterSelector";
+import { appParameters } from "@constants";
 
 const MonthlyExpensesList = () => {
   const theme = useTheme();
@@ -25,7 +24,7 @@ const MonthlyExpensesList = () => {
   const monthlyExpenses = useSelector(getMonthlyExpenses);
   const loading = useSelector(getExpensesLoading);
   const showTotalYear = useSelector(
-    selectAppParameterByKeyAsBoolean("showTotalYear", false),
+    selectAppParameterByKeyAsBoolean(appParameters.showTotalYearParameter, false),
   );
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const currentYear = new Date().getFullYear().toString();
@@ -141,44 +140,38 @@ const MonthlyExpensesList = () => {
                 }}
               >
                 {availableYears.map((year) => (
-                  <Pressable
+                  <View
                     key={year}
-                    onPress={() => setSelectedYear(year)}
-                    android_ripple={{
-                      ...{ color: "rgba(255, 255, 255, 0.2)" },
-                      borderless: false,
-                      foreground: true,
+                    style={{
+                      borderRadius: 50,
+                      overflow: "hidden",
+                      backgroundColor:
+                        year === selectedYear
+                          ? theme.colors.primary
+                          : theme.colors.elevation.level3,
                     }}
-                    style={({ pressed }) => [
-                      {
+                  >
+                    <TouchableRipple
+                      onPress={() => setSelectedYear(year)}
+                      style={{
                         paddingHorizontal: 16,
                         paddingVertical: 8,
-                        borderRadius: 50,
-                        overflow: "hidden",
-                        backgroundColor:
-                          year === selectedYear
-                            ? theme.colors.primary
-                            : theme.colors.elevation.level3,
-                      },
-                      pressed && {
-                        opacity: 0.6,
-                        backgroundColor: theme.colors.onSurface,
-                      },
-                    ]}
-                  >
-                    <Text
-                      style={{
-                        color:
-                          year === selectedYear
-                            ? theme.colors.onPrimary
-                            : theme.colors.onBackground,
-                        fontWeight: "bold",
-                        fontSize: 16,
                       }}
                     >
-                      {year}
-                    </Text>
-                  </Pressable>
+                      <Text
+                        style={{
+                          color:
+                            year === selectedYear
+                              ? theme.colors.onPrimary
+                              : theme.colors.onBackground,
+                          fontWeight: "bold",
+                          fontSize: 16,
+                        }}
+                      >
+                        {year}
+                      </Text>
+                    </TouchableRipple>
+                  </View>
                 ))}
               </ScrollView>
             }

@@ -3,7 +3,6 @@ import { useTheme } from "react-native-paper";
 import { View, Dimensions } from "react-native";
 import PieChart from "react-native-pie-chart";
 
-
 const ExpensePieChart = ({ tagExpenseMap }) => {
   const theme = useTheme();
   const [series, setSeries] = useState([]);
@@ -38,7 +37,12 @@ const ExpensePieChart = ({ tagExpenseMap }) => {
   const hasData = series.length > 0 && series.some((item) => item.value > 0);
 
   return (
-    <View style={{ backgroundColor: theme.colors.backgroundColor, alignItems: "center" }}>
+    <View
+      style={{
+        backgroundColor: theme.colors.background,
+        alignItems: "center",
+      }}
+    >
       {hasData && (
         <>
           <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -46,12 +50,9 @@ const ExpensePieChart = ({ tagExpenseMap }) => {
               widthAndHeight={chartSize}
               series={series}
               sliceColor={series.map((item) => item.color)}
-              doughnut={true}
-              cover={0.4}
+              cover={0.35}
             />
           </View>
-
-          <View style={{ height: 8 }} />
         </>
       )}
     </View>

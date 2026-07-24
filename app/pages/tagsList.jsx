@@ -68,7 +68,6 @@ const TagsList = () => {
             onEdit={goToStoreTagForUpdate}
           />
         )}
-        //ItemSeparatorComponent={() => <Divider style={{ opacity: 0.1 }} />}
       />
 
       <ConfirmationDialog
@@ -76,7 +75,7 @@ const TagsList = () => {
         visible={dialogVisible}
         setVisible={handleCancelDelete}
         handleConfirm={handleConfirmDelete}
-        handleCancel={handleCancelDelete}
+        handleCancel={handleCancelDelete}       
       />
 
       <FAB

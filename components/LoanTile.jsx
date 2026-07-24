@@ -1,5 +1,5 @@
-import { View, Pressable } from "react-native";
-import { useTheme, Text, Card } from "react-native-paper";
+import { View } from "react-native";
+import { useTheme, Text, Card, TouchableRipple } from "react-native-paper";
 import IconButton from "./IconButton";
 import { formatDate, formatMoney } from "@utils";
 
@@ -14,16 +14,13 @@ const LoanTile = ({ loan, onDelete, onEdit }) => {
         borderRadius: 20,
         overflow: "hidden",
         backgroundColor: theme.colors.elevation.level3,
-        paddingVertical: 16,
       }}
     >
-      <Pressable
+      <TouchableRipple
         onPress={() => onEdit(loan)}
-        android_ripple={{ color: "rgba(255, 255, 255, 0.15)" }}
-        style={({ pressed }) => [
-          pressed && { opacity: 0.7, backgroundColor: theme.colors.onSurface },
-        ]}
-        unstable_pressDelay={100}
+        style={{
+          paddingVertical: 16,
+        }}
       >
         <Card.Title
           title={loan.name}
@@ -63,7 +60,7 @@ const LoanTile = ({ loan, onDelete, onEdit }) => {
             </View>
           )}
         />
-      </Pressable>
+      </TouchableRipple>
     </Card>
   );
 };

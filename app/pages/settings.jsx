@@ -15,19 +15,21 @@ import { exportBackup, importBackup } from "../../db/backup";
 import { fetchTags } from "@tagDuck";
 import { fetchAppParameters } from "@appParameterDuck";
 import { selectAppParameterByKey } from "@appParameterSelector";
+import { appParameters } from "@constants";
 
 const Settings = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const lastBackupDate = useSelector(selectAppParameterByKey("lastBackupDate"));
+  const lastBackupDate = useSelector(
+    selectAppParameterByKey(appParameters.lastBackupDateParameter),
+  );
 
   useEffect(() => {
     dispatch(fetchAppParameters());
   }, [dispatch]);
 
   const navigateToChangelog = () => navigation.navigate("pages/changelog");
-  const navigateToDebug = () => navigation.navigate("pages/debug");
 
   const handleOpenGitHubRepo = () => {
     Linking.openURL(appDetails.repositoryLink);
@@ -86,7 +88,7 @@ const Settings = () => {
         <SettingsSwitch
           title="Mostrar total anual"
           subtitle="Exibe o total anual na página das despesas mensais"
-          parameterKey="showTotalYear"
+          parameterKey={appParameters.showTotalYearParameter}
           defaultValue={false}
         />
       </CardList>

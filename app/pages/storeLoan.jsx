@@ -1,28 +1,13 @@
 import { useState, useEffect } from "react";
-import { useTheme, Button, Text } from "react-native-paper";
-import { TextInput, KeyboardAvoidingView, View } from "react-native";
+import { useTheme, Button, Text, TextInput } from "react-native-paper";
+import { KeyboardAvoidingView, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import { showToast, formatCurrencyInput, completeCurrencyZeros } from "@utils";
 import { selectLoanById } from "@loanSelector";
 import { createLoan } from "../../entities/loan";
 import { addLoan, updateLoan } from "@loanDuck";
-import { DefaultPageContainer } from "@components";
-
-const inputStyle = {
-  backgroundColor: "transparent",
-  borderRadius: 4,
-  fontSize: 16,
-  height: 50,
-  borderWidth: 1,
-  borderColor: "#d1d1d1",
-  padding: 8,
-};
-
-const noteInputStyle = {
-  ...inputStyle,
-  height: 100,
-};
+import { DefaultPageContainer, SizedBox } from "@components";
 
 const StoreLoan = () => {
   const theme = useTheme();
@@ -88,54 +73,36 @@ const StoreLoan = () => {
   return (
     <DefaultPageContainer>
       <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
-        <Text
-          variant="bodyLarge"
-          style={{ color: theme.colors.onBackground, marginBottom: 8 }}
-        >
-          Nome:
-        </Text>
         <TextInput
-          style={[inputStyle, { color: theme.colors.onBackground }]}
-          placeholder=""
+          label="Nome"
+          mode="outlined"
           value={name}
           onChangeText={setName}
           maxLength={30}
         />
 
-        <View style={{ height: 10 }} />
+        <SizedBox height="24" />
 
-        <Text
-          variant="bodyLarge"
-          style={{ color: theme.colors.onBackground, marginBottom: 8 }}
-        >
-          Valor:
-        </Text>
         <TextInput
-          style={[inputStyle, { color: theme.colors.onBackground }]}
-          onChangeText={handleValueChange}
+          label="Valor"
+          mode="outlined"
           value={value}
+          onChangeText={handleValueChange}
           maxLength={10}
-          placeholder=""
           keyboardType="numeric"
+          left={<TextInput.Affix text="R$" />}
         />
 
-        <View style={{ height: 10 }} />
+        <SizedBox height="24" />
 
-        <Text
-          variant="bodyLarge"
-          style={{ color: theme.colors.onBackground, marginBottom: 8 }}
-        >
-          Nota:
-        </Text>
         <TextInput
-          style={[noteInputStyle, { color: theme.colors.onBackground }]}
-          onChangeText={setNote}
+          label="Nota"
+          mode="outlined"
           value={note}
+          onChangeText={setNote}
           maxLength={250}
-          placeholder=""
           multiline={true}
           numberOfLines={5}
-          textAlignVertical="top"
         />
 
         <View style={{ marginTop: 25 }}>

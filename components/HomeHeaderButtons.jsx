@@ -2,7 +2,7 @@ import { View, Dimensions } from "react-native";
 import { useTheme } from "react-native-paper";
 import { useNavigation } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Menu } from "react-native-paper";
+import { Menu, IconButton } from "react-native-paper";
 import { useState } from "react";
 
 const { width: screenWidth } = Dimensions.get("window");
@@ -27,6 +27,7 @@ const HomeHeaderButtons = () => {
         justifyContent: "center",
         alignItems: "center",
         gap: 12,
+        marginRight: -12,
       }}
     >
       <Menu
@@ -40,10 +41,9 @@ const HomeHeaderButtons = () => {
           elevation: 2,
         }}
         anchor={
-          <Ionicons
-            name="ellipsis-vertical"
-            size={24}
-            color={theme.colors.onBackground}
+          <IconButton
+            icon="dots-vertical"
+            iconColor={theme.colors.onBackground}
             onPress={openMenu}
           />
         }

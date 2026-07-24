@@ -1,6 +1,6 @@
 import { ScrollView } from "react-native";
 import { useTheme } from "react-native-paper";
-import { SizedBox } from "@components";
+import SizedBox from "./SizedBox";
 
 const DefaultPageContainer = ({ children, style }) => {
   const theme = useTheme();

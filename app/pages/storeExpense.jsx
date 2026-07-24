@@ -1,22 +1,28 @@
 import { useState, useEffect } from "react";
-import { useTheme, Button, Text } from "react-native-paper";
-import { TextInput, KeyboardAvoidingView, View } from "react-native";
+import {
+  useTheme,
+  Button,
+  Text,
+  IconButton,
+  TextInput,
+} from "react-native-paper";
+import { KeyboardAvoidingView, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import { showToast, formatCurrencyInput, completeCurrencyZeros } from "@utils";
-import { HomeTagsList, DefaultPageContainer, SizedBox } from "@components";
+import {
+  HomeTagsList,
+  DefaultPageContainer,
+  SizedBox,
+  ConfirmationDialog,
+} from "@components";
 import { fetchTags, getTags } from "@tagDuck";
-import { addExpense, updateExpense, selectExpenseById } from "@expenseDuck";
-
-const inputStyle = {
-  backgroundColor: "transparent",
-  borderRadius: 4,
-  fontSize: 16,
-  height: 50,
-  borderWidth: 1,
-  borderColor: "#d1d1d1",
-  padding: 8,
-};
+import {
+  addExpense,
+  updateExpense,
+  selectExpenseById,
+  deleteExpense,
+} from "@expenseDuck";
 
 const StoreExpense = () => {
   const theme = useTheme();
@@ -51,16 +57,34 @@ const StoreExpense = () => {
   const [selectedTag, setSelectedTag] = useState(
     expenseForUpdate?.tags?.[0] || null,
   );
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
 
   useEffect(() => {
     dispatch(fetchTags());
+  }, [dispatch]);
+
+  useEffect(() => {
     navigation.setOptions({
       title:
         isInsert === "true" || isInsert === true
           ? "Nova Despesa"
           : "Editar Despesa",
+      headerRight: () => {
+        if (isUpdate === "true" || isUpdate === true) {
+          return (
+            <IconButton
+              icon="delete-outline"
+              onPress={() => setIsDialogVisible(true)}
+              style={{
+                marginRight: -8,
+              }}
+            />
+          );
+        }
+        return null;
+      },
     });
-  }, [navigation, dispatch]);
+  }, [navigation, isInsert, isUpdate]);
 
   const handleSaveExpense = () => {
     if (!value || value === "0") {
@@ -95,6 +119,22 @@ const StoreExpense = () => {
     }
   };
 
+  const handleConfirmDelete = () => {
+    dispatch(
+      deleteExpense({
+        expenseId: expenseId,
+        date: date || (expenseForUpdate ? expenseForUpdate.createdDate : null),
+      }),
+    );
+    setIsDialogVisible(false);
+    showToast("Despesa excluída!");
+    router.back();
+  };
+
+  const handleCancelDelete = () => {
+    setIsDialogVisible(false);
+  };
+
   function parseForDb(val) {
     return val.replace(/\./g, "").replace(",", ".");
   }
@@ -106,15 +146,9 @@ const StoreExpense = () => {
   return (
     <DefaultPageContainer>
       <KeyboardAvoidingView behavior={"height"}>
-        <Text
-          variant="bodyLarge"
-          style={{ color: theme.colors.onBackground, marginBottom: 8 }}
-        >
-          Nome:
-        </Text>
         <TextInput
-          style={[inputStyle, { color: theme.colors.onBackground }]}
-          placeholder=""
+          label="Nome"
+          mode="outlined"
           value={name}
           onChangeText={setName}
           maxLength={30}
@@ -122,19 +156,14 @@ const StoreExpense = () => {
 
         <SizedBox height="24" />
 
-        <Text
-          variant="bodyLarge"
-          style={{ color: theme.colors.onBackground, marginBottom: 8 }}
-        >
-          Valor:
-        </Text>
         <TextInput
-          style={[inputStyle, { color: theme.colors.onBackground }]}
-          onChangeText={handleValueChange}
+          label="Valor"
+          mode="outlined"
           value={value}
+          onChangeText={handleValueChange}
           maxLength={10}
-          placeholder=""
           keyboardType="numeric"
+          left={<TextInput.Affix text="R$" />}
         />
 
         <SizedBox height="24" />
@@ -169,6 +198,14 @@ const StoreExpense = () => {
           Salvar
         </Button>
       </KeyboardAvoidingView>
+
+      <ConfirmationDialog
+        visible={isDialogVisible}
+        setVisible={setIsDialogVisible}
+        message={`Deseja excluir "${expenseForUpdate?.name || "a despesa"}"?`}
+        handleConfirm={handleConfirmDelete}
+        handleCancel={handleCancelDelete}
+      />
     </DefaultPageContainer>
   );
 };

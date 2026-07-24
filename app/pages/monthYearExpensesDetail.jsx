@@ -8,14 +8,12 @@ import {
   getExpensesByMonthYear,
   clearExpensesByMonthYear,
   getExpensesLoading,
-  deleteExpense,
 } from "@expenseDuck";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import {
   ExpenseCard,
-  TagChip,
+  ExpensesDetailCard,
   ExpensePieChart,
-  ConfirmationDialog,
   DefaultPageContainer,
   SizedBox,
 } from "@components";
@@ -30,8 +28,6 @@ const MonthYearExpensesDetail = () => {
   const expensesByMonthYear = useSelector(getExpensesByMonthYear);
   const loading = useSelector(getExpensesLoading);
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const [isDialogVisible, setIsDialogVisible] = useState(false);
-  const [selectedExpense, setSelectedExpense] = useState(null);
 
   useEffect(() => {
     if (!loading) {
@@ -100,24 +96,6 @@ const MonthYearExpensesDetail = () => {
     });
   };
 
-  const handleLongPressExpense = (expense) => {
-    setSelectedExpense(expense);
-    setIsDialogVisible(true);
-  };
-
-  const handleConfirmDelete = () => {
-    if (selectedExpense) {
-      dispatch(deleteExpense({ expenseId: selectedExpense.id, date: date }));
-      setIsDialogVisible(false);
-      setSelectedExpense(null);
-    }
-  };
-
-  const handleCancelDelete = () => {
-    setIsDialogVisible(false);
-    setSelectedExpense(null);
-  };
-
   const totalAllExpenses = Array.from(tagExpenseMap.values())
     .flatMap(({ expenses }) => expenses)
     .reduce((sum, expense) => {
@@ -173,105 +151,19 @@ const MonthYearExpensesDetail = () => {
                 ).toFixed(2);
 
                 return (
-                  <View
+                  <ExpensesDetailCard
                     key={tag.id || tag.name}
-                    style={{
-                      backgroundColor: theme.colors.elevation.level5,
-                      borderRadius: 20,
-                      paddingBottom: 12,
-                      marginVertical: 8,
-                    }}
-                  >
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        marginRight: 12,
-                        marginLeft: 4,
-                        marginVertical: 8,
-                      }}
-                    >
-                      <TagChip key={tag.id} tag={tag} bgColor="transparent" />
-                      <Text
-                        variant="titleMedium"
-                        style={{
-                          color: tag.color,
-                        }}
-                      >
-                        {percentage}%
-                      </Text>
-                    </View>
-
-                    <Divider
-                      style={{
-                        backgroundColor: theme.colors.background,
-                        height: 1,
-                      }}
-                    />
-
-                    <View
-                      style={{
-                        backgroundColor: theme.colors.elevation.level3,
-                      }}
-                    >
-                      {expenses.map((expense, index) => (
-                        <Fragment key={expense.id || index}>
-                          <ExpenseCard
-                            expense={expense}
-                            onPress={handlePressExpense}
-                            onLongPress={handleLongPressExpense}
-                          />
-                          <Divider
-                            style={{
-                              backgroundColor: theme.colors.background,
-                              height: 1,
-                            }}
-                          />
-                        </Fragment>
-                      ))}
-                    </View>
-
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        marginTop: 8,
-                        marginHorizontal: 12,
-                      }}
-                    >
-                      <Text
-                        variant="titleMedium"
-                        style={{
-                          color: theme.colors.onBackground,
-                        }}
-                      >
-                        Total:
-                      </Text>
-                      <Text
-                        variant="titleMedium"
-                        style={{
-                          color: theme.colors.onBackground,
-                        }}
-                      >
-                        R$ {formatMoney(totalTag)}
-                      </Text>
-                    </View>
-                  </View>
+                    tag={tag}
+                    expenses={expenses}
+                    totalTag={totalTag}
+                    percentage={percentage}
+                    onPressExpense={handlePressExpense}
+                  />
                 );
               })}
           </Animated.View>
         )}
       </DefaultPageContainer>
-
-      <ConfirmationDialog
-        visible={isDialogVisible}
-        setVisible={setIsDialogVisible}
-        message={`Deseja excluir "${selectedExpense?.name || "a despesa selecionada"}"?`}
-        handleConfirm={handleConfirmDelete}
-        handleCancel={handleCancelDelete}
-      />
     </>
   );
 };

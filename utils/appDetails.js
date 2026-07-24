@@ -1,5 +1,5 @@
 const AppDetails = {
-  appVersion: "2.0.4",
+  appVersion: "2.0.5",
   appName: "Quick Expenses Fschmatz",
   appNameHomePage: " Quick Expenses",
   repositoryLink: "https://github.com/Fschmatz/QuickExpensesFschmatz",
@@ -9,7 +9,9 @@ const AppDetails = {
 AppDetails.currentChangelog = `
 ${AppDetails.appVersion}
 - Update Expo 57
+- Update React Native
 - Material You
+- Várias atualizações na interface
 `;
 
 AppDetails.changelog = `
