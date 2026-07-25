@@ -16,7 +16,9 @@ import {
   ExpensePieChart,
   DefaultPageContainer,
   SizedBox,
+  EmptyState,
 } from "@components";
+
 import { formatDate, isEmpty, formatMoney } from "@utils";
 
 import Animated, { runOnJS, FadeIn } from "react-native-reanimated";
@@ -107,6 +109,17 @@ const MonthYearExpensesDetail = () => {
           >
             {/*  <ActivityIndicator size="large" color={theme.colors.onBackground} /> */}
           </View>
+        ) : tagExpenseMap.size === 0 ? (
+          <Animated.View
+            entering={FadeIn.duration(400)}
+            style={{ flex: 1 }}
+          >
+            <EmptyState
+              icon="receipt-outline"
+              title="Nenhuma despesa"
+              subtitle="Não há despesas registradas para este período."
+            />
+          </Animated.View>
         ) : (
           <Animated.View entering={FadeIn.duration(400)}>
             <SizedBox height="12" />

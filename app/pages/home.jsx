@@ -1,36 +1,28 @@
 import { useEffect, useState, useRef } from "react";
-import { useTheme, Text, TouchableRipple } from "react-native-paper";
-import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import { TextInput, View, Pressable, useWindowDimensions } from "react-native";
-import { HomeTagsList, SizedBox } from "@components";
-import {
-  greaterThanZero,
-  showToast,
-  formatMoney,
-  formatCurrencyInput,
-  getMonthName,
-} from "@utils";
+import { View, useWindowDimensions } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SizedBox, HomeTopContainer, HomeBottomContainer } from "@components";
+import { greaterThanZero, showToast, formatCurrencyInput } from "@utils";
 import { fetchTags, getTags } from "@tagDuck";
 import {
   addExpense,
   fetchTotalExpensesCurrentMonth,
   getTotalExpensesCurrentMonth,
 } from "@expenseDuck";
-import { useRouter } from "expo-router";
 
 const Home = () => {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
   const [inputValue, setInputValue] = useState("0");
   const [nome, setNome] = useState("");
   const [selectedTag, setSelectedTag] = useState();
   const { height } = useWindowDimensions();
   const responsiveFontSize = Math.min(height * 0.08, 70);
-  const router = useRouter();
   const dispatch = useDispatch();
   const tags = useSelector(getTags);
   const totalExpensesCurrentMonth = useSelector(getTotalExpensesCurrentMonth);
-  const numPad = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ","];
   const maxLengthValue = 8;
   const maxLengthName = 30;
   const [containerSize, setContainerSize] = useState({
@@ -95,22 +87,6 @@ const Home = () => {
     }
   };
 
-  const navigateToCurrentMonthDetail = () => {
-    const today = new Date();
-    const todayFormatted = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-01`;
-    router.push({
-      pathname: "/pages/monthYearExpensesDetail",
-      params: { date: todayFormatted },
-    });
-  };
-
-  const getCurrentMonthYear = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    return `${getMonthName(`${year}-${month}`)}/${year}`;
-  };
-
   return (
     <View
       style={{ flex: 1 }}
@@ -136,219 +112,33 @@ const Home = () => {
             flex: 1,
             width: "100%",
             backgroundColor: theme.colors.background,
+            paddingBottom: insets.bottom,
           },
           containerSize.height !== "auto"
             ? { minHeight: containerSize.height }
             : {},
         ]}
       >
-        {/* Top Container */}
-        <View
-          style={{
-            backgroundColor: theme.colors.elevation.level3,
-            flex: 1,
-            padding: 16,
-            borderRadius: 40,
-          }}
-        >
-          {/* Total mensal */}
-          <View
-            style={{
-              width: "100%",
-              borderRadius: 25,
-              overflow: "hidden",
-            }}
-          >
-            <TouchableRipple
-              onPress={navigateToCurrentMonthDetail}
-              style={{
-                backgroundColor: theme.colors.background,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  paddingHorizontal: 24,
-                  paddingVertical: 12,
-                  width: "100%",
-                }}
-              >
-                <Text
-                  style={{
-                    color: theme.colors.onBackground,
-                    fontSize: 16,
-                    fontWeight: "500",
-                  }}
-                >
-                  {getCurrentMonthYear()}
-                </Text>
-                <Text
-                  style={{
-                    color: theme.colors.onBackground,
-                    fontSize: 16,
-                    fontWeight: "500",
-                  }}
-                >
-                  R$ {formatMoney(totalExpensesCurrentMonth)}
-                </Text>
-              </View>
-            </TouchableRipple>
-          </View>
+        <HomeTopContainer
+          inputValue={inputValue}
+          nome={nome}
+          setNome={setNome}
+          tags={tags}
+          selectedTag={selectedTag}
+          onSelectTag={handleSelectTag}
+          totalExpensesCurrentMonth={totalExpensesCurrentMonth}
+          responsiveFontSize={responsiveFontSize}
+          maxLengthValue={maxLengthValue}
+          maxLengthName={maxLengthName}
+          nomeInputRef={nomeInputRef}
+        />
 
-          {/* Value Input */}
-          <TextInput
-            value={inputValue}
-            editable={false}
-            maxLength={maxLengthValue}
-            adjustsFontSizeToFit
-            numberOfLines={1}
-            style={{
-              color: theme.colors.onBackground,
-              fontSize: responsiveFontSize,
-              fontWeight: "700",
-              textAlign: "right",
-              alignSelf: "flex-end",
-              marginRight: 5,
-              marginTop: "1%",
-              marginBottom: "1.7%",
-              flex: 1,
-            }}
-          />
-
-          {/* Nome Input */}
-          <TextInput
-            ref={nomeInputRef}
-            placeholder="Nome"
-            placeholderTextColor={theme.colors.outline}
-            value={nome}
-            maxLength={maxLengthName}
-            onChangeText={setNome}
-            style={{
-              color: theme.colors.onBackground,
-              fontSize: 16,
-              fontWeight: "500",
-              backgroundColor: theme.colors.background,
-              borderRadius: 25,
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-              marginBottom: 10,
-              width: "100%",
-            }}
-          />
-
-          <HomeTagsList
-            tags={tags}
-            selectedTag={selectedTag}
-            onSelectTag={handleSelectTag}
-          />
-        </View>
-
-        {/* Bottom Container - Keypad */}
-        <View style={{ flex: 1.1, padding: 16 }}>
-          <View style={{ flex: 1, flexDirection: "row" }}>
-            {/* Numbers */}
-            <View
-              style={{
-                flex: 3,
-                flexDirection: "row",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-                alignContent: "space-between",
-              }}
-            >
-              {numPad.map((num) => (
-                <View
-                  key={num}
-                  style={{
-                    width: num === "0" ? "65.75%" : "31.5%",
-                    height: "23.5%",
-                    minHeight: 50,
-                    borderRadius: 50,
-                    overflow: "hidden",
-                  }}
-                >
-                  <TouchableRipple
-                    onPress={() => handlePress(num.toString())}
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: theme.colors.secondaryContainer,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: theme.colors.onBackground,
-                        fontSize: 38,
-                        fontWeight: "600",
-                      }}
-                    >
-                      {num}
-                    </Text>
-                  </TouchableRipple>
-                </View>
-              ))}
-            </View>
-
-            {/* Delete + Confirm */}
-            <View style={{ flex: 1, flexDirection: "column", marginLeft: 10 }}>
-              <View
-                style={{
-                  width: "100%",
-                  height: "23.5%",
-                  minHeight: 50,
-                  marginBottom: 15,
-                  borderRadius: 50,
-                  overflow: "hidden",
-                }}
-              >
-                <TouchableRipple
-                  onPress={handleDelete}
-                  onLongPress={handleDeleteAll}
-                  style={{
-                    flex: 1,
-                    backgroundColor: theme.colors.tertiaryContainer,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Ionicons
-                    name="backspace-outline"
-                    size={38}
-                    color={theme.colors.onTertiaryContainer}
-                  />
-                </TouchableRipple>
-              </View>
-
-              <View
-                style={{
-                  width: "100%",
-                  flex: 1,
-                  borderRadius: 50,
-                  overflow: "hidden",
-                }}
-              >
-                <TouchableRipple
-                  onPress={handleConfirm}
-                  style={{
-                    flex: 1,
-                    backgroundColor: theme.colors.primary,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Ionicons
-                    name="checkmark"
-                    size={38}
-                    color={theme.colors.onPrimary}
-                  />
-                </TouchableRipple>
-              </View>
-            </View>
-          </View>
-        </View>
-        <SizedBox height={16} />
+        <HomeBottomContainer
+          onPress={handlePress}
+          onDelete={handleDelete}
+          onDeleteAll={handleDeleteAll}
+          onConfirm={handleConfirm}
+        />
       </View>
     </View>
   );

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "expo-router";
-import { ConfirmationDialog, DefaultPageContainer } from "@components";
+import { ConfirmationDialog, DefaultPageContainer, EmptyState } from "@components";
 import { deleteLoan, getLoans, fetchLoans } from "@loanDuck";
 import LoanTile from "../../components/LoanTile";
 import { useTheme, FAB } from "react-native-paper";
@@ -61,7 +61,7 @@ const LoansList = () => {
       }}
     >
       <FlatList
-        contentContainerStyle={{ gap: 8, paddingBottom: 75 }}
+        contentContainerStyle={{ gap: 8, paddingBottom: 75, flexGrow: 1 }}
         data={loans}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
@@ -72,6 +72,13 @@ const LoansList = () => {
           />
         )}
         ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
+        ListEmptyComponent={
+          <EmptyState
+            icon="cash-outline"
+            title="Nenhum empréstimo"
+            subtitle="Você não possui empréstimos registrados."
+          />
+        }
       />
 
       <ConfirmationDialog

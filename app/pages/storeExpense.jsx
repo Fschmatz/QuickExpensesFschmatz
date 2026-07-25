@@ -108,7 +108,7 @@ const StoreExpense = () => {
       showToast("Despesa atualizada com sucesso!");
     }
 
-    router.back();
+    setTimeout(() => router.back(), 300);
   };
 
   const handleSelectTag = (tag) => {
@@ -128,7 +128,7 @@ const StoreExpense = () => {
     );
     setIsDialogVisible(false);
     showToast("Despesa excluída!");
-    router.back();
+    setTimeout(() => router.back(), 300);
   };
 
   const handleCancelDelete = () => {

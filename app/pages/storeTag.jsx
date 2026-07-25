@@ -10,7 +10,14 @@ import { showToast } from "@utils";
 import { addTag, updateTag } from "@tagDuck";
 import { selectTagById } from "@tagSelector";
 import { createTag } from "../../entities/tag";
-import { DefaultPageContainer, SizedBox } from "@components";
+import { DefaultPageContainer, SizedBox, ListTileWithIcon } from "@components";
+
+const chunkArray = (arr, rows) => {
+  const perRow = Math.ceil(arr.length / rows);
+  return Array.from({ length: rows }, (_, i) =>
+    arr.slice(i * perRow, i * perRow + perRow),
+  );
+};
 
 const StoreTag = () => {
   const theme = useTheme();
@@ -80,85 +87,89 @@ const StoreTag = () => {
             autoFocus={Boolean(isInsert)}
           />
 
-          <SizedBox height="24" />
+          <SizedBox height="12" />
 
-          <Text
-            variant="bodyLarge"
-            style={{ color: theme.colors.onBackground, marginBottom: 8 }}
-          >
-            Cor:
-          </Text>
+          <ListTileWithIcon
+            title="Cor:"
+            titleColor={theme.colors.onPrimaryContainer}
+            iconColor={theme.colors.onPrimaryContainer}
+            boldText={true}
+          />
 
-          <View
-            style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-              gap: 16,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {tagColors.map((color, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => setSelectedColor(color)}
+          <View style={{ gap: 12 }}>
+            {chunkArray(tagColors, 2).map((row, rowIndex) => (
+              <View
+                key={rowIndex}
                 style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 24,
-                  backgroundColor: color,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
                 }}
               >
-                {selectedColor === color && (
-                  <Ionicons name="checkmark" size={28} color="#000" />
-                )}
-              </TouchableOpacity>
+                {row.map((color, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => setSelectedColor(color)}
+                    style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: 24,
+                      backgroundColor: color,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    {selectedColor === color && (
+                      <Ionicons name="checkmark" size={28} color="#000" />
+                    )}
+                  </TouchableOpacity>
+                ))}
+              </View>
             ))}
           </View>
 
-          <SizedBox height="24" />
+          <SizedBox height="12" />
 
-          <Text
-            variant="bodyLarge"
-            style={{ color: theme.colors.onBackground, marginBottom: 8 }}
-          >
-            Ícone:
-          </Text>
+          <ListTileWithIcon
+            title="Ícone:"
+            titleColor={theme.colors.onPrimaryContainer}
+            iconColor={theme.colors.onPrimaryContainer}
+            boldText={true}
+          />
 
-          <View
-            style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-              gap: 12,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {tagIcons.map((icon, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => setSelectedIcon(icon)}
+          <View style={{ gap: 12 }}>
+            {chunkArray(tagIcons, 3).map((row, rowIndex) => (
+              <View
+                key={rowIndex}
                 style={{
-                  borderRadius: 50,
-                  padding: 10,
-                  backgroundColor:
-                    selectedIcon === icon
-                      ? theme.colors.primary
-                      : "transparent",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
                 }}
               >
-                <Ionicons
-                  name={icon}
-                  size={32}
-                  color={
-                    selectedIcon === icon
-                      ? theme.colors.onPrimary
-                      : theme.colors.onBackground
-                  }
-                />
-              </TouchableOpacity>
+                {row.map((icon, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => setSelectedIcon(icon)}
+                    style={{
+                      borderRadius: 50,
+                      padding: 10,
+                      backgroundColor:
+                        selectedIcon === icon
+                          ? theme.colors.primary
+                          : "transparent",
+                    }}
+                  >
+                    <Ionicons
+                      name={icon}
+                      size={28}
+                      color={
+                        selectedIcon === icon
+                          ? theme.colors.onPrimary
+                          : theme.colors.onBackground
+                      }
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
             ))}
           </View>
 
