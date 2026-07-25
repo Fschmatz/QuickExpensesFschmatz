@@ -1,18 +1,11 @@
 import { useState, useEffect } from "react";
 import { useTheme, Button, Text, TextInput } from "react-native-paper";
-import {
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  View,
-  InteractionManager,
-  ActivityIndicator,
-} from "react-native";
+import { TouchableOpacity, KeyboardAvoidingView, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
-import ColorPicker, { Panel1, HueSlider } from "reanimated-color-picker";
-import Animated, { runOnJS, FadeIn } from "react-native-reanimated";
-import { tagIcons } from "@constants";
+import Animated, { FadeIn } from "react-native-reanimated";
+import { tagIcons, tagColors } from "@constants";
 import { showToast } from "@utils";
 import { addTag, updateTag } from "@tagDuck";
 import { selectTagById } from "@tagSelector";
@@ -28,18 +21,11 @@ const StoreTag = () => {
   const tagForUpdate = useSelector(selectTagById(tagId));
   const [name, setName] = useState(isUpdate ? tagForUpdate.name : "");
   const [selectedColor, setSelectedColor] = useState(
-    isUpdate ? tagForUpdate.color : "#6dda78",
+    isUpdate ? tagForUpdate.color : "#18c435",
   );
   const [selectedIcon, setSelectedIcon] = useState(
     isUpdate ? tagForUpdate.icon : "bag-outline",
   );
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    InteractionManager.runAfterInteractions(() => {
-      setIsReady(true);
-    });
-  }, []);
 
   useEffect(() => {
     navigation.setOptions({
@@ -81,110 +67,116 @@ const StoreTag = () => {
     router.back();
   };
 
-  const handleSelectColor = ({ hex }) => {
-    "worklet";
-    runOnJS(setSelectedColor)(hex);
-  };
-
   return (
     <DefaultPageContainer>
-      {isReady ? (
-        <Animated.View entering={FadeIn.duration(400)}>
-          <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
-            <TextInput
-              label="Nome"
-              mode="outlined"
-              value={name}
-              onChangeText={setName}
-              maxLength={20}
-              autoFocus={Boolean(isInsert)}
-            />
+      <Animated.View entering={FadeIn.duration(400)}>
+        <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
+          <TextInput
+            label="Nome"
+            mode="outlined"
+            value={name}
+            onChangeText={setName}
+            maxLength={20}
+            autoFocus={Boolean(isInsert)}
+          />
 
-            <SizedBox height="24" />
+          <SizedBox height="24" />
 
-            <Text
-              variant="bodyLarge"
-              style={{ color: theme.colors.onBackground, marginBottom: 8 }}
-            >
-              Cor:
-            </Text>
+          <Text
+            variant="bodyLarge"
+            style={{ color: theme.colors.onBackground, marginBottom: 8 }}
+          >
+            Cor:
+          </Text>
 
-            <ColorPicker value={selectedColor} onComplete={handleSelectColor}>
-              <Panel1 />
-              <HueSlider style={{ marginTop: 15 }} />
-            </ColorPicker>
-
-            <SizedBox height="24" />
-
-            <Text
-              variant="bodyLarge"
-              style={{ color: theme.colors.onBackground, marginBottom: 8 }}
-            >
-              Ícone:
-            </Text>
-
-            <View
-              style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                gap: 8,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {tagIcons.map((icon, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => setSelectedIcon(icon)}
-                  style={{
-                    borderRadius: 50,
-                    padding: 10,
-                    backgroundColor:
-                      selectedIcon === icon
-                        ? theme.colors.primary
-                        : "transparent",
-                  }}
-                >
-                  <Ionicons
-                    name={icon}
-                    size={32}
-                    color={
-                      selectedIcon === icon
-                        ? theme.colors.onPrimary
-                        : theme.colors.onBackground
-                    }
-                  />
-                </TouchableOpacity>
-              ))}
-            </View>
-
-            <View style={{ marginTop: 25 }}>
-              <Button
-                mode="contained"
-                icon="content-save-outline"
-                buttonColor={theme.colors.primary}
-                textColor={theme.colors.onPrimary}
-                onPress={handleCreateTag}
-                style={{ borderRadius: 25 }}
-                labelStyle={{ fontSize: 16, fontWeight: "500" }}
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              gap: 16,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {tagColors.map((color, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => setSelectedColor(color)}
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 24,
+                  backgroundColor: color,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
-                Salvar
-              </Button>
-            </View>
-          </KeyboardAvoidingView>
-        </Animated.View>
-      ) : (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: 50,
-          }}
-        >
-          {/*  <ActivityIndicator size="large" color={theme.colors.primary} /> */}
-        </View>
-      )}
+                {selectedColor === color && (
+                  <Ionicons name="checkmark" size={28} color="#000" />
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <SizedBox height="24" />
+
+          <Text
+            variant="bodyLarge"
+            style={{ color: theme.colors.onBackground, marginBottom: 8 }}
+          >
+            Ícone:
+          </Text>
+
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              gap: 12,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {tagIcons.map((icon, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => setSelectedIcon(icon)}
+                style={{
+                  borderRadius: 50,
+                  padding: 10,
+                  backgroundColor:
+                    selectedIcon === icon
+                      ? theme.colors.primary
+                      : "transparent",
+                }}
+              >
+                <Ionicons
+                  name={icon}
+                  size={32}
+                  color={
+                    selectedIcon === icon
+                      ? theme.colors.onPrimary
+                      : theme.colors.onBackground
+                  }
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <View style={{ marginTop: 25 }}>
+            <Button
+              mode="contained"
+              icon="content-save-outline"
+              buttonColor={theme.colors.primary}
+              textColor={theme.colors.onPrimary}
+              onPress={handleCreateTag}
+              style={{ borderRadius: 25 }}
+              labelStyle={{ fontSize: 16, fontWeight: "500" }}
+            >
+              Salvar
+            </Button>
+          </View>
+        </KeyboardAvoidingView>
+      </Animated.View>
     </DefaultPageContainer>
   );
 };

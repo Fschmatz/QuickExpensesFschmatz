@@ -35,16 +35,16 @@ const ExpensesDetailCard = ({
       >
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
           <Ionicons name={tag.icon} size={20} color={tag.color} />
-            <Text
-              variant="titleSmall"
-              style={{
-                color: theme.colors.onBackground,
-                fontWeight: "bold",
-              }}
-            >
-              {tag.name}
-            </Text>
-          </View>
+          <Text
+            variant="titleSmall"
+            style={{
+              color: theme.colors.onBackground,
+              fontWeight: "bold",
+            }}
+          >
+            {tag.name}
+          </Text>
+        </View>
         <Text
           variant="titleSmall"
           style={{

@@ -168,15 +168,6 @@ const StoreExpense = () => {
 
         <SizedBox height="24" />
 
-        <Text
-          variant="bodyLarge"
-          style={{ color: theme.colors.onBackground, marginBottom: 8 }}
-        >
-          Tags:
-        </Text>
-
-        <SizedBox height="5" />
-
         <HomeTagsList
           tags={tags}
           selectedTag={selectedTag}

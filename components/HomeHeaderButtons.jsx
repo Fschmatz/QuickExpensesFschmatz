@@ -36,7 +36,7 @@ const HomeHeaderButtons = () => {
         contentStyle={{
           backgroundColor: theme.colors.elevation.level5,
           borderRadius: 20,
-          marginTop: -49,
+          marginTop: -35,
           marginLeft: screenWidth - 235,
           elevation: 2,
         }}
