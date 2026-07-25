@@ -43,7 +43,7 @@ function* handleAddTag(action) {
 
 function* handleUpdateTag(action) {
   try {
-    yield call(TagService.update, action.payload);
+    yield call([TagService, "update"], action.payload);
     yield put(fetchTags());
     yield put(updateTagSuccess());    
   } catch (error) {

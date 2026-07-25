@@ -1,33 +1,31 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components/native";
+import {
+  useTheme,
+  Button,
+  Text,
+  IconButton,
+  TextInput,
+} from "react-native-paper";
 import { KeyboardAvoidingView, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
-import { useRouter, useLocalSearchParams } from "expo-router";
-import { appColors } from "@constants";
+import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import { showToast, formatCurrencyInput, completeCurrencyZeros } from "@utils";
 import {
-  ButtonWithIcon,
-  Label,
-  PageContainer,
-  SizedBox,
   HomeTagsList,
+  DefaultPageContainer,
+  SizedBox,
+  ConfirmationDialog,
 } from "@components";
 import { fetchTags, getTags } from "@tagDuck";
-import { addExpense, updateExpense, selectExpenseById } from "@expenseDuck";
-
-const NameInput = styled.TextInput`
-  background-color: transparent;
-  border-radius: 4px;
-  font-size: 16px;
-  height: 50px;
-  border-width: 1px;
-  border-color: #d1d1d1;
-  color: ${appColors.text};
-  padding: 8px;
-`;
+import {
+  addExpense,
+  updateExpense,
+  selectExpenseById,
+  deleteExpense,
+} from "@expenseDuck";
 
 const StoreExpense = () => {
+  const theme = useTheme();
   const {
     isInsert = false,
     isUpdate = false,
@@ -59,16 +57,34 @@ const StoreExpense = () => {
   const [selectedTag, setSelectedTag] = useState(
     expenseForUpdate?.tags?.[0] || null,
   );
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
 
   useEffect(() => {
     dispatch(fetchTags());
+  }, [dispatch]);
+
+  useEffect(() => {
     navigation.setOptions({
       title:
         isInsert === "true" || isInsert === true
           ? "Nova Despesa"
           : "Editar Despesa",
+      headerRight: () => {
+        if (isUpdate === "true" || isUpdate === true) {
+          return (
+            <IconButton
+              icon="delete-outline"
+              onPress={() => setIsDialogVisible(true)}
+              style={{
+                marginRight: -8,
+              }}
+            />
+          );
+        }
+        return null;
+      },
     });
-  }, [navigation, dispatch]);
+  }, [navigation, isInsert, isUpdate]);
 
   const handleSaveExpense = () => {
     if (!value || value === "0") {
@@ -103,6 +119,22 @@ const StoreExpense = () => {
     }
   };
 
+  const handleConfirmDelete = () => {
+    dispatch(
+      deleteExpense({
+        expenseId: expenseId,
+        date: date || (expenseForUpdate ? expenseForUpdate.createdDate : null),
+      }),
+    );
+    setIsDialogVisible(false);
+    showToast("Despesa excluída!");
+    router.back();
+  };
+
+  const handleCancelDelete = () => {
+    setIsDialogVisible(false);
+  };
+
   function parseForDb(val) {
     return val.replace(/\./g, "").replace(",", ".");
   }
@@ -112,31 +144,30 @@ const StoreExpense = () => {
   }
 
   return (
-    <PageContainer>
+    <DefaultPageContainer>
       <KeyboardAvoidingView behavior={"height"}>
-        <Label>Nome:</Label>
-        <NameInput
-          placeholder=""
+        <TextInput
+          label="Nome"
+          mode="outlined"
           value={name}
           onChangeText={setName}
           maxLength={30}
         />
 
-        <SizedBox height={10} />
+        <SizedBox height="24" />
 
-        <Label>Valor:</Label>
-        <NameInput
-          onChangeText={handleValueChange}
+        <TextInput
+          label="Valor"
+          mode="outlined"
           value={value}
+          onChangeText={handleValueChange}
           maxLength={10}
-          placeholder=""
           keyboardType="numeric"
+          left={<TextInput.Affix text="R$" />}
         />
 
-        <SizedBox height={10} />
+        <SizedBox height="24" />
 
-        <Label>Tags:</Label>
-        <SizedBox height={5} />
         <HomeTagsList
           tags={tags}
           selectedTag={selectedTag}
@@ -144,17 +175,29 @@ const StoreExpense = () => {
           isStoreExpensePage={true}
         />
 
-        <SizedBox height={10} />
+        <SizedBox height="24" />
 
-        <ButtonWithIcon
-          icon={"save-outline"}
-          bgColor={appColors.btnConfirmBackground}
-          textColor={appColors.btnConfirmText}
-          text={"Salvar"}
+        <Button
+          mode="contained"
+          icon="content-save-outline"
+          buttonColor={theme.colors.primary}
+          textColor={theme.colors.onPrimary}
           onPress={handleSaveExpense}
-        />
+          style={{ borderRadius: 25 }}
+          labelStyle={{ fontSize: 16, fontWeight: "500" }}
+        >
+          Salvar
+        </Button>
       </KeyboardAvoidingView>
-    </PageContainer>
+
+      <ConfirmationDialog
+        visible={isDialogVisible}
+        setVisible={setIsDialogVisible}
+        message={`Deseja excluir "${expenseForUpdate?.name || "a despesa"}"?`}
+        handleConfirm={handleConfirmDelete}
+        handleCancel={handleCancelDelete}
+      />
+    </DefaultPageContainer>
   );
 };
 

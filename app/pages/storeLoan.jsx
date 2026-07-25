@@ -1,39 +1,16 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components/native";
+import { useTheme, Button, Text, TextInput } from "react-native-paper";
 import { KeyboardAvoidingView, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
-import { useRouter, useLocalSearchParams } from "expo-router";
-import { appColors } from "@constants";
+import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import { showToast, formatCurrencyInput, completeCurrencyZeros } from "@utils";
-import { ButtonWithIcon, Label, PageContainer, SizedBox } from "@components";
 import { selectLoanById } from "@loanSelector";
 import { createLoan } from "../../entities/loan";
 import { addLoan, updateLoan } from "@loanDuck";
-
-const NameInput = styled.TextInput`
-  background-color: transparent;
-  border-radius: 4px;
-  font-size: 16px;
-  height: 50px;
-  border-width: 1px;
-  border-color: #d1d1d1;
-  color: ${appColors.text};
-  padding: 8px;
-`;
-
-const NoteInput = styled.TextInput`
-  background-color: transparent;
-  border-radius: 4px;
-  font-size: 16px;
-  height: 100px;
-  border-width: 1px;
-  border-color: #d1d1d1;
-  color: ${appColors.text};
-  padding: 8px;
-`;
+import { DefaultPageContainer, SizedBox } from "@components";
 
 const StoreLoan = () => {
+  const theme = useTheme();
   const { isInsert = false, isUpdate = false, loanId } = useLocalSearchParams();
   const navigation = useNavigation();
   const router = useRouter();
@@ -55,7 +32,7 @@ const StoreLoan = () => {
     });
   }, [navigation]);
 
-  const handleCreateTag = () => {
+  const handleSaveLoan = () => {
     if (!name.trim()) {
       showToast("Informe um nome!");
       return;
@@ -94,51 +71,55 @@ const StoreLoan = () => {
   }
 
   return (
-    <PageContainer>
+    <DefaultPageContainer>
       <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
-        <Label>Nome:</Label>
-        <NameInput
-          placeholder=""
+        <TextInput
+          label="Nome"
+          mode="outlined"
           value={name}
           onChangeText={setName}
           maxLength={30}
         />
 
-        <SizedBox height={10} />
+        <SizedBox height="24" />
 
-        <Label>Valor:</Label>
-        <NameInput
-          onChangeText={handleValueChange}
+        <TextInput
+          label="Valor"
+          mode="outlined"
           value={value}
+          onChangeText={handleValueChange}
           maxLength={10}
-          placeholder=""
           keyboardType="numeric"
+          left={<TextInput.Affix text="R$" />}
         />
 
-        <SizedBox height={10} />
+        <SizedBox height="24" />
 
-        <Label>Nota:</Label>
-        <NoteInput
-          onChangeText={setNote}
+        <TextInput
+          label="Nota"
+          mode="outlined"
           value={note}
+          onChangeText={setNote}
           maxLength={250}
-          placeholder=""
           multiline={true}
           numberOfLines={5}
-          textAlignVertical="top"
         />
 
         <View style={{ marginTop: 25 }}>
-          <ButtonWithIcon
-            icon={"save-outline"}
-            bgColor={appColors.btnConfirmBackground}
-            textColor={appColors.btnConfirmText}
-            text={"Salvar"}
-            onPress={handleCreateTag}
-          />
+          <Button
+            mode="contained"
+            icon="content-save-outline"
+            buttonColor={theme.colors.primary}
+            textColor={theme.colors.onPrimary}
+            onPress={handleSaveLoan}
+            style={{ borderRadius: 25 }}
+            labelStyle={{ fontSize: 16, fontWeight: "500" }}
+          >
+            Salvar
+          </Button>
         </View>
       </KeyboardAvoidingView>
-    </PageContainer>
+    </DefaultPageContainer>
   );
 };
 

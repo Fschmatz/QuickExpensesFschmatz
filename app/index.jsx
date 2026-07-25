@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
+import { View } from "react-native";
 import { useDispatch } from "react-redux";
 import Home from "./pages/home";
 import DatabaseInit from "../db/databaseInit";
-import { PageContainer } from "@components";
+
 import { fetchAppParameters } from "@appParameterDuck";
 
+import { useTheme } from "react-native-paper";
+
 export default function Index() {
+  const theme = useTheme();
   const [isDbReady, setIsDbReady] = useState(false);
   const dispatch = useDispatch();
 
@@ -26,7 +30,7 @@ export default function Index() {
   }, [dispatch]);
 
   if (!isDbReady) {
-    return <PageContainer />;
+    return <View style={{ flex: 1, backgroundColor: theme.colors.background }} />;
   }
 
   return <Home />;

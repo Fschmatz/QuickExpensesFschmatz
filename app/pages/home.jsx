@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from "react";
+import { useTheme, Text, TouchableRipple } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
-import styled from "styled-components/native";
 import { useDispatch, useSelector } from "react-redux";
-import { appColors } from "@constants";
-import { HomeTagsList } from "@components";
+import { TextInput, View, Pressable, useWindowDimensions } from "react-native";
+import { HomeTagsList, SizedBox } from "@components";
 import {
   greaterThanZero,
   showToast,
@@ -18,125 +18,9 @@ import {
   getTotalExpensesCurrentMonth,
 } from "@expenseDuck";
 import { useRouter } from "expo-router";
-import { View, useWindowDimensions } from "react-native";
-
-const Container = styled.View`
-  padding: 0px;
-  flex: 1;
-  width: 100%;
-  background-color: ${appColors.background};
-`;
-
-const TopContainer = styled.View`
-  background-color: ${appColors.primaryContainer};
-  flex: 1;
-  padding: 16px;
-  border-radius: 40px;
-`;
-
-const ValueInput = styled.TextInput`
-  color: ${appColors.text};
-  font-size: ${(props) => props.fontSize}px;
-  font-weight: 700;
-  text-align: right;
-  align-self: flex-end;
-  margin-right: 5px;
-  margin-top: 1%;
-  margin-bottom: 1.7%;
-  flex: 1;
-`;
-
-const NomeInput = styled.TextInput`
-  color: ${appColors.text};
-  font-size: 18px;
-  background-color: ${appColors.background};
-  border-radius: 20px;
-  padding: 10px 20px;
-  margin-bottom: 10px;
-  width: 100%;
-`;
-
-const BottomContainer = styled.View`
-  flex: 1.1;
-  padding: 16px;
-`;
-
-const Keypad = styled.View`
-  flex: 1;
-  flex-direction: row;
-`;
-
-const NumbersContainer = styled.View`
-  flex: 3;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-content: space-between;
-`;
-
-const ConfirmDeleteContainer = styled.View`
-  flex: 1;
-  flex-direction: column;
-  margin-left: 10px;
-`;
-
-const KeyButton = styled.Pressable`
-  width: ${(props) => (props.big ? "65.75%" : "31.5%")};
-  height: 23.5%;
-  min-height: 50px;
-  justify-content: center;
-  align-items: center;
-  background-color: ${appColors.btnNumberBackground};
-  border-radius: 50px;
-  overflow: hidden;
-`;
-
-const KeyText = styled.Text`
-  color: ${appColors.text};
-  font-size: 38px;
-  font-weight: 600;
-`;
-
-const DeleteKey = styled.Pressable`
-  width: 100%;
-  height: 23.5%;
-  min-height: 50px;
-  background-color: ${appColors.btnDeleteBackground};
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 15px;
-  border-radius: 50px;
-  overflow: hidden;
-`;
-
-const ConfirmKey = styled.Pressable`
-  width: 100%;
-  flex: 1;
-  background-color: ${appColors.btnConfirmBackground};
-  justify-content: center;
-  align-items: center;
-  border-radius: 50px;
-  overflow: hidden;
-`;
-
-const TotalExpensesCurrentMonthContainer = styled.TouchableOpacity`
-  width: 100%;
-  flex-direction: row;
-  align-self: center;
-  justify-content: space-between;
-  background-color: ${appColors.background};
-  border-radius: 50px;
-  padding: 12px 24px;
-`;
-
-const TotalExpensesCurrentMonthText = styled.Text`
-  color: ${appColors.text};
-  text-align: center;
-  font-size: 16px;
-  font-weight: 500;
-`;
 
 const Home = () => {
+  const theme = useTheme();
   const [inputValue, setInputValue] = useState("0");
   const [nome, setNome] = useState("");
   const [selectedTag, setSelectedTag] = useState();
@@ -180,7 +64,6 @@ const Home = () => {
 
   const handleConfirm = () => {
     const normalizedValue = inputValue.replace(",", ".");
-
     if (inputValue && greaterThanZero(normalizedValue)) {
       insertExpense(inputValue, nome);
       setInputValue("0");
@@ -214,10 +97,7 @@ const Home = () => {
 
   const navigateToCurrentMonthDetail = () => {
     const today = new Date();
-    const todayFormatted = `${today.getFullYear()}-${String(
-      today.getMonth() + 1,
-    ).padStart(2, "0")}-01`;
-
+    const todayFormatted = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-01`;
     router.push({
       pathname: "/pages/monthYearExpensesDetail",
       params: { date: todayFormatted },
@@ -236,6 +116,7 @@ const Home = () => {
       style={{ flex: 1 }}
       onLayout={(e) => {
         const { height, width } = e.nativeEvent.layout;
+
         if (containerSize.height === "auto") {
           setContainerSize({ height, width });
         } else {
@@ -248,41 +129,112 @@ const Home = () => {
         }
       }}
     >
-      <Container
-        style={
+      <View
+        style={[
+          {
+            padding: 0,
+            flex: 1,
+            width: "100%",
+            backgroundColor: theme.colors.background,
+          },
           containerSize.height !== "auto"
             ? { minHeight: containerSize.height }
-            : {}
-        }
+            : {},
+        ]}
       >
-        <TopContainer>
-          <TotalExpensesCurrentMonthContainer
-            onPress={navigateToCurrentMonthDetail}
+        {/* Top Container */}
+        <View
+          style={{
+            backgroundColor: theme.colors.elevation.level3,
+            flex: 1,
+            padding: 16,
+            borderRadius: 40,
+          }}
+        >
+          {/* Total mensal */}
+          <View
+            style={{
+              width: "100%",
+              borderRadius: 25,
+              overflow: "hidden",
+            }}
           >
-            <TotalExpensesCurrentMonthText>
-              {getCurrentMonthYear()}
-            </TotalExpensesCurrentMonthText>
-            <TotalExpensesCurrentMonthText>
-              R$ {formatMoney(totalExpensesCurrentMonth)}
-            </TotalExpensesCurrentMonthText>
-          </TotalExpensesCurrentMonthContainer>
+            <TouchableRipple
+              onPress={navigateToCurrentMonthDetail}
+              style={{
+                backgroundColor: theme.colors.background,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingHorizontal: 24,
+                  paddingVertical: 12,
+                  width: "100%",
+                }}
+              >
+                <Text
+                  style={{
+                    color: theme.colors.onBackground,
+                    fontSize: 16,
+                    fontWeight: "500",
+                  }}
+                >
+                  {getCurrentMonthYear()}
+                </Text>
+                <Text
+                  style={{
+                    color: theme.colors.onBackground,
+                    fontSize: 16,
+                    fontWeight: "500",
+                  }}
+                >
+                  R$ {formatMoney(totalExpensesCurrentMonth)}
+                </Text>
+              </View>
+            </TouchableRipple>
+          </View>
 
-          <ValueInput
+          {/* Value Input */}
+          <TextInput
             value={inputValue}
             editable={false}
             maxLength={maxLengthValue}
-            fontSize={responsiveFontSize}
             adjustsFontSizeToFit
             numberOfLines={1}
+            style={{
+              color: theme.colors.onBackground,
+              fontSize: responsiveFontSize,
+              fontWeight: "700",
+              textAlign: "right",
+              alignSelf: "flex-end",
+              marginRight: 5,
+              marginTop: "1%",
+              marginBottom: "1.7%",
+              flex: 1,
+            }}
           />
 
-          <NomeInput
+          {/* Nome Input */}
+          <TextInput
             ref={nomeInputRef}
             placeholder="Nome"
-            placeholderTextColor={appColors.placeholderText}
+            placeholderTextColor={theme.colors.outline}
             value={nome}
             maxLength={maxLengthName}
             onChangeText={setNome}
+            style={{
+              color: theme.colors.onBackground,
+              fontSize: 16,
+              fontWeight: "500",
+              backgroundColor: theme.colors.background,
+              borderRadius: 25,
+              paddingHorizontal: 20,
+              paddingVertical: 10,
+              marginBottom: 10,
+              width: "100%",
+            }}
           />
 
           <HomeTagsList
@@ -290,71 +242,114 @@ const Home = () => {
             selectedTag={selectedTag}
             onSelectTag={handleSelectTag}
           />
-        </TopContainer>
+        </View>
 
-        <BottomContainer>
-          <Keypad>
-            <NumbersContainer>
+        {/* Bottom Container - Keypad */}
+        <View style={{ flex: 1.1, padding: 16 }}>
+          <View style={{ flex: 1, flexDirection: "row" }}>
+            {/* Numbers */}
+            <View
+              style={{
+                flex: 3,
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
+                alignContent: "space-between",
+              }}
+            >
               {numPad.map((num) => (
-                <KeyButton
+                <View
                   key={num}
-                  big={num === "0"}
-                  onPress={() => handlePress(num.toString())}
-                  android_ripple={{
-                    ...appColors.androidRippleEffect,
-                    borderless: false,
-                    foreground: true,
+                  style={{
+                    width: num === "0" ? "65.75%" : "31.5%",
+                    height: "23.5%",
+                    minHeight: 50,
+                    borderRadius: 50,
+                    overflow: "hidden",
                   }}
-                  style={({ pressed }) => [
-                    pressed && appColors.androidRippleColor,
-                  ]}
                 >
-                  <KeyText>{num}</KeyText>
-                </KeyButton>
+                  <TouchableRipple
+                    onPress={() => handlePress(num.toString())}
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      backgroundColor: theme.colors.secondaryContainer,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: theme.colors.onBackground,
+                        fontSize: 38,
+                        fontWeight: "600",
+                      }}
+                    >
+                      {num}
+                    </Text>
+                  </TouchableRipple>
+                </View>
               ))}
-            </NumbersContainer>
+            </View>
 
-            <ConfirmDeleteContainer>
-              <DeleteKey
-                onPress={handleDelete}
-                onLongPress={handleDeleteAll}
-                android_ripple={{
-                  ...appColors.androidRippleEffect,
-                  borderless: false,
-                  foreground: true,
+            {/* Delete + Confirm */}
+            <View style={{ flex: 1, flexDirection: "column", marginLeft: 10 }}>
+              <View
+                style={{
+                  width: "100%",
+                  height: "23.5%",
+                  minHeight: 50,
+                  marginBottom: 15,
+                  borderRadius: 50,
+                  overflow: "hidden",
                 }}
-                style={({ pressed }) => [
-                  pressed && appColors.androidRippleColor,
-                ]}
               >
-                <Ionicons
-                  name="backspace-outline"
-                  size={38}
-                  color={appColors.btnDeleteText}
-                />
-              </DeleteKey>
+                <TouchableRipple
+                  onPress={handleDelete}
+                  onLongPress={handleDeleteAll}
+                  style={{
+                    flex: 1,
+                    backgroundColor: theme.colors.tertiaryContainer,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Ionicons
+                    name="backspace-outline"
+                    size={38}
+                    color={theme.colors.onTertiaryContainer}
+                  />
+                </TouchableRipple>
+              </View>
 
-              <ConfirmKey
-                onPress={handleConfirm}
-                android_ripple={{
-                  ...appColors.androidRippleEffect,
-                  borderless: false,
-                  foreground: true,
+              <View
+                style={{
+                  width: "100%",
+                  flex: 1,
+                  borderRadius: 50,
+                  overflow: "hidden",
                 }}
-                style={({ pressed }) => [
-                  pressed && appColors.androidRippleColor,
-                ]}
               >
-                <Ionicons
-                  name="checkmark"
-                  size={38}
-                  color={appColors.btnConfirmText}
-                />
-              </ConfirmKey>
-            </ConfirmDeleteContainer>
-          </Keypad>
-        </BottomContainer>
-      </Container>
+                <TouchableRipple
+                  onPress={handleConfirm}
+                  style={{
+                    flex: 1,
+                    backgroundColor: theme.colors.primary,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Ionicons
+                    name="checkmark"
+                    size={38}
+                    color={theme.colors.onPrimary}
+                  />
+                </TouchableRipple>
+              </View>
+            </View>
+          </View>
+        </View>
+        <SizedBox height={16} />
+      </View>
     </View>
   );
 };

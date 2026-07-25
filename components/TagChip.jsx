@@ -1,31 +1,47 @@
-import styled from "styled-components/native";
+import { Chip } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
-import { appColors } from "@constants";
+import { useMaterialYouColor } from "@utils";
 
-const ChipContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  background-color: ${appColors.background};
-  border-radius: 50px;
-  padding: 8px 12px;
-  gap: 6px;
-`;
+const TagChip = ({ tag, isSelected, onSelectTag, isStoreExpensePage }) => {
+  const theme = useTheme();
+  const { primaryContainer, onPrimaryContainer } = useMaterialYouColor(
+    tag.color,
+  );
+  const getBackgroundColor = () =>
+    isSelected
+      ? primaryContainer
+      : isStoreExpensePage
+        ? theme.colors.elevation.level2
+        : theme.colors.background;
 
-const ChipText = styled.Text`
-  color: ${appColors.text};
-  font-size: 14px;
-  font-weight: 500;
-`;
+  const getTextColor = () =>
+    isSelected ? onPrimaryContainer : theme.colors.onBackground;
 
-const TagChip = ({ tag }) => {
-  {/* Pequeno truque para deixar os Sem Tag por ultimo nos detalhes */}
-  const name = tag.name === "zzz_" ? "Sem Tag" : tag.name;
+  const getIconColor = () => (isSelected ? onPrimaryContainer : tag.color);
 
   return (
-    <ChipContainer>
-      <Ionicons name={tag.icon} size={18} color={tag.color} />      
-      <ChipText>{name}</ChipText>
-    </ChipContainer>
+    <Chip
+      icon={() => <Ionicons name={tag.icon} size={16} color={getIconColor()} />}
+      onPress={() => onSelectTag(tag)}
+      style={{
+        backgroundColor: getBackgroundColor(),
+        borderRadius: 50,
+      }}
+      contentStyle={{
+        paddingLeft: 6,
+        paddingRight: 0,
+      }}
+      textStyle={{
+        color: getTextColor(),
+        fontSize: 14,
+        fontWeight: "500",
+        marginRight: 12,
+        marginLeft: 8,
+      }}
+    >
+      {tag.name}
+    </Chip>
   );
 };
 

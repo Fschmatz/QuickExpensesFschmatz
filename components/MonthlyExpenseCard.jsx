@@ -1,33 +1,11 @@
-import styled from "styled-components/native";
+import { View } from "react-native";
+import { useTheme } from "react-native-paper";
+import { Surface, Text, TouchableRipple } from "react-native-paper";
 import { useRouter } from "expo-router";
-import { appColors } from "@constants";
 import { getMonthName, formatMoney } from "@utils";
 
-const CardContainer = styled.Pressable`
-  background-color: ${appColors.primaryContainer};
-  padding: 16px;
-  border-radius: 12px;
-  margin: 0px 16px;
-`;
-
-const CardContent = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const ValueText = styled.Text`
-  font-size: 18px;
-  font-weight: bold;
-  color: ${appColors.text};
-`;
-
-const DateText = styled.Text`
-  font-size: 16px;
-  color: ${appColors.text};
-`;
-
 const MonthlyExpenseCard = ({ monthlyExpense }) => {
+  const theme = useTheme();
   const router = useRouter();
 
   const navigateToMonthlyExpenseDetail = (date) => {
@@ -38,17 +16,45 @@ const MonthlyExpenseCard = ({ monthlyExpense }) => {
   };
 
   return (
-    <CardContainer
-      onPress={() => navigateToMonthlyExpenseDetail(monthlyExpense.date)}
-      android_ripple={appColors.androidRippleEffect}
-      style={({ pressed }) => [pressed && appColors.androidRippleColor]}
-      unstable_pressDelay={100}
+    <View
+      style={{
+        marginHorizontal: 16,
+        backgroundColor: theme.colors.elevation.level3,
+        borderRadius: 20,
+        overflow: "hidden",
+      }}
+      elevation={0}
     >
-      <CardContent>
-        <DateText>{getMonthName(monthlyExpense.date)}</DateText>
-        <ValueText>R$ {formatMoney(monthlyExpense.value)}</ValueText>
-      </CardContent>
-    </CardContainer>
+      <TouchableRipple
+        onPress={() => navigateToMonthlyExpenseDetail(monthlyExpense.date)}
+        style={{
+          width: "100%",
+        }}
+      >
+        <View
+          style={{
+            padding: 16,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          <Text
+            variant="titleMedium"
+            style={{ color: theme.colors.onBackground }}
+          >
+            {getMonthName(monthlyExpense.date)}
+          </Text>
+          <Text
+            variant="titleMedium"
+            style={{ color: theme.colors.onBackground, fontWeight: "bold" }}
+          >
+            R$ {formatMoney(monthlyExpense.value)}
+          </Text>
+        </View>
+      </TouchableRipple>
+    </View>
   );
 };
 

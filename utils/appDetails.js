@@ -1,19 +1,28 @@
 const AppDetails = {
-  appVersion: "1.3.2",
+  appVersion: "2.0.6",
   appName: "Quick Expenses Fschmatz",
   appNameHomePage: " Quick Expenses",
   repositoryLink: "https://github.com/Fschmatz/QuickExpensesFschmatz",
   backupFileName: "quick_expenses_backup",
 };
 
-AppDetails.changelog = `
+AppDetails.currentChangelog = `
 ${AppDetails.appVersion}
+- Update Expo 57
+- Update React Native
+- Material You
+- Várias atualizações na interface
+- Tema claro
+`;
+
+AppDetails.changelog = `
+1.3.2
 - Adicionado AppParameters
 - Filtros de ano na listagem mensal
 - Total do ano na listagem mensal
 
 1.2.6
-- Adicionado nome as despesas
+- Adicionar nome as despesas
 - Home responsiva
 - Correções
 - Popup menu

@@ -1,54 +1,63 @@
+import { View } from "react-native";
+import { useTheme } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
-import styled from "styled-components/native";
-import { appColors } from "@constants";
 import IconButton from "./IconButton";
 
-const Container = styled.View`
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 16px;
-  margin-top: 8px;
-  padding: 0px 16px;
-`;
-
-const ButtonContainer = styled.View`
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-`;
-
-const TagIcon = styled(Ionicons)`
-  margin-right: 16px;
-`;
-
-const TagName = styled.Text`
-  flex: 1;
-  color: ${appColors.text};
-  font-size: 16px;
-  font-weight: bold;
-`;
-
 const TagTile = ({ tag, onDelete, onEdit }) => {
+  const theme = useTheme();
+
   return (
-    <Container>
-      <TagIcon name={tag.icon} size={24} color={tag.color} />
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
 
-      <TagName>{tag.name}</TagName>
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        backgroundColor: theme.colors.elevation.level3,
+        borderRadius: 12,
+      }}
+    >
+      <Ionicons
+        name={tag.icon}
+        size={22}
+        color={tag.color}
+        style={{ marginRight: 16 }}
+      />
 
-      <ButtonContainer>
+      <Text
+        variant="titleMedium"
+        style={{
+          flex: 1,
+          color: theme.colors.onBackground,
+        }}
+      >
+        {tag.name}
+      </Text>
+
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 15,
+        }}
+      >
         <IconButton
+          size={22}
           icon="create-outline"
           onPress={() => onEdit(tag)}
           style={{ padding: 0, margin: 0 }}
         />
         <IconButton
+          size={22}
           icon="trash-outline"
           onPress={() => onDelete(tag)}
           style={{ padding: 0, margin: 0 }}
         />
-      </ButtonContainer>
-    </Container>
+      </View>
+    </View>
   );
 };
 

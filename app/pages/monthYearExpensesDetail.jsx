@@ -1,91 +1,34 @@
-import { View, ScrollView, ActivityIndicator, Animated } from "react-native";
-import { useEffect, useState, useMemo, useRef } from "react";
+import { View, ScrollView, ActivityIndicator } from "react-native";
+import { useTheme } from "react-native-paper";
+import { useEffect, useState, useMemo, useRef, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Text, Divider } from "react-native-paper";
 import {
   fetchByMonthYear,
   getExpensesByMonthYear,
   clearExpensesByMonthYear,
   getExpensesLoading,
-  deleteExpense,
 } from "@expenseDuck";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import {
-  PageContainer,
   ExpenseCard,
-  TagChip,
+  ExpensesDetailCard,
   ExpensePieChart,
+  DefaultPageContainer,
   SizedBox,
-  ConfirmationDialog,
 } from "@components";
 import { formatDate, isEmpty, formatMoney } from "@utils";
-import { appColors } from "@constants";
-import styled from "styled-components/native";
 
-const ExpenseByTagContainer = styled.View`
-  background-color: ${appColors.primaryContainer};
-  border-left-color: ${(props) => props.borderColor};
-  border-left-width: 6px;
-  border-radius: 16px;
-  padding: 8px 8px 12px 8px;
-  margin: 6px 0;
-`;
-
-const PercentTag = styled.Text`
-  font-size: 14px;
-  font-weight: 600;
-  color: ${(props) => props.color};
-`;
-
-const TotalTag = styled.Text`
-  font-size: 14px;
-  font-weight: 600;
-  color: ${appColors.text};
-`;
-
-const TopContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-right: 8px;
-`;
-
-const BottomContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-right: 8px;
-  margin-top: 4px;
-  margin-left: 4px;
-`;
-
-const MonthTotal = styled.Text`
-  font-size: 18px;
-  text-align: center;
-  font-weight: 500;
-  color: ${appColors.text};
-`;
+import Animated, { runOnJS, FadeIn } from "react-native-reanimated";
 
 const MonthYearExpensesDetail = () => {
+  const theme = useTheme();
   const { date } = useLocalSearchParams();
   const dispatch = useDispatch();
   const router = useRouter();
   const navigation = useNavigation();
   const expensesByMonthYear = useSelector(getExpensesByMonthYear);
   const loading = useSelector(getExpensesLoading);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const [isDialogVisible, setIsDialogVisible] = useState(false);
-  const [selectedExpense, setSelectedExpense] = useState(null);
-
-  useEffect(() => {
-    if (!loading) {
-      fadeAnim.setValue(0);
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [loading]);
 
   const tagExpenseMap = useMemo(() => {
     return createTagExpenseMap(expensesByMonthYear || []);
@@ -114,14 +57,9 @@ const MonthYearExpensesDetail = () => {
 
       expense.tags.forEach((tag) => {
         const tagId = tag.id;
-
         if (!tagExpenseMap.has(tagId)) {
-          tagExpenseMap.set(tagId, {
-            tag: tag,
-            expenses: [],
-          });
+          tagExpenseMap.set(tagId, { tag: tag, expenses: [] });
         }
-
         tagExpenseMap.get(tagId).expenses.push(expense);
       });
     });
@@ -129,9 +67,9 @@ const MonthYearExpensesDetail = () => {
     if (!isEmpty(untaggedExpenses)) {
       tagExpenseMap.set("untagged", {
         tag: {
-          id: "99999",
-          name: "zzz_",
-          color: appColors.text,
+          id: "untagged",
+          name: "Sem Tag",
+          color: theme.colors.onBackground,
           icon: "pricetag-outline",
         },
         expenses: untaggedExpenses,
@@ -144,30 +82,8 @@ const MonthYearExpensesDetail = () => {
   const handlePressExpense = (expense) => {
     router.push({
       pathname: "/pages/storeExpense",
-      params: {
-        isUpdate: true,
-        expenseId: expense.id,
-        date: date,
-      },
+      params: { isUpdate: true, expenseId: expense.id, date: date },
     });
-  };
-
-  const handleLongPressExpense = (expense) => {
-    setSelectedExpense(expense);
-    setIsDialogVisible(true);
-  };
-
-  const handleConfirmDelete = () => {
-    if (selectedExpense) {
-      dispatch(deleteExpense({ expenseId: selectedExpense.id, date: date }));
-      setIsDialogVisible(false);
-      setSelectedExpense(null);
-    }
-  };
-
-  const handleCancelDelete = () => {
-    setIsDialogVisible(false);
-    setSelectedExpense(null);
   };
 
   const totalAllExpenses = Array.from(tagExpenseMap.values())
@@ -178,11 +94,8 @@ const MonthYearExpensesDetail = () => {
     }, 0);
 
   return (
-    <PageContainer isScrollView={false}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      >
+    <>
+      <DefaultPageContainer>
         {loading ? (
           <View
             style={{
@@ -192,20 +105,35 @@ const MonthYearExpensesDetail = () => {
               paddingTop: 100,
             }}
           >
-            <ActivityIndicator size="large" color={appColors.text} />
+            {/*  <ActivityIndicator size="large" color={theme.colors.onBackground} /> */}
           </View>
         ) : (
-          <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+          <Animated.View entering={FadeIn.duration(400)}>
+            <SizedBox height="12" />
+
             <ExpensePieChart tagExpenseMap={tagExpenseMap} />
 
-            <MonthTotal>
-              Total Mensal: R$ {formatMoney(totalAllExpenses)}
-            </MonthTotal>
+            <SizedBox height="12" />
 
-            <SizedBox height={4} />
+            <Text
+              style={{
+                fontSize: 18,
+                textAlign: "center",
+                fontWeight: "500",
+                color: theme.colors.onBackground,
+              }}
+            >
+              Total Mensal: R$ {formatMoney(totalAllExpenses)}
+            </Text>
+
+            <SizedBox height="12" />
 
             {Array.from(tagExpenseMap.values())
-              .sort((a, b) => a.tag.name.localeCompare(b.tag.name))
+              .sort((a, b) => {
+                if (a.tag.id === "untagged") return 1;
+                if (b.tag.id === "untagged") return -1;
+                return a.tag.name.localeCompare(b.tag.name);
+              })
               .map(({ tag, expenses }) => {
                 const totalTag = expenses.reduce((sum, expense) => {
                   const amount = parseFloat(expense?.value) || 0;
@@ -217,48 +145,20 @@ const MonthYearExpensesDetail = () => {
                 ).toFixed(2);
 
                 return (
-                  <ExpenseByTagContainer
+                  <ExpensesDetailCard
                     key={tag.id || tag.name}
-                    borderColor={tag.color}
-                  >
-                    <TopContainer>
-                      <TagChip key={tag.id} tag={tag} />
-
-                      <PercentTag color={tag.color}>{percentage}%</PercentTag>
-                    </TopContainer>
-
-                    <View>
-                      {expenses.map((expense, index) => (
-                        <ExpenseCard
-                          key={expense.id || index}
-                          expense={expense}
-                          onPress={handlePressExpense}
-                          onLongPress={handleLongPressExpense}
-                        />
-                      ))}
-                    </View>
-
-                    <BottomContainer>
-                      <TotalTag>Total: </TotalTag>
-                      <TotalTag>R$ {formatMoney(totalTag)}</TotalTag>
-                    </BottomContainer>
-                  </ExpenseByTagContainer>
+                    tag={tag}
+                    expenses={expenses}
+                    totalTag={totalTag}
+                    percentage={percentage}
+                    onPressExpense={handlePressExpense}
+                  />
                 );
               })}
-
-            <SizedBox height={50} />
           </Animated.View>
         )}
-      </ScrollView>
-
-      <ConfirmationDialog
-        visible={isDialogVisible}
-        setVisible={setIsDialogVisible}
-        message={`Deseja excluir "${selectedExpense?.name || "esta despesa"}"?`}
-        handleConfirm={handleConfirmDelete}
-        handleCancel={handleCancelDelete}
-      />
-    </PageContainer>
+      </DefaultPageContainer>
+    </>
   );
 };
 

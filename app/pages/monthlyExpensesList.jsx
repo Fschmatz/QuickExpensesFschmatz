@@ -6,65 +6,25 @@ import {
   ScrollView,
 } from "react-native";
 import { useEffect, useRef, useState, useMemo } from "react";
+import { useTheme, Text, TouchableRipple } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import { MonthlyExpenseCard, PageContainer } from "@components";
+import { MonthlyExpenseCard, DefaultPageContainer } from "@components";
 import {
   fetchMonthlyExpenses,
   getMonthlyExpenses,
   getExpensesLoading,
 } from "@expenseDuck";
-import { appColors } from "@constants";
-import styled from "styled-components/native";
 import { formatMoney } from "@utils";
 import { selectAppParameterByKeyAsBoolean } from "@appParameterSelector";
-
-const YearChip = styled.Pressable`
-  padding: 8px 16px;
-  border-radius: 50px;
-  overflow: hidden;
-  background-color: ${(props) =>
-    props.selected
-      ? appColors.btnConfirmBackground
-      : appColors.primaryContainer};
-`;
-
-const YearText = styled.Text`
-  color: ${(props) =>
-    props.selected ? appColors.btnConfirmText : appColors.text};
-  font-weight: bold;
-  font-size: 16px;
-`;
-
-const TotalCardContainer = styled.View`
-  border-width: 1px;
-  border-color: ${appColors.btnDeleteBackground};
-  padding: 16px 16px;
-  border-radius: 16px;
-  margin: 0px 16px 8px 16px;
-  align-items: center;
-  justify-content: center;
-`;
-
-const TotalLabel = styled.Text`
-  font-size: 12px;
-  color: ${appColors.btnDeleteText};
-  font-weight: 600;
-  margin-bottom: 6px;
-  letter-spacing: 0.5px;
-`;
-
-const TotalValue = styled.Text`
-  font-size: 24px;
-  font-weight: bold;
-  color: ${appColors.btnDeleteText};
-`;
+import { appParameters } from "@constants";
 
 const MonthlyExpensesList = () => {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const monthlyExpenses = useSelector(getMonthlyExpenses);
   const loading = useSelector(getExpensesLoading);
   const showTotalYear = useSelector(
-    selectAppParameterByKeyAsBoolean("showTotalYear", false),
+    selectAppParameterByKeyAsBoolean(appParameters.showTotalYearParameter, false),
   );
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const currentYear = new Date().getFullYear().toString();
@@ -105,7 +65,12 @@ const MonthlyExpensesList = () => {
   }, [filteredExpenses]);
 
   return (
-    <PageContainer isScrollView={false} containerPadding="0">
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.colors.background,
+      }}
+    >
       {loading ? (
         <View
           style={{
@@ -115,21 +80,50 @@ const MonthlyExpensesList = () => {
             paddingTop: 100,
           }}
         >
-          <ActivityIndicator size="large" color={appColors.text} />
+          <ActivityIndicator size="large" color={theme.colors.onBackground} />
         </View>
       ) : (
         <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
           {showTotalYear && (
-            <TotalCardContainer>
-              <TotalLabel>Total de {selectedYear}</TotalLabel>
-              <TotalValue>R$ {formatMoney(yearlyTotal)}</TotalValue>
-            </TotalCardContainer>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: theme.colors.tertiaryContainer,
+                padding: 16,
+                borderRadius: 20,
+                margin: 16,
+                marginBottom: 8,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: theme.colors.onTertiaryContainer,
+                  fontWeight: "600",
+                  marginBottom: 6,
+                  letterSpacing: 0.5,
+                }}
+              >
+                Total de {selectedYear}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: "bold",
+                  color: theme.colors.onTertiaryContainer,
+                }}
+              >
+                R$ {formatMoney(yearlyTotal)}
+              </Text>
+            </View>
           )}
 
           <FlatList
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ gap: 8, paddingBottom: 75 }}
+            contentContainerStyle={{ gap: 8, paddingBottom: 50 }}
             data={filteredExpenses}
             keyExtractor={(item) => item.date.toString()}
             renderItem={({ item }) => (
@@ -146,28 +140,45 @@ const MonthlyExpensesList = () => {
                 }}
               >
                 {availableYears.map((year) => (
-                  <YearChip
+                  <View
                     key={year}
-                    selected={year === selectedYear}
-                    onPress={() => setSelectedYear(year)}
-                    android_ripple={{
-                      ...appColors.androidRippleEffect,
-                      borderless: false,
-                      foreground: true,
+                    style={{
+                      borderRadius: 50,
+                      overflow: "hidden",
+                      backgroundColor:
+                        year === selectedYear
+                          ? theme.colors.primary
+                          : theme.colors.elevation.level3,
                     }}
-                    style={({ pressed }) => [
-                      pressed && appColors.androidRippleColor,
-                    ]}
                   >
-                    <YearText selected={year === selectedYear}>{year}</YearText>
-                  </YearChip>
+                    <TouchableRipple
+                      onPress={() => setSelectedYear(year)}
+                      style={{
+                        paddingHorizontal: 16,
+                        paddingVertical: 8,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color:
+                            year === selectedYear
+                              ? theme.colors.onPrimary
+                              : theme.colors.onBackground,
+                          fontWeight: "bold",
+                          fontSize: 16,
+                        }}
+                      >
+                        {year}
+                      </Text>
+                    </TouchableRipple>
+                  </View>
                 ))}
               </ScrollView>
             }
           />
         </Animated.View>
       )}
-    </PageContainer>
+    </View>
   );
 };
 

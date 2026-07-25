@@ -1,59 +1,30 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components/native";
+import { useTheme, Button, Text, TextInput } from "react-native-paper";
 import { TouchableOpacity, KeyboardAvoidingView, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
-import { useRouter, useLocalSearchParams } from "expo-router";
-import ColorPicker, { Panel1, HueSlider } from "reanimated-color-picker";
-import { appColors, tagIcons } from "@constants";
+import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
+import Animated, { FadeIn } from "react-native-reanimated";
+import { tagIcons, tagColors } from "@constants";
 import { showToast } from "@utils";
-import { ButtonWithIcon, Label, PageContainer, SizedBox } from "@components";
 import { addTag, updateTag } from "@tagDuck";
 import { selectTagById } from "@tagSelector";
 import { createTag } from "../../entities/tag";
-
-const NameInput = styled.TextInput`
-  background-color: transparent;
-  border-radius: 4px;
-  font-size: 16px;
-  height: 50px;
-  border-width: 1px;
-  border-color: #d1d1d1;
-  color: ${appColors.text};
-  padding: 8px;
-`;
-
-const IconsContainer = styled.View`
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  justify-content: center;
-`;
-
-const IconButton = styled(TouchableOpacity)`
-  border-radius: 50px;
-  padding: 10px;
-  ${({ selected }) =>
-    selected &&
-    `
-    background-color: ${appColors.btnConfirmBackground};
-  `}
-`;
+import { DefaultPageContainer, SizedBox } from "@components";
 
 const StoreTag = () => {
+  const theme = useTheme();
   const { isInsert = false, isUpdate = false, tagId } = useLocalSearchParams();
   const navigation = useNavigation();
   const router = useRouter();
   const dispatch = useDispatch();
-  const tagForUpdate = isUpdate ? useSelector(selectTagById(tagId)) : "";
+  const tagForUpdate = useSelector(selectTagById(tagId));
   const [name, setName] = useState(isUpdate ? tagForUpdate.name : "");
   const [selectedColor, setSelectedColor] = useState(
-    isUpdate ? tagForUpdate.color : "#6dda78"
+    isUpdate ? tagForUpdate.color : "#18c435",
   );
   const [selectedIcon, setSelectedIcon] = useState(
-    isUpdate ? tagForUpdate.icon : "bag-outline"
+    isUpdate ? tagForUpdate.icon : "bag-outline",
   );
 
   useEffect(() => {
@@ -96,62 +67,117 @@ const StoreTag = () => {
     router.back();
   };
 
-  const handleSelectColor = ({ hex }) => {
-    setSelectedColor(hex);
-  };
-
   return (
-    <PageContainer>
-      <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
-        <Label>Nome:</Label>
-        <NameInput
-          placeholder=""
-          value={name}
-          onChangeText={setName}
-          maxLength={20}
-          autoFocus={Boolean(isInsert)}
-        />
-
-        <SizedBox height={10} />
-
-        <Label>Cor:</Label>
-
-        <ColorPicker value={selectedColor} onComplete={handleSelectColor}>
-          <Panel1 />
-          <HueSlider style={{ marginTop: 15 }} />
-        </ColorPicker>
-
-        <SizedBox height={10} />
-
-        <Label>Ícone:</Label>
-
-        <IconsContainer>
-          {tagIcons.map((icon, index) => (
-            <IconButton
-              key={index}
-              selected={selectedIcon === icon}
-              onPress={() => setSelectedIcon(icon)}
-            >
-              <Ionicons
-                name={icon}
-                size={32}
-                color={appColors.btnConfirmText}
-              />
-            </IconButton>
-          ))}
-        </IconsContainer>
-
-        <View style={{ marginTop: 25 }}>
-          <ButtonWithIcon
-            icon={"save-outline"}
-            bgColor={appColors.btnConfirmBackground}
-            textColor={appColors.btnConfirmText}
-            text={"Salvar"}
-            onPress={handleCreateTag}
+    <DefaultPageContainer>
+      <Animated.View entering={FadeIn.duration(400)}>
+        <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
+          <TextInput
+            label="Nome"
+            mode="outlined"
+            value={name}
+            onChangeText={setName}
+            maxLength={20}
+            autoFocus={Boolean(isInsert)}
           />
-        </View>
-      </KeyboardAvoidingView>
-    </PageContainer>
+
+          <SizedBox height="24" />
+
+          <Text
+            variant="bodyLarge"
+            style={{ color: theme.colors.onBackground, marginBottom: 8 }}
+          >
+            Cor:
+          </Text>
+
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              gap: 16,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {tagColors.map((color, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => setSelectedColor(color)}
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 24,
+                  backgroundColor: color,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {selectedColor === color && (
+                  <Ionicons name="checkmark" size={28} color="#000" />
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <SizedBox height="24" />
+
+          <Text
+            variant="bodyLarge"
+            style={{ color: theme.colors.onBackground, marginBottom: 8 }}
+          >
+            Ícone:
+          </Text>
+
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              gap: 12,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {tagIcons.map((icon, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => setSelectedIcon(icon)}
+                style={{
+                  borderRadius: 50,
+                  padding: 10,
+                  backgroundColor:
+                    selectedIcon === icon
+                      ? theme.colors.primary
+                      : "transparent",
+                }}
+              >
+                <Ionicons
+                  name={icon}
+                  size={32}
+                  color={
+                    selectedIcon === icon
+                      ? theme.colors.onPrimary
+                      : theme.colors.onBackground
+                  }
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <View style={{ marginTop: 25 }}>
+            <Button
+              mode="contained"
+              icon="content-save-outline"
+              buttonColor={theme.colors.primary}
+              textColor={theme.colors.onPrimary}
+              onPress={handleCreateTag}
+              style={{ borderRadius: 25 }}
+              labelStyle={{ fontSize: 16, fontWeight: "500" }}
+            >
+              Salvar
+            </Button>
+          </View>
+        </KeyboardAvoidingView>
+      </Animated.View>
+    </DefaultPageContainer>
   );
 };
 

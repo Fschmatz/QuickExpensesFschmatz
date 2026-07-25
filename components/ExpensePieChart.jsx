@@ -1,32 +1,20 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components/native";
+import { useTheme } from "react-native-paper";
+import { View, Dimensions } from "react-native";
 import PieChart from "react-native-pie-chart";
-import { appColors } from "@constants";
-import SizedBox from "./SizedBox";
-import { Dimensions } from 'react-native';
-
-const Container = styled.View`
-  background-color: ${appColors.backgroundColor};
-  align-items: center;
-`;
-
-const ChartContainer = styled.View`
-  justify-content: center;
-  align-items: center;
-`;
 
 const ExpensePieChart = ({ tagExpenseMap }) => {
+  const theme = useTheme();
   const [series, setSeries] = useState([]);
-  const windowWidth = Dimensions.get('window').width;
+  const windowWidth = Dimensions.get("window").width;
   const chartSize = windowWidth * 0.45;
- 
+
   useEffect(() => {
     if (!tagExpenseMap || tagExpenseMap.size === 0) {
       return;
     }
-    
+
     const series = [];
-    const legendItems = [];
 
     Array.from(tagExpenseMap.entries()).forEach(([key, data]) => {
       const { tag, expenses } = data;
@@ -41,39 +29,33 @@ const ExpensePieChart = ({ tagExpenseMap }) => {
         value: tagTotal,
         color: tag.color,
       });
-
-      legendItems.push({
-        id: tag.id,
-        name: tag.name,
-        color: tag.color,
-        icon: tag.icon,
-        value: tagTotal,
-      });
     });
 
     setSeries(series);
   }, [tagExpenseMap]);
- 
+
   const hasData = series.length > 0 && series.some((item) => item.value > 0);
 
   return (
-    <Container>
+    <View
+      style={{
+        backgroundColor: theme.colors.background,
+        alignItems: "center",
+      }}
+    >
       {hasData && (
         <>
-          <ChartContainer>
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
             <PieChart
               widthAndHeight={chartSize}
               series={series}
               sliceColor={series.map((item) => item.color)}
-              doughnut={true}
-              cover={0.4}             
+              cover={0.35}
             />
-          </ChartContainer>
-
-          <SizedBox height={8} />
+          </View>
         </>
       )}
-    </Container>
+    </View>
   );
 };
 
