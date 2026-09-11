@@ -26,10 +26,16 @@ const HomeHeaderButtons = () => {
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        gap: 12,
         marginRight: -12,
       }}
     >
+      <IconButton
+        icon={({ size, color }) => (
+          <Ionicons name="receipt-outline" size={size} color={color} />
+        )}
+        iconColor={theme.colors.onBackground}
+        onPress={() => navigate("pages/monthlyExpensesList")}
+      />
       <Menu
         visible={menuVisible}
         onDismiss={closeMenu}
@@ -48,18 +54,6 @@ const HomeHeaderButtons = () => {
           />
         }
       >
-        <Menu.Item
-          leadingIcon={({ size }) => (
-            <Ionicons
-              name="receipt-outline"
-              size={size}
-              color={theme.colors.onBackground}
-            />
-          )}
-          onPress={() => navigate("pages/monthlyExpensesList")}
-          title="Despesas Mensais"
-          titleStyle={{ color: theme.colors.onBackground }}
-        />
         <Menu.Item
           leadingIcon={({ size }) => (
             <Ionicons

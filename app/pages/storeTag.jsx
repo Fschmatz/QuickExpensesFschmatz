@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useTheme, Button, Text, TextInput } from "react-native-paper";
+import { useTheme, Button, Text, TextInput, IconButton } from "react-native-paper";
 import { TouchableOpacity, KeyboardAvoidingView, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,10 +7,10 @@ import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { tagIcons, tagColors } from "@constants";
 import { showToast } from "@utils";
-import { addTag, updateTag } from "@tagDuck";
+import { addTag, updateTag, deleteTag } from "@tagDuck";
 import { selectTagById } from "@tagSelector";
 import { createTag } from "../../entities/tag";
-import { DefaultPageContainer, SizedBox, ListTileWithIcon } from "@components";
+import { DefaultPageContainer, SizedBox, ListTile, ConfirmationDialog } from "@components";
 
 const chunkArray = (arr, rows) => {
   const perRow = Math.ceil(arr.length / rows);
@@ -33,12 +33,38 @@ const StoreTag = () => {
   const [selectedIcon, setSelectedIcon] = useState(
     isUpdate ? tagForUpdate.icon : "bag-outline",
   );
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
-      title: isInsert ? "Nova Tag" : "Editar Tag",
+      title: isInsert === "true" || isInsert === true ? "Nova Tag" : "Editar Tag",
+      headerRight: () => {
+        if (isUpdate === "true" || isUpdate === true) {
+          return (
+            <IconButton
+              icon="delete-outline"
+              onPress={() => setIsDialogVisible(true)}
+              style={{
+                marginRight: -8,
+              }}
+            />
+          );
+        }
+        return null;
+      },
     });
-  }, [navigation]);
+  }, [navigation, isInsert, isUpdate]);
+
+  const handleConfirmDelete = () => {
+    dispatch(deleteTag(tagForUpdate));
+    setIsDialogVisible(false);
+    showToast("Tag excluída!");
+    router.back();
+  };
+
+  const handleCancelDelete = () => {
+    setIsDialogVisible(false);
+  };
 
   const handleCreateTag = () => {
     if (!name.trim()) {
@@ -89,11 +115,11 @@ const StoreTag = () => {
 
           <SizedBox height="12" />
 
-          <ListTileWithIcon
+          <ListTile
             title="Cor:"
             titleColor={theme.colors.onPrimaryContainer}
-            iconColor={theme.colors.onPrimaryContainer}
             boldText={true}
+            disabled={true}
           />
 
           <View style={{ gap: 12 }}>
@@ -129,11 +155,11 @@ const StoreTag = () => {
 
           <SizedBox height="12" />
 
-          <ListTileWithIcon
+          <ListTile
             title="Ícone:"
             titleColor={theme.colors.onPrimaryContainer}
-            iconColor={theme.colors.onPrimaryContainer}
             boldText={true}
+            disabled={true}
           />
 
           <View style={{ gap: 12 }}>
@@ -173,23 +199,31 @@ const StoreTag = () => {
             ))}
           </View>
 
-          <View style={{ marginTop: 25 }}>
-            <Button
-              mode="contained"
-              icon="content-save-outline"
-              buttonColor={theme.colors.primary}
-              textColor={theme.colors.onPrimary}
-              onPress={handleCreateTag}
-              style={{ borderRadius: 25 }}
-              labelStyle={{ fontSize: 16, fontWeight: "500" }}
-            >
-              Salvar
-            </Button>
-          </View>
-        </KeyboardAvoidingView>
-      </Animated.View>
-    </DefaultPageContainer>
-  );
-};
+            <View style={{ marginTop: 25 }}>
+              <Button
+                mode="contained"
+                icon="content-save-outline"
+                buttonColor={theme.colors.primary}
+                textColor={theme.colors.onPrimary}
+                onPress={handleCreateTag}
+                style={{ borderRadius: 25 }}
+                labelStyle={{ fontSize: 16, fontWeight: "500" }}
+              >
+                Salvar
+              </Button>
+            </View>
+          </KeyboardAvoidingView>
+        </Animated.View>
+        
+        <ConfirmationDialog
+          visible={isDialogVisible}
+          setVisible={setIsDialogVisible}
+          message={`Deseja excluir "${tagForUpdate?.name || "a tag"}"?`}
+          handleConfirm={handleConfirmDelete}
+          handleCancel={handleCancelDelete}
+        />
+      </DefaultPageContainer>
+    );
+  };
 
 export default StoreTag;

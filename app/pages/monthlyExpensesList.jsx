@@ -8,13 +8,18 @@ import {
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useTheme, Text, TouchableRipple } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import { MonthlyExpenseCard, DefaultPageContainer } from "@components";
+import {
+  MonthlyExpenseCard,
+  MonthlyExpensesLineChart,
+  YearlyTotalCard,
+  YearFilterList,
+  SizedBox,
+} from "@components";
 import {
   fetchMonthlyExpenses,
   getMonthlyExpenses,
   getExpensesLoading,
 } from "@expenseDuck";
-import { formatMoney } from "@utils";
 import { selectAppParameterByKeyAsBoolean } from "@appParameterSelector";
 import { appParameters } from "@constants";
 
@@ -24,11 +29,19 @@ const MonthlyExpensesList = () => {
   const monthlyExpenses = useSelector(getMonthlyExpenses);
   const loading = useSelector(getExpensesLoading);
   const showTotalYear = useSelector(
-    selectAppParameterByKeyAsBoolean(appParameters.showTotalYearParameter, false),
+    selectAppParameterByKeyAsBoolean(
+      appParameters.showTotalYearParameter,
+      false,
+    ),
   );
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const currentYear = new Date().getFullYear().toString();
   const [selectedYear, setSelectedYear] = useState(currentYear);
+  const showChartTotalMonth = useSelector(
+    selectAppParameterByKeyAsBoolean(
+      appParameters.showChartTotalMonthParameter,
+    ),
+  );
 
   useEffect(() => {
     dispatch(fetchMonthlyExpenses());
@@ -84,41 +97,24 @@ const MonthlyExpensesList = () => {
         </View>
       ) : (
         <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+          <YearFilterList
+            availableYears={availableYears}
+            selectedYear={selectedYear}
+            setSelectedYear={setSelectedYear}
+          />
+
           {showTotalYear && (
-            <View
-              style={{
-                borderWidth: 1,
-                borderColor: theme.colors.tertiaryContainer,
-                padding: 16,
-                borderRadius: 20,
-                margin: 16,
-                marginBottom: 8,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 12,
-                  color: theme.colors.onTertiaryContainer,
-                  fontWeight: "600",
-                  marginBottom: 6,
-                  letterSpacing: 0.5,
-                }}
-              >
-                Total de {selectedYear}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 24,
-                  fontWeight: "bold",
-                  color: theme.colors.onTertiaryContainer,
-                }}
-              >
-                R$ {formatMoney(yearlyTotal)}
-              </Text>
-            </View>
+            <YearlyTotalCard
+              selectedYear={selectedYear}
+              yearlyTotal={yearlyTotal}
+            />
           )}
+
+          {showChartTotalMonth && (
+            <MonthlyExpensesLineChart filteredExpenses={filteredExpenses} />
+          )}
+
+          <SizedBox height={12} />
 
           <FlatList
             showsVerticalScrollIndicator={false}
@@ -129,52 +125,6 @@ const MonthlyExpensesList = () => {
             renderItem={({ item }) => (
               <MonthlyExpenseCard monthlyExpense={item} />
             )}
-            ListHeaderComponent={
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{
-                  gap: 12,
-                  paddingHorizontal: 16,
-                  paddingVertical: 16,
-                }}
-              >
-                {availableYears.map((year) => (
-                  <View
-                    key={year}
-                    style={{
-                      borderRadius: 50,
-                      overflow: "hidden",
-                      backgroundColor:
-                        year === selectedYear
-                          ? theme.colors.primary
-                          : theme.colors.elevation.level3,
-                    }}
-                  >
-                    <TouchableRipple
-                      onPress={() => setSelectedYear(year)}
-                      style={{
-                        paddingHorizontal: 16,
-                        paddingVertical: 8,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          color:
-                            year === selectedYear
-                              ? theme.colors.onPrimary
-                              : theme.colors.onBackground,
-                          fontWeight: "bold",
-                          fontSize: 16,
-                        }}
-                      >
-                        {year}
-                      </Text>
-                    </TouchableRipple>
-                  </View>
-                ))}
-              </ScrollView>
-            }
           />
         </Animated.View>
       )}

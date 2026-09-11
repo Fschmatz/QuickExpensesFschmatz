@@ -1,23 +1,24 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "react-native-paper";
 import { View, Dimensions } from "react-native";
-import PieChart from "react-native-pie-chart";
+import { PieChart } from "react-native-gifted-charts";
 
 const ExpensePieChart = ({ tagExpenseMap }) => {
   const theme = useTheme();
-  const [series, setSeries] = useState([]);
+  const [pieData, setPieData] = useState([]);
   const windowWidth = Dimensions.get("window").width;
   const chartSize = windowWidth * 0.45;
 
   useEffect(() => {
     if (!tagExpenseMap || tagExpenseMap.size === 0) {
+      setPieData([]);
       return;
     }
 
-    const series = [];
+    const data = [];
 
-    Array.from(tagExpenseMap.entries()).forEach(([key, data]) => {
-      const { tag, expenses } = data;
+    Array.from(tagExpenseMap.entries()).forEach(([key, entry]) => {
+      const { tag, expenses } = entry;
 
       // Calcular o total de despesas para a tag
       const tagTotal = expenses.reduce((sum, expense) => {
@@ -25,16 +26,18 @@ const ExpensePieChart = ({ tagExpenseMap }) => {
         return isNaN(amount) ? sum : sum + amount;
       }, 0);
 
-      series.push({
-        value: tagTotal,
-        color: tag.color,
-      });
+      if (tagTotal > 0) {
+        data.push({
+          value: tagTotal,
+          color: tag.color,
+        });
+      }
     });
 
-    setSeries(series);
+    setPieData(data);
   }, [tagExpenseMap]);
 
-  const hasData = series.length > 0 && series.some((item) => item.value > 0);
+  const hasData = pieData.length > 0;
 
   return (
     <View
@@ -44,16 +47,15 @@ const ExpensePieChart = ({ tagExpenseMap }) => {
       }}
     >
       {hasData && (
-        <>
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <PieChart
-              widthAndHeight={chartSize}
-              series={series}
-              sliceColor={series.map((item) => item.color)}
-              cover={0.35}
-            />
-          </View>
-        </>
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <PieChart
+            data={pieData}
+            radius={chartSize / 2.3}
+            innerRadius={chartSize * 0.15}
+            innerCircleColor={theme.colors.background}
+            donut
+          />
+        </View>
       )}
     </View>
   );

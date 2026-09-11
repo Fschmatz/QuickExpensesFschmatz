@@ -160,6 +160,24 @@ export const getMonthName = (monthStr) => {
   return `${months[parseInt(month) - 1]}`;
 };
 
+export const isLastBackupDateMoreThan30Days = (lastBackupDate) => {
+  if (!lastBackupDate) return true; // Nunca fez backup
+
+  try {
+    const [datePart, timePart] = lastBackupDate.split(" ");
+    const [day, month, year] = datePart.split("/");
+    const backupDate = new Date(
+      `${year}-${month}-${day}T${timePart || "00:00"}:00`,
+    );
+
+    const diffTime = new Date() - backupDate;
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    return diffDays > 30;
+  } catch (e) {
+    return false;
+  }
+};
+
 export default {
   formatDate,
   darkenColor,
@@ -175,4 +193,5 @@ export default {
   formatCurrencyInput,
   completeCurrencyZeros,
   getMonthName,
+  isLastBackupDateMoreThan30Days,
 };

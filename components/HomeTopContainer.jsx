@@ -1,7 +1,7 @@
 import { useTheme, Text, TouchableRipple } from "react-native-paper";
 import { TextInput, View } from "react-native";
 import { useRouter } from "expo-router";
-import { HomeTagsList } from "@components";
+import HomeTagsList from "./HomeTagsList";
 import { formatMoney, getMonthName } from "@utils";
 
 const HomeTopContainer = ({

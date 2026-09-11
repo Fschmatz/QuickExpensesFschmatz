@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
-import { useTheme, Card, Portal, ActivityIndicator } from "react-native-paper";
-import { Linking, View, ScrollView, StyleSheet } from "react-native";
+import { useEffect, useState, useMemo } from "react";
+import { useTheme, Portal, ActivityIndicator } from "react-native-paper";
+import { Linking, View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 import { useNavigation } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
-import { appDetails } from "@utils";
+import { appDetails, isLastBackupDateMoreThan30Days } from "@utils";
 import {
-  ListTileWithIcon,
+  ListTile,
+  ListTileIcon,
   SettingsSwitch,
   DefaultPageContainer,
   CardList,
@@ -52,6 +53,10 @@ const Settings = () => {
     setIsLoading(false);
   };
 
+  const isBackupOld = useMemo(() => {
+    return isLastBackupDateMoreThan30Days(lastBackupDate);
+  }, [lastBackupDate]);
+
   return (
     <>
       <DefaultPageContainer>
@@ -86,11 +91,11 @@ const Settings = () => {
           </Text>
         </View>
 
-        <ListTileWithIcon
+        <ListTile
           title="Tema"
           titleColor={theme.colors.onPrimaryContainer}
-          iconColor={theme.colors.onPrimaryContainer}
           boldText={true}
+          disabled={true}
         />
         <CardList>
           <SettingsThemeSegmented
@@ -99,11 +104,11 @@ const Settings = () => {
           />
         </CardList>
 
-        <ListTileWithIcon
+        <ListTile
           title="Geral"
           titleColor={theme.colors.onPrimaryContainer}
-          iconColor={theme.colors.onPrimaryContainer}
           boldText={true}
+          disabled={true}
         />
 
         <CardList>
@@ -113,52 +118,73 @@ const Settings = () => {
             parameterKey={appParameters.showTotalYearParameter}
             defaultValue={false}
           />
+          <SettingsSwitch
+            title="Mostrar gráfico de gastos mensais"
+            subtitle="Exibe uma gráfico de linhas na página das despesas mensais"
+            parameterKey={appParameters.showChartTotalMonthParameter}
+            defaultValue={true}
+          />
         </CardList>
 
-        <ListTileWithIcon
+        <ListTile
           title="Backup"
           titleColor={theme.colors.onPrimaryContainer}
-          iconColor={theme.colors.onPrimaryContainer}
           boldText={true}
+          disabled={true}
         />
 
         <CardList>
-          <ListTileWithIcon
+          <ListTile
             title="Exportar"
             subtitle={
               lastBackupDate ? `Último backup: ${lastBackupDate}` : undefined
             }
-            icon="push-outline"
+            left={(props) => <ListTileIcon {...props} icon="push-outline" />}
+            right={
+              isBackupOld
+                ? (props) => (
+                    <ListTileIcon
+                      {...props}
+                      icon="alert-circle-outline"
+                      iconColor={theme.colors.error}
+                    />
+                  )
+                : undefined
+            }
             disabled={isLoading}
             onPress={handleExportBackup}
           />
 
-          <ListTileWithIcon
+          <ListTile
             title="Importar"
-            icon="download-outline"
+            left={(props) => (
+              <ListTileIcon {...props} icon="download-outline" />
+            )}
             disabled={isLoading}
             onPress={handleImportBackup}
           />
         </CardList>
 
-        <ListTileWithIcon
+        <ListTile
           title="Sobre"
           titleColor={theme.colors.onPrimaryContainer}
-          iconColor={theme.colors.onPrimaryContainer}
           boldText={true}
+          disabled={true}
         />
 
         <CardList>
-          <ListTileWithIcon
+          <ListTile
             title="Ver código-fonte no GitHub"
-            icon="link-outline"
+            left={(props) => <ListTileIcon {...props} icon="link-outline" />}
             disabled={isLoading}
             onPress={handleOpenGitHubRepo}
           />
 
-          <ListTileWithIcon
+          <ListTile
             title="Changelog"
-            icon="document-text-outline"
+            left={(props) => (
+              <ListTileIcon {...props} icon="document-text-outline" />
+            )}
             disabled={isLoading}
             onPress={navigateToChangelog}
           />

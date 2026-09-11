@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { useTheme, Button, Text, TextInput } from "react-native-paper";
+import { useTheme, Button, Text, TextInput, IconButton } from "react-native-paper";
 import { KeyboardAvoidingView, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import { showToast, formatCurrencyInput, completeCurrencyZeros } from "@utils";
 import { selectLoanById } from "@loanSelector";
 import { createLoan } from "../../entities/loan";
-import { addLoan, updateLoan } from "@loanDuck";
-import { DefaultPageContainer, SizedBox } from "@components";
+import { addLoan, updateLoan, deleteLoan } from "@loanDuck";
+import { DefaultPageContainer, SizedBox, ConfirmationDialog } from "@components";
 
 const StoreLoan = () => {
   const theme = useTheme();
@@ -25,12 +25,38 @@ const StoreLoan = () => {
       : "0",
   );
   const [note, setNote] = useState(isUpdate ? loanForUpdate.note : "");
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
-      title: isInsert ? "Novo Empréstimo" : "Editar Empréstimo",
+      title: isInsert === "true" || isInsert === true ? "Novo Empréstimo" : "Editar Empréstimo",
+      headerRight: () => {
+        if (isUpdate === "true" || isUpdate === true) {
+          return (
+            <IconButton
+              icon="delete-outline"
+              onPress={() => setIsDialogVisible(true)}
+              style={{
+                marginRight: -8,
+              }}
+            />
+          );
+        }
+        return null;
+      },
     });
-  }, [navigation]);
+  }, [navigation, isInsert, isUpdate]);
+
+  const handleConfirmDelete = () => {
+    dispatch(deleteLoan(loanForUpdate));
+    setIsDialogVisible(false);
+    showToast("Empréstimo excluído!");
+    router.back();
+  };
+
+  const handleCancelDelete = () => {
+    setIsDialogVisible(false);
+  };
 
   const handleSaveLoan = () => {
     if (!name.trim()) {
@@ -119,6 +145,14 @@ const StoreLoan = () => {
           </Button>
         </View>
       </KeyboardAvoidingView>
+
+      <ConfirmationDialog
+        visible={isDialogVisible}
+        setVisible={setIsDialogVisible}
+        message={`Deseja excluir "${loanForUpdate?.name || "o empréstimo"}"?`}
+        handleConfirm={handleConfirmDelete}
+        handleCancel={handleCancelDelete}
+      />
     </DefaultPageContainer>
   );
 };
