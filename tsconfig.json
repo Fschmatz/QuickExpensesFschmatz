@@ -2,10 +2,34 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "allowJs": true,
+    "checkJs": false,
+    "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"],
+      "@components": ["./components"],
+      "@components/*": ["./components/*"],
+      "@utils": ["./utils"],
+      "@utils/*": ["./utils/*"],
+      "@constants": ["./utils/constants"],
+      "@constants/*": ["./utils/constants/*"],
+
+      "@expenseDuck": ["./redux/ducks/expenseDuck"],
+      "@tagDuck": ["./redux/ducks/tagDuck"],
+      "@expenseTagDuck": ["./redux/ducks/expenseTagDuck"],
+      "@loanDuck": ["./redux/ducks/loanDuck"],
+
+      "@expenseSaga": ["./redux/sagas/expenseSaga"],
+      "@tagSaga": ["./redux/sagas/tagSaga"],
+      "@expenseTagSaga": ["./redux/sagas/expenseTagSaga"],
+      "@loanSaga": ["./redux/sagas/loanSaga"],
+
+      "@tagSelector": ["./redux/selectors/tagSelector"],
+      "@loanSelector": ["./redux/selectors/loanSelector"],
+
+      "@appParameterDuck": ["./redux/ducks/appParameterDuck"],
+      "@appParameterSaga": ["./redux/sagas/appParameterSaga"],
+      "@appParameterSelector": ["./redux/selectors/appParameterSelector"]
     }
   },
   "include": [
@@ -13,5 +37,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "app/entities/tag.js", "app/entities/monthlyExpense.js", "app/entities/expenseTag.js", "app/entities/expense.js"  ]
+  ]
 }

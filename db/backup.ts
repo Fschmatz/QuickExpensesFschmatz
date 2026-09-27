@@ -1,0 +1,120 @@
+import { File, Paths } from "expo-file-system";
+import * as Sharing from "expo-sharing";
+import * as DocumentPicker from "expo-document-picker";
+import ExpenseService from "../service/expenseService";
+import TagService from "../service/tagService";
+import ExpenseTagService from "../service/expenseTagService";
+import LoanService from "../service/loanService";
+import AppParameterService from "../service/appParameterService";
+import { store } from "../redux/store";
+import { updateLastBackupDate } from "@appParameterDuck";
+import {
+  formatDate,
+  formatDateForBackup,
+  showToast,
+  isEmpty,
+  appDetails,
+} from "@utils";
+
+export const exportBackup = async (): Promise<void> => {
+  try {
+    const expenses = await ExpenseService.fetchAll();
+    const tags = await TagService.fetchAll();
+    const expensesTags = await ExpenseTagService.fetchAll();
+    const loans = await LoanService.fetchAll();
+    const appParameters = await AppParameterService.getAll();
+    const backupDate = formatDate(
+      new Date().toISOString().split("T")[0],
+      "dd/mm/yyyy"
+    );
+
+    const backupData = {
+      version: appDetails.appVersion,
+      createdAt: backupDate,
+      data: {
+        expenses,
+        tags,
+        expensesTags,
+        loans,
+        appParameters,
+      },
+    };
+
+    const jsonData = JSON.stringify(backupData, null, 2);
+    const filename = `${appDetails.backupFileName}_${formatDateForBackup()}.json`;
+
+    const file = new File(Paths.cache, filename);
+    file.write(jsonData);
+
+    if (!file.exists) {
+      showToast("Erro ao criar arquivo de backup!");
+    }
+
+    if (await Sharing.isAvailableAsync()) {
+      await Sharing.shareAsync(file.uri, {
+        mimeType: "application/json",
+        dialogTitle: "Salvar backup",
+        UTI: "public.json",
+      });
+
+      store.dispatch(updateLastBackupDate());
+
+      showToast("Backup salvo!");
+    }
+  } catch (error) {
+    console.log(error);
+    showToast("Erro ao exportar backup!");
+  }
+};
+
+export const importBackup = async (): Promise<void> => {
+  try {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "application/json",
+      copyToCacheDirectory: true,
+    });
+
+    if (result.canceled) {
+      return;
+    }
+
+    const file = result.assets[0];
+
+    const response = await fetch(file.uri);
+    const text = await response.text();
+    const jsonData = JSON.parse(text);
+    const expenses = jsonData?.data?.expenses ?? [];
+    const tags = jsonData?.data?.tags ?? [];
+    const expensesTags = jsonData?.data?.expensesTags ?? [];
+    const loans = jsonData?.data?.loans ?? [];
+    const appParameters = jsonData?.data?.appParameters ?? {};
+
+    if (!isEmpty(expenses)) {
+      await ExpenseService.importFromBackup(expenses);
+    }
+
+    if (!isEmpty(tags)) {
+      await TagService.importFromBackup(tags);
+    }
+
+    if (!isEmpty(expensesTags)) {
+      await ExpenseTagService.importFromBackup(expensesTags);
+    }
+
+    if (!isEmpty(loans)) {
+      await LoanService.importFromBackup(loans);
+    }
+
+    if (!isEmpty(Object.keys(appParameters))) {
+      for (const [key, value] of Object.entries(appParameters)) {
+        await AppParameterService.update(key, value);
+      }
+    }
+
+    showToast("Backup importado com sucesso!");
+  } catch (error) {
+    showToast("Erro ao importar backup!");
+  }
+};
+
+export default { exportBackup, importBackup };
