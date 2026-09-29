@@ -49,6 +49,11 @@ class ExpenseTagDAO {
     );
   }
 
+  async deleteAll(): Promise<void> {
+    const db = await getDatabase();
+    await db.runAsync(`DELETE FROM ${tables.EXPENSES_TAGS};`);
+  }
+
   async importFromBackup(
     expensesTags: Array<{ expense_id: number; tag_id: number }>
   ): Promise<void> {

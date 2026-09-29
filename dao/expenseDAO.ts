@@ -81,7 +81,7 @@ class ExpenseDAO {
       `UPDATE ${tables.EXPENSES} 
        SET value = ?, name = ?
        WHERE id = ?;`,
-      [expense.value, expense.name || null, expense.id]
+      [expense.value, expense.name || null, expense.id ?? 0]
     );
   }
 
