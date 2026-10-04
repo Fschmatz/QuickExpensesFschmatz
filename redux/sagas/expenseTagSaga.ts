@@ -4,9 +4,12 @@ import {
   addExpenseTagFailure,
   addExpenseTagSuccess,
   ADD_EXPENSE_TAG,
+  addExpenseTag,
 } from "@expenseTagDuck";
 
-function* handleAddExpenseTag(action: any): Generator<any, void, any> {
+function* handleAddExpenseTag(
+  action: ReturnType<typeof addExpenseTag>
+): Generator<any, void, any> {
   try {
     const { expenseId, tagId } = action.payload;
     yield call([ExpenseTagService, "insert"], expenseId, tagId);

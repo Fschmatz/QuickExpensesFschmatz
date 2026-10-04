@@ -55,7 +55,7 @@ type Action =
 
 export default function appParameterReducer(
   state: AppParameterState = initialState,
-  action: any
+  action: Action
 ): AppParameterState {
   switch (action.type) {
     case FETCH_APP_PARAMETERS:
@@ -89,9 +89,9 @@ export default function appParameterReducer(
   }
 }
 
-export const getAppParameters = (state: any): Record<string, any> =>
+export const getAppParameters = (state: { appParameters: AppParameterState }): Record<string, unknown> =>
   state?.appParameters?.data ?? {};
-export const getAppParametersLoading = (state: any): boolean =>
+export const getAppParametersLoading = (state: { appParameters: AppParameterState }): boolean =>
   state?.appParameters?.loading ?? false;
-export const getAppParametersError = (state: any): string | null =>
+export const getAppParametersError = (state: { appParameters: AppParameterState }): string | null =>
   state?.appParameters?.error ?? null;

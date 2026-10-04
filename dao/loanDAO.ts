@@ -22,14 +22,13 @@ class LoanDAO {
     );
   }
 
-  async deleteById(loan: { id?: number }): Promise<void> {
+  async deleteById(loan: { id?: number } | number): Promise<void> {
     const db = await getDatabase();
+    const loanId = typeof loan === "number" ? loan : (loan?.id ?? 0);
     await db.runAsync("BEGIN TRANSACTION");
 
     try {
-      await db.runAsync(`DELETE FROM ${tables.LOANS} WHERE id = ?;`, [
-        loan.id ?? 0,
-      ]);
+      await db.runAsync(`DELETE FROM ${tables.LOANS} WHERE id = ?;`, [loanId]);
       await db.runAsync("COMMIT");
     } catch (error) {
       await db.runAsync("ROLLBACK");

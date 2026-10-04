@@ -32,13 +32,16 @@ import {
   FETCH_TOTAL_EXPENSES_CURRENT_MONTH,
   UPDATE_EXPENSE,
   fetchTotalExpensesCurrentMonth,
+  addExpense,
+  updateExpense,
+  deleteExpense,
 } from "@expenseDuck";
 import { addExpenseTag } from "@expenseTagDuck";
 import ExpenseTagService from "../../service/expenseTagService";
 
 function* handleFetchExpenses(): Generator<any, void, any> {
   try {
-    const expenses = yield call([ExpenseService, "fetchAll"]);
+    const expenses = yield call(() => ExpenseService.fetchAll());
     yield put(fetchExpensesSuccess(expenses));
   } catch (error: any) {
     yield put(fetchExpensesFailure(error?.toString() ?? String(error)));
@@ -47,17 +50,19 @@ function* handleFetchExpenses(): Generator<any, void, any> {
 
 function* handleFetchMonthlyExpenses(): Generator<any, void, any> {
   try {
-    const monthlyExpenses = yield call([ExpenseService, "fetchMonthly"]);
+    const monthlyExpenses = yield call(() => ExpenseService.fetchMonthly());
     yield put(fetchMonthlyExpensesSuccess(monthlyExpenses));
   } catch (error: any) {
     yield put(fetchMonthlyExpensesFailure(error?.toString() ?? String(error)));
   }
 }
 
-function* handleAddExpense(action: any): Generator<any, void, any> {
+function* handleAddExpense(
+  action: ReturnType<typeof addExpense>
+): Generator<any, void, any> {
   try {
     const { value, tagId, name } = action.payload;
-    const newExpenseId = yield call([ExpenseService, "insert"], value, name);
+    const newExpenseId = yield call(() => ExpenseService.insert(value, name));
 
     if (newExpenseId && tagId) {
       yield put(
@@ -76,12 +81,14 @@ function* handleAddExpense(action: any): Generator<any, void, any> {
   }
 }
 
-function* handleUpdateExpense(action: any): Generator<any, void, any> {
+function* handleUpdateExpense(
+  action: ReturnType<typeof updateExpense>
+): Generator<any, void, any> {
   try {
     const { id, value, tagId, name, date } = action.payload;
-    yield call(ExpenseService.update, { id, value, name, createdDate: "", tags: [] });
+    yield call(() => ExpenseService.update({ id, value, name: name ?? null }));
 
-    yield call(ExpenseTagService.deleteByExpenseId, id);
+    yield call(() => ExpenseTagService.deleteByExpenseId(id));
 
     if (tagId) {
       yield put(
@@ -103,14 +110,20 @@ function* handleUpdateExpense(action: any): Generator<any, void, any> {
   }
 }
 
-function* handleDeleteExpense(action: any): Generator<any, void, any> {
+function* handleDeleteExpense(
+  action: ReturnType<typeof deleteExpense>
+): Generator<any, void, any> {
   try {
-    const { expenseId, date } = action.payload;
+    const payload = action.payload;
+    const expenseId = typeof payload === "number" ? payload : payload.expenseId;
+    const date = typeof payload === "number" ? undefined : payload.date;
 
-    yield call([ExpenseService, "deleteById"], expenseId);
+    yield call(() => ExpenseService.deleteById(expenseId));
     yield put(fetchMonthlyExpenses());
     yield put(fetchTotalExpensesCurrentMonth());
-    yield put(fetchByMonthYear(date));
+    if (date) {
+      yield put(fetchByMonthYear(date));
+    }
     yield put(deleteExpenseSuccess());
   } catch (error: any) {
     yield put(deleteExpenseFailure(error?.toString() ?? String(error)));
@@ -119,7 +132,7 @@ function* handleDeleteExpense(action: any): Generator<any, void, any> {
 
 function* handleDeleteAllExpenses(): Generator<any, void, any> {
   try {
-    yield call([ExpenseService, "deleteAll"]);
+    yield call(() => ExpenseService.deleteAll());
     yield put(deleteAllExpensesSuccess());
     yield put(fetchExpenses());
     yield put(fetchMonthlyExpenses());
@@ -128,11 +141,12 @@ function* handleDeleteAllExpenses(): Generator<any, void, any> {
   }
 }
 
-function* handleFetchByMonthYear(action: any): Generator<any, void, any> {
+function* handleFetchByMonthYear(
+  action: ReturnType<typeof fetchByMonthYear>
+): Generator<any, void, any> {
   try {
     const monthlyExpenses = yield call(
-      [ExpenseService, "fetchByMonthYear"],
-      action.payload,
+      () => ExpenseService.fetchByMonthYear(action.payload),
     );
     yield put(fetchByMonthYearSuccess(monthlyExpenses));
   } catch (error: any) {

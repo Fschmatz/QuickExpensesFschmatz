@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { useTheme, Text, SegmentedButtons } from "react-native-paper";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setAppParameter } from "@appParameterDuck";
 import { selectAppParameterByKey } from "@appParameterSelector";
 import { appParameters } from "@constants";
@@ -16,8 +16,8 @@ const SettingsThemeSegmented: React.FC<SettingsThemeSegmentedProps> = ({
   subtitle,
 }) => {
   const theme = useTheme();
-  const dispatch = useDispatch();
-  const value = useSelector(
+  const dispatch = useAppDispatch();
+  const value = useAppSelector(
     selectAppParameterByKey(appParameters.themePreferenceParameter, "system" as any),
   );
 

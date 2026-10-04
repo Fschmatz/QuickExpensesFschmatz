@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, FlatList } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useRouter } from "expo-router";
 import { ConfirmationDialog, EmptyState } from "@components";
 import { deleteLoan, getLoans, fetchLoans } from "@loanDuck";
@@ -11,8 +11,8 @@ import { LoanItem } from "../../entities/loan";
 const LoansList: React.FC = () => {
   const theme = useTheme();
   const router = useRouter();
-  const dispatch = useDispatch();
-  const loans = useSelector(getLoans);
+  const dispatch = useAppDispatch();
+  const loans = useAppSelector(getLoans);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [loanToDelete, setLoanToDelete] = useState<LoanItem | null>(null);
 

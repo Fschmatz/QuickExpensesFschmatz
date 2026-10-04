@@ -1,22 +1,23 @@
+import type { RootState } from "../store";
 import { getAppParameters } from "../ducks/appParameterDuck";
 
-const parseBool = (val: any): boolean => val === true || val === "true";
+const parseBool = (val: unknown): boolean => val === true || val === "true";
 
-export const selectShowDebug = (state: any): boolean =>
+export const selectShowDebug = (state: RootState): boolean =>
   parseBool(getAppParameters(state)?.showDebug);
 
 // Generic selector for any parameter by key
 export const selectAppParameterByKey =
-  <T = any>(key: string, defaultValue: T | null = null) =>
-  (state: any): T | null => {
+  <T = string>(key: string, defaultValue: T | null = null) =>
+  (state: RootState): T | null => {
     const params = getAppParameters(state);
     if (!params) return defaultValue;
-    return params[key] !== undefined ? params[key] : defaultValue;
+    return params[key] !== undefined ? (params[key] as T) : defaultValue;
   };
 
 export const selectAppParameterByKeyAsBoolean =
   (key: string, defaultValue: boolean = true) =>
-  (state: any): boolean => {
+  (state: RootState): boolean => {
     return parseBool(selectAppParameterByKey(key, defaultValue)(state));
   };
 

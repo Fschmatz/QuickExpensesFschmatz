@@ -11,7 +11,7 @@ class LoanService {
     return await LoanDAO.fetchAll();
   }
 
-  async deleteById(loan: { id?: number }): Promise<void> {
+  async deleteById(loan: { id?: number } | number): Promise<void> {
     await LoanDAO.deleteById(loan);
   }
 

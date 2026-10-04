@@ -6,7 +6,7 @@ import {
   Animated,
 } from "react-native";
 import { useTheme } from "react-native-paper";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   MonthlyExpenseCard,
   MonthlyExpensesLineChart,
@@ -24,10 +24,10 @@ import { appParameters } from "@constants";
 
 const MonthlyExpensesList: React.FC = () => {
   const theme = useTheme();
-  const dispatch = useDispatch();
-  const monthlyExpenses = useSelector(getMonthlyExpenses);
-  const loading = useSelector(getExpensesLoading);
-  const showTotalYear = useSelector(
+  const dispatch = useAppDispatch();
+  const monthlyExpenses = useAppSelector(getMonthlyExpenses);
+  const loading = useAppSelector(getExpensesLoading);
+  const showTotalYear = useAppSelector(
     selectAppParameterByKeyAsBoolean(
       appParameters.showTotalYearParameter,
       false,
@@ -36,7 +36,7 @@ const MonthlyExpensesList: React.FC = () => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const currentYear = new Date().getFullYear().toString();
   const [selectedYear, setSelectedYear] = useState<string | number>(currentYear);
-  const showChartTotalMonth = useSelector(
+  const showChartTotalMonth = useAppSelector(
     selectAppParameterByKeyAsBoolean(
       appParameters.showChartTotalMonthParameter,
     ),

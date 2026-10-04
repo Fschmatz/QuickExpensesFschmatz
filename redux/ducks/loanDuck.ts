@@ -81,7 +81,7 @@ type Action =
 
 export default function loanReducer(
   state: LoanState = initialState,
-  action: any
+  action: Action
 ): LoanState {
   switch (action.type) {
     case FETCH_LOANS:
@@ -117,6 +117,6 @@ export default function loanReducer(
   }
 }
 
-export const getLoans = (state: any): LoanItem[] => state?.loans?.list ?? [];
-export const getLoansLoading = (state: any): boolean => state?.loans?.loading ?? false;
-export const getLoansError = (state: any): string | null => state?.loans?.error ?? null;
+export const getLoans = (state: { loans: LoanState }): LoanItem[] => state?.loans?.list ?? [];
+export const getLoansLoading = (state: { loans: LoanState }): boolean => state?.loans?.loading ?? false;
+export const getLoansError = (state: { loans: LoanState }): string | null => state?.loans?.error ?? null;

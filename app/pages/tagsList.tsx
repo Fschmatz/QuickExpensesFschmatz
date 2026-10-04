@@ -1,6 +1,6 @@
 import React from "react";
 import { View, FlatList } from "react-native";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../redux/hooks";
 import { useRouter } from "expo-router";
 import { useTheme, FAB } from "react-native-paper";
 import { TagTile, EmptyState } from "@components";
@@ -10,7 +10,7 @@ import { TagItem } from "../../entities/tag";
 const TagsList: React.FC = () => {
   const theme = useTheme();
   const router = useRouter();
-  const tags = useSelector(getTags);
+  const tags = useAppSelector(getTags);
 
   const goToStoreTagForInsert = () => {
     router.push({

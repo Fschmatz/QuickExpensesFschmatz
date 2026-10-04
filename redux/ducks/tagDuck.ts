@@ -81,7 +81,7 @@ type Action =
 
 export default function tagReducer(
   state: TagState = initialState,
-  action: any
+  action: Action
 ): TagState {
   switch (action.type) {
     case FETCH_TAGS:
@@ -117,6 +117,6 @@ export default function tagReducer(
   }
 }
 
-export const getTags = (state: any): TagItem[] => state?.tags?.list ?? [];
-export const getTagsLoading = (state: any): boolean => state?.tags?.loading ?? false;
-export const getTagsError = (state: any): string | null => state?.tags?.error ?? null;
+export const getTags = (state: { tags: TagState }): TagItem[] => state?.tags?.list ?? [];
+export const getTagsLoading = (state: { tags: TagState }): boolean => state?.tags?.loading ?? false;
+export const getTagsError = (state: { tags: TagState }): string | null => state?.tags?.error ?? null;

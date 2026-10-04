@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useTheme } from "react-native-paper";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { View, useWindowDimensions, TextInput } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { HomeTopContainer, HomeBottomContainer } from "@components";
@@ -21,9 +21,9 @@ const Home: React.FC = () => {
   const [selectedTag, setSelectedTag] = useState<TagItem | null>(null);
   const { height } = useWindowDimensions();
   const responsiveFontSize = Math.min(height * 0.08, 70);
-  const dispatch = useDispatch();
-  const tags = useSelector(getTags);
-  const totalExpensesCurrentMonth = useSelector(getTotalExpensesCurrentMonth);
+  const dispatch = useAppDispatch();
+  const tags = useAppSelector(getTags);
+  const totalExpensesCurrentMonth = useAppSelector(getTotalExpensesCurrentMonth);
   const maxLengthValue = 8;
   const maxLengthName = 30;
   const [containerSize, setContainerSize] = useState<{

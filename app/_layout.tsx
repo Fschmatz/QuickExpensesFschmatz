@@ -4,7 +4,8 @@ import * as NavigationBar from "expo-navigation-bar";
 import * as SystemUI from "expo-system-ui";
 import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
-import { Provider, useSelector } from "react-redux";
+import { Provider } from "react-redux";
+import { useAppSelector } from "../redux/hooks";
 import { store } from "../redux/store";
 import { HomeHeaderButtons } from "@components";
 import { appDetails } from "@utils";
@@ -16,7 +17,7 @@ import { useColorScheme } from "react-native";
 
 function AppContent() {
   const { theme } = useMaterial3Theme({ fallbackSourceColor: "#3E5682" });
-  const themePreference = useSelector(
+  const themePreference = useAppSelector(
     selectAppParameterByKey(appParameters.themePreferenceParameter, "system"),
   );
   const systemColorScheme = useColorScheme();

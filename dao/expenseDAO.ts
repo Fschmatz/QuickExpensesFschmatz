@@ -14,6 +14,12 @@ export interface ExpenseWithTagRow {
   tag_icon: string | null;
 }
 
+export interface UpdateExpenseData {
+  id: number;
+  value: number;
+  name?: string | null;
+}
+
 class ExpenseDAO {
   async insert(
     date: string,
@@ -75,13 +81,13 @@ class ExpenseDAO {
     await db.runAsync(`DELETE FROM ${tables.EXPENSES};`);
   }
 
-  async update(expense: ExpenseItem): Promise<void> {
+  async update(expense: UpdateExpenseData): Promise<void> {
     const db = await getDatabase();
     await db.runAsync(
       `UPDATE ${tables.EXPENSES} 
        SET value = ?, name = ?
        WHERE id = ?;`,
-      [expense.value, expense.name || null, expense.id ?? 0]
+      [expense.value, expense.name || null, expense.id]
     );
   }
 

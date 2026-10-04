@@ -20,105 +20,98 @@ export const tables = {
 export const initializeTables = async (): Promise<void> => {
   const database = await getDatabase();
 
-  return new Promise(async (resolve, reject) => {
-    try {
-      const checkTableExists = await database.getFirstAsync<{ name: string }>(
-        `SELECT name FROM sqlite_master WHERE type='table' AND name='${tables.TAGS}';`
-      );
+  const checkTableExists = await database.getFirstAsync<{ name: string }>(
+    `SELECT name FROM sqlite_master WHERE type='table' AND name='${tables.TAGS}';`
+  );
 
-      // Se as tabelas existem, não continua
-      if (checkTableExists) {
-        return resolve();
-      }
+  // Se as tabelas existem, não continua
+  if (checkTableExists) {
+    return;
+  }
 
-      console.log("Criando tabelas...");
+  console.log("Criando tabelas...");
 
-      await database.execAsync(
-        `CREATE TABLE IF NOT EXISTS ${tables.EXPENSES} (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          createdDate TEXT NOT NULL,
-          value REAL NOT NULL,
-          name TEXT
-        );`
-      );
+  await database.execAsync(
+    `CREATE TABLE IF NOT EXISTS ${tables.EXPENSES} (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      createdDate TEXT NOT NULL,
+      value REAL NOT NULL,
+      name TEXT
+    );`
+  );
 
-      await database.execAsync(
-        `CREATE TABLE IF NOT EXISTS ${tables.TAGS} (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          color TEXT NOT NULL,
-          icon TEXT NOT NULL
-        );`
-      );
+  await database.execAsync(
+    `CREATE TABLE IF NOT EXISTS ${tables.TAGS} (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      color TEXT NOT NULL,
+      icon TEXT NOT NULL
+    );`
+  );
 
-      await database.execAsync(
-        `CREATE TABLE IF NOT EXISTS ${tables.EXPENSES_TAGS} (
-          expense_id INTEGER NOT NULL,
-          tag_id INTEGER NOT NULL,
-          PRIMARY KEY (expense_id, tag_id),
-          FOREIGN KEY (expense_id) REFERENCES expenses(id),
-          FOREIGN KEY (tag_id) REFERENCES tags(id)
-        );`
-      );
+  await database.execAsync(
+    `CREATE TABLE IF NOT EXISTS ${tables.EXPENSES_TAGS} (
+      expense_id INTEGER NOT NULL,
+      tag_id INTEGER NOT NULL,
+      PRIMARY KEY (expense_id, tag_id),
+      FOREIGN KEY (expense_id) REFERENCES expenses(id),
+      FOREIGN KEY (tag_id) REFERENCES tags(id)
+    );`
+  );
 
-      await database.execAsync(
-        `CREATE TABLE IF NOT EXISTS ${tables.LOANS} (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          value REAL NOT NULL,
-          note TEXT NOT NULL,
-          createdDate TEXT NOT NULL
-        );`
-      );
+  await database.execAsync(
+    `CREATE TABLE IF NOT EXISTS ${tables.LOANS} (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      value REAL NOT NULL,
+      note TEXT NOT NULL,
+      createdDate TEXT NOT NULL
+    );`
+  );
 
-      await database.execAsync(
-        `CREATE TABLE IF NOT EXISTS ${tables.APP_PARAMETERS} (
-          key TEXT PRIMARY KEY,
-          value TEXT NOT NULL
-        );`
-      );
+  await database.execAsync(
+    `CREATE TABLE IF NOT EXISTS ${tables.APP_PARAMETERS} (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    );`
+  );
 
-      console.log("Tabelas criadas com sucesso!");
-      console.log("Inserindo valores padrão...");
+  console.log("Tabelas criadas com sucesso!");
+  console.log("Inserindo valores padrão...");
 
-      await database.runAsync(
-        `INSERT INTO ${tables.TAGS} (name, color, icon) VALUES 
-          (?, ?, ?), 
-          (?, ?, ?), 
-          (?, ?, ?), 
-          (?, ?, ?), 
-          (?, ?, ?), 
-          (?, ?, ?);`,
-        [
-          "Alimentação",
-          "#FBC02D",
-          "restaurant-outline",
-          "Compras",
-          "#00ACC1",
-          "bag-outline",
-          "Contas",
-          "#D81B60",
-          "document-text-outline",
-          "Gasolina",
-          "#3F51B5",
-          "water-outline",
-          "Lazer",
-          "#8E24AA",
-          "balloon-outline",
-          "Mercado",
-          "#4CAF50",
-          "cart-outline",
-        ]
-      );
+  await database.runAsync(
+    `INSERT INTO ${tables.TAGS} (name, color, icon) VALUES 
+      (?, ?, ?), 
+      (?, ?, ?), 
+      (?, ?, ?), 
+      (?, ?, ?), 
+      (?, ?, ?), 
+      (?, ?, ?);`,
+    [
+      "Alimentação",
+      "#FBC02D",
+      "restaurant-outline",
+      "Compras",
+      "#00ACC1",
+      "bag-outline",
+      "Contas",
+      "#D81B60",
+      "document-text-outline",
+      "Gasolina",
+      "#3F51B5",
+      "water-outline",
+      "Lazer",
+      "#8E24AA",
+      "balloon-outline",
+      "Mercado",
+      "#4CAF50",
+      "cart-outline",
+    ]
+  );
 
-      await database.execAsync("PRAGMA user_version = 2;");
+  await database.execAsync("PRAGMA user_version = 2;");
 
-      resolve();
-    } catch (error) {
-      console.error("Erro de inicialização do banco de dados: ", error);
-      reject(error);
-    }
-  });
+  console.log("Database initialized.");
 };
 
 export const dropAllTables = async (): Promise<void> => {

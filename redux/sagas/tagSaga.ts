@@ -14,20 +14,25 @@ import {
   DELETE_TAG,
   ADD_TAG,
   UPDATE_TAG,
+  deleteTag,
+  addTag,
+  updateTag,
 } from "@tagDuck";
 
 function* handleFetchTags(): Generator<any, void, any> {
   try {
-    const data = yield call([TagService, "fetchAll"]);
+    const data = yield call(() => TagService.fetchAll());
     yield put(fetchTagsSuccess(data));
   } catch (error: any) {
     yield put(fetchTagsFailure(error?.message ?? String(error)));
   }
 }
 
-function* handleDeleteTag(action: any): Generator<any, void, any> {
+function* handleDeleteTag(
+  action: ReturnType<typeof deleteTag>
+): Generator<any, void, any> {
   try {
-    yield call([TagService, "deleteById"], action.payload);
+    yield call(() => TagService.deleteById(action.payload));
     yield put(deleteTagSuccess());
     yield put(fetchTags());
   } catch (error: any) {
@@ -35,9 +40,11 @@ function* handleDeleteTag(action: any): Generator<any, void, any> {
   }
 }
 
-function* handleAddTag(action: any): Generator<any, void, any> {
+function* handleAddTag(
+  action: ReturnType<typeof addTag>
+): Generator<any, void, any> {
   try {
-    yield call([TagService, "insert"], action.payload);
+    yield call(() => TagService.insert(action.payload));
     yield put(fetchTags());
     yield put(addTagSuccess());    
   } catch (error: any) {
@@ -45,9 +52,11 @@ function* handleAddTag(action: any): Generator<any, void, any> {
   }
 }
 
-function* handleUpdateTag(action: any): Generator<any, void, any> {
+function* handleUpdateTag(
+  action: ReturnType<typeof updateTag>
+): Generator<any, void, any> {
   try {
-    yield call([TagService, "update"], action.payload);
+    yield call(() => TagService.update(action.payload));
     yield put(fetchTags());
     yield put(updateTagSuccess());    
   } catch (error: any) {

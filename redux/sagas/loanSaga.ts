@@ -14,20 +14,25 @@ import {
   DELETE_LOAN,
   ADD_LOAN,
   UPDATE_LOAN,
+  deleteLoan,
+  addLoan,
+  updateLoan,
 } from "@loanDuck";
 
 function* handleFetchLoans(): Generator<any, void, any> {
   try {
-    const data = yield call([LoanService, "fetchAll"]);
+    const data = yield call(() => LoanService.fetchAll());
     yield put(fetchLoansSuccess(data));
   } catch (error: any) {
     yield put(fetchLoansFailure(error?.message ?? String(error)));
   }
 }
 
-function* handleDeleteLoan(action: any): Generator<any, void, any> {
+function* handleDeleteLoan(
+  action: ReturnType<typeof deleteLoan>
+): Generator<any, void, any> {
   try {
-    yield call([LoanService, "deleteById"], action.payload);
+    yield call(() => LoanService.deleteById(action.payload));
     yield put(deleteLoanSuccess());
     yield put(fetchLoans());
   } catch (error: any) {
@@ -35,9 +40,11 @@ function* handleDeleteLoan(action: any): Generator<any, void, any> {
   }
 }
 
-function* handleAddLoan(action: any): Generator<any, void, any> {
+function* handleAddLoan(
+  action: ReturnType<typeof addLoan>
+): Generator<any, void, any> {
   try {
-    yield call([LoanService, "insert"], action.payload);
+    yield call(() => LoanService.insert(action.payload));
     yield put(fetchLoans());
     yield put(addLoanSuccess());
   } catch (error: any) {
@@ -45,9 +52,11 @@ function* handleAddLoan(action: any): Generator<any, void, any> {
   }
 }
 
-function* handleUpdateLoan(action: any): Generator<any, void, any> {
+function* handleUpdateLoan(
+  action: ReturnType<typeof updateLoan>
+): Generator<any, void, any> {
   try {
-    yield call([LoanService, "update"], action.payload);
+    yield call(() => LoanService.update(action.payload));
     yield put(fetchLoans());
     yield put(updateLoanSuccess());
   } catch (error: any) {

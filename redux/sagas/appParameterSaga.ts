@@ -9,6 +9,7 @@ import {
   SET_APP_PARAMETER,
   FETCH_APP_PARAMETERS,
   UPDATE_LAST_BACKUP_DATE,
+  setAppParameter,
 } from "../ducks/appParameterDuck";
 import { appParameters } from "@constants";
 
@@ -21,7 +22,9 @@ function* handleFetchAppParameters(): Generator<any, void, any> {
   }
 }
 
-function* handleSetAppParameter(action: any): Generator<any, void, any> {
+function* handleSetAppParameter(
+  action: ReturnType<typeof setAppParameter>
+): Generator<any, void, any> {
   try {
     const { key, value } = action.payload;
     yield call(AppParameterService.update, key, value);

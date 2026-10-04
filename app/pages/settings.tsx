@@ -3,7 +3,7 @@ import { useTheme, Portal, ActivityIndicator } from "react-native-paper";
 import { Linking, View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 import { useNavigation } from "expo-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { appDetails, isLastBackupDateMoreThan30Days } from "@utils";
 import {
   ListTile,
@@ -23,9 +23,9 @@ import { appParameters } from "@constants";
 const Settings: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigation = useNavigation<any>();
-  const lastBackupDate = useSelector(
+  const lastBackupDate = useAppSelector(
     selectAppParameterByKey(appParameters.lastBackupDateParameter),
   );
 

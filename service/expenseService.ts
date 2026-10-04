@@ -1,4 +1,4 @@
-import ExpenseDAO from "../dao/expenseDAO";
+import ExpenseDAO, { UpdateExpenseData } from "../dao/expenseDAO";
 import { ExpenseItem } from "../entities/expense";
 import { MonthlyExpenseItem } from "../entities/monthlyExpense";
 
@@ -24,7 +24,7 @@ class ExpenseService {
     await ExpenseDAO.deleteAll();
   }
 
-  async update(expense: ExpenseItem): Promise<void> {
+  async update(expense: UpdateExpenseData): Promise<void> {
     await ExpenseDAO.update(expense);
   }
 

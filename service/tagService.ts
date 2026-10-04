@@ -10,7 +10,7 @@ class TagService {
     return await TagDAO.fetchAll();
   }
 
-  async deleteById(tag: { id?: number }): Promise<void> {
+  async deleteById(tag: { id?: number } | number): Promise<void> {
     await TagDAO.deleteById(tag);
   }
 

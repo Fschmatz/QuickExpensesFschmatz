@@ -1,7 +1,7 @@
 import React from "react";
 import { useTheme, List } from "react-native-paper";
 import { Switch } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setAppParameter } from "@appParameterDuck";
 import { selectAppParameterByKeyAsBoolean } from "@appParameterSelector";
 
@@ -19,8 +19,8 @@ const SettingsSwitch: React.FC<SettingsSwitchProps> = ({
   defaultValue = true,
 }) => {
   const theme = useTheme();
-  const dispatch = useDispatch();
-  const value = useSelector(
+  const dispatch = useAppDispatch();
+  const value = useAppSelector(
     selectAppParameterByKeyAsBoolean(parameterKey, defaultValue),
   );
 

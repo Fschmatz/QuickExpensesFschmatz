@@ -17,18 +17,19 @@ class TagDAO {
     );
   }
 
-  async deleteById(tag: { id?: number }): Promise<void> {
+  async deleteById(tag: { id?: number } | number): Promise<void> {
     const db = await getDatabase();
+    const tagId = typeof tag === "number" ? tag : (tag?.id ?? 0);
 
     await db.runAsync("BEGIN TRANSACTION");
 
     try {
       await db.runAsync(
         `DELETE FROM ${tables.EXPENSES_TAGS} WHERE tag_id = ?;`,
-        [tag.id ?? 0]
+        [tagId]
       );
 
-      await db.runAsync(`DELETE FROM ${tables.TAGS} WHERE id = ?;`, [tag.id ?? 0]);
+      await db.runAsync(`DELETE FROM ${tables.TAGS} WHERE id = ?;`, [tagId]);
 
       await db.runAsync("COMMIT");
     } catch (error) {

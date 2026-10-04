@@ -6,7 +6,7 @@ import {
   TextInput,
 } from "react-native-paper";
 import { KeyboardAvoidingView } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import { showToast, formatCurrencyInput, completeCurrencyZeros } from "@utils";
 import {
@@ -27,25 +27,27 @@ import { TagItem } from "../../entities/tag";
 const StoreExpense: React.FC = () => {
   const theme = useTheme();
   const {
-    isInsert = false,
-    isUpdate = false,
+    isInsert = "false",
+    isUpdate = "false",
     expenseId,
     date,
-  } = useLocalSearchParams() as {
-    isInsert?: string | boolean;
-    isUpdate?: string | boolean;
+  } = useLocalSearchParams<{
+    isInsert?: string;
+    isUpdate?: string;
     expenseId?: string;
     date?: string;
-  };
+  }>();
   const navigation = useNavigation();
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const tags = useSelector(getTags);
-  const expenseForUpdate =
-    isUpdate === "true" || isUpdate === true
-      ? useSelector(selectExpenseById(expenseId ?? ""))
-      : null;
+  const isUpdateBool = isUpdate === "true";
+  const isInsertBool = isInsert === "true";
+
+  const tags = useAppSelector(getTags);
+  const expenseForUpdate = isUpdateBool
+    ? useAppSelector(selectExpenseById(expenseId ?? ""))
+    : null;
 
   const [name, setName] = useState(
     expenseForUpdate ? (expenseForUpdate.name ?? "") : "",
@@ -70,12 +72,9 @@ const StoreExpense: React.FC = () => {
 
   useEffect(() => {
     navigation.setOptions({
-      title:
-        isInsert === "true" || isInsert === true
-          ? "Nova Despesa"
-          : "Editar Despesa",
+      title: isInsertBool ? "Nova Despesa" : "Editar Despesa",
       headerRight: () => {
-        if (isUpdate === "true" || isUpdate === true) {
+        if (isUpdateBool) {
           return (
             <IconButton
               icon="delete-outline"
@@ -89,7 +88,7 @@ const StoreExpense: React.FC = () => {
         return null;
       },
     });
-  }, [navigation, isInsert, isUpdate]);
+  }, [navigation, isInsertBool, isUpdateBool]);
 
   const handleSaveExpense = () => {
     if (!value || value === "0") {
@@ -99,7 +98,7 @@ const StoreExpense: React.FC = () => {
 
     const numericValue = parseFloat(parseForDb(value));
 
-    if (isInsert === "true" || isInsert === true) {
+    if (isInsertBool) {
       dispatch(
         addExpense({
           value: numericValue,

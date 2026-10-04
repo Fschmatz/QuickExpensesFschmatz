@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTheme, Button, TextInput, IconButton } from "react-native-paper";
 import { TouchableOpacity, KeyboardAvoidingView, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { tagIcons, tagColors } from "@constants";
@@ -21,29 +21,31 @@ const chunkArray = <T,>(arr: T[], rows: number): T[][] => {
 
 const StoreTag: React.FC = () => {
   const theme = useTheme();
-  const { isInsert = false, isUpdate = false, tagId } = useLocalSearchParams() as {
-    isInsert?: string | boolean;
-    isUpdate?: string | boolean;
+  const { isInsert = "false", isUpdate = "false", tagId } = useLocalSearchParams<{
+    isInsert?: string;
+    isUpdate?: string;
     tagId?: string;
-  };
+  }>();
   const navigation = useNavigation();
   const router = useRouter();
-  const dispatch = useDispatch();
-  const tagForUpdate = useSelector(selectTagById(tagId ?? ""));
-  const [name, setName] = useState(isUpdate ? (tagForUpdate?.name ?? "") : "");
+  const dispatch = useAppDispatch();
+  const isUpdateBool = isUpdate === "true";
+  const isInsertBool = isInsert === "true";
+  const tagForUpdate = useAppSelector(selectTagById(tagId ?? ""));
+  const [name, setName] = useState(isUpdateBool ? (tagForUpdate?.name ?? "") : "");
   const [selectedColor, setSelectedColor] = useState(
-    isUpdate ? (tagForUpdate?.color ?? "#18c435") : "#18c435",
+    isUpdateBool ? (tagForUpdate?.color ?? "#18c435") : "#18c435",
   );
   const [selectedIcon, setSelectedIcon] = useState(
-    isUpdate ? (tagForUpdate?.icon ?? "bag-outline") : "bag-outline",
+    isUpdateBool ? (tagForUpdate?.icon ?? "bag-outline") : "bag-outline",
   );
   const [isDialogVisible, setIsDialogVisible] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
-      title: isInsert === "true" || isInsert === true ? "Nova Tag" : "Editar Tag",
+      title: isInsertBool ? "Nova Tag" : "Editar Tag",
       headerRight: () => {
-        if (isUpdate === "true" || isUpdate === true) {
+        if (isUpdateBool) {
           return (
             <IconButton
               icon="delete-outline"
@@ -57,7 +59,7 @@ const StoreTag: React.FC = () => {
         return null;
       },
     });
-  }, [navigation, isInsert, isUpdate]);
+  }, [navigation, isInsertBool, isUpdateBool]);
 
   const handleConfirmDelete = () => {
     if (tagForUpdate?.id) {
@@ -86,13 +88,13 @@ const StoreTag: React.FC = () => {
       return;
     }
 
-    if (isInsert === "true" || isInsert === true) {
+    if (isInsertBool) {
       const newTag = createTag(undefined, name, selectedColor, selectedIcon);
       showToast("Tag criada com sucesso!");
       dispatch(addTag(newTag));
     }
 
-    if (isUpdate === "true" || isUpdate === true) {
+    if (isUpdateBool) {
       if (tagForUpdate) {
         const updatedTag = {
           ...tagForUpdate,
@@ -118,7 +120,7 @@ const StoreTag: React.FC = () => {
             value={name}
             onChangeText={setName}
             maxLength={20}
-            autoFocus={Boolean(isInsert === "true" || isInsert === true)}
+            autoFocus={isInsertBool}
           />
 
           <SizedBox height={12} />

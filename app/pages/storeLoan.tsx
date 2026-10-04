@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTheme, Button, TextInput, IconButton } from "react-native-paper";
 import { KeyboardAvoidingView, View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import { showToast, formatCurrencyInput, completeCurrencyZeros } from "@utils";
 import { selectLoanById } from "@loanSelector";
@@ -11,31 +11,33 @@ import { DefaultPageContainer, SizedBox, ConfirmationDialog } from "@components"
 
 const StoreLoan: React.FC = () => {
   const theme = useTheme();
-  const { isInsert = false, isUpdate = false, loanId } = useLocalSearchParams() as {
-    isInsert?: string | boolean;
-    isUpdate?: string | boolean;
+  const { isInsert = "false", isUpdate = "false", loanId } = useLocalSearchParams<{
+    isInsert?: string;
+    isUpdate?: string;
     loanId?: string;
-  };
+  }>();
   const navigation = useNavigation();
   const router = useRouter();
-  const dispatch = useDispatch();
-  const loanForUpdate = useSelector(selectLoanById(loanId ?? ""));
-  const [name, setName] = useState(isUpdate ? (loanForUpdate?.name ?? "") : "");
+  const dispatch = useAppDispatch();
+  const isUpdateBool = isUpdate === "true";
+  const isInsertBool = isInsert === "true";
+  const loanForUpdate = useAppSelector(selectLoanById(loanId ?? ""));
+  const [name, setName] = useState(isUpdateBool ? (loanForUpdate?.name ?? "") : "");
   const [value, setValue] = useState(
-    isUpdate && loanForUpdate
+    isUpdateBool && loanForUpdate
       ? completeCurrencyZeros(
           formatCurrencyInput(loanForUpdate.value.toString().replace(".", ",")),
         )
       : "0",
   );
-  const [note, setNote] = useState(isUpdate ? (loanForUpdate?.note ?? "") : "");
+  const [note, setNote] = useState(isUpdateBool ? (loanForUpdate?.note ?? "") : "");
   const [isDialogVisible, setIsDialogVisible] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
-      title: isInsert === "true" || isInsert === true ? "Novo Empréstimo" : "Editar Empréstimo",
+      title: isInsertBool ? "Novo Empréstimo" : "Editar Empréstimo",
       headerRight: () => {
-        if (isUpdate === "true" || isUpdate === true) {
+        if (isUpdateBool) {
           return (
             <IconButton
               icon="delete-outline"
@@ -74,13 +76,13 @@ const StoreLoan: React.FC = () => {
       return;
     }
 
-    if (isInsert === "true" || isInsert === true) {
+    if (isInsertBool) {
       const newLoan = createLoan(undefined, name, parseFloat(parseForDb(value)), note || null, "");
       showToast("Empréstimo criado com sucesso!");
       dispatch(addLoan(newLoan));
     }
 
-    if (isUpdate === "true" || isUpdate === true) {
+    if (isUpdateBool) {
       if (loanForUpdate) {
         const updatedLoan = {
           ...loanForUpdate,

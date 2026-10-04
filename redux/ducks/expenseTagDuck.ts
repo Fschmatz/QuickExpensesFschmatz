@@ -34,7 +34,7 @@ type Action =
 
 export default function expenseTagReducer(
   state: ExpenseTagState = initialState,
-  action: any
+  action: Action
 ): ExpenseTagState {
   switch (action.type) {
     case ADD_EXPENSE_TAG:

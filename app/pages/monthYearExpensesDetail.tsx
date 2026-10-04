@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { View } from "react-native";
-import { useTheme } from "react-native-paper";
-import { useDispatch, useSelector } from "react-redux";
-import { Text } from "react-native-paper";
+import { useTheme, Text } from "react-native-paper";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   fetchByMonthYear,
   getExpensesByMonthYear,
@@ -30,11 +29,11 @@ interface TagExpenseEntry {
 const MonthYearExpensesDetail: React.FC = () => {
   const theme = useTheme();
   const { date } = useLocalSearchParams<{ date?: string }>();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const navigation = useNavigation();
-  const expensesByMonthYear = useSelector(getExpensesByMonthYear);
-  const loading = useSelector(getExpensesLoading);
+  const expensesByMonthYear = useAppSelector(getExpensesByMonthYear);
+  const loading = useAppSelector(getExpensesLoading);
 
   const tagExpenseMap = useMemo(() => {
     return createTagExpenseMap(expensesByMonthYear || []);

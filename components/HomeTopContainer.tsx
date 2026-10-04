@@ -1,4 +1,4 @@
-import React, { RefObject } from "react";
+import React from "react";
 import { useTheme, Text, TouchableRipple } from "react-native-paper";
 import { TextInput, View } from "react-native";
 import { useRouter } from "expo-router";
@@ -17,7 +17,7 @@ export interface HomeTopContainerProps {
   responsiveFontSize: number;
   maxLengthValue?: number;
   maxLengthName?: number;
-  nomeInputRef?: RefObject<TextInput | null> | React.Ref<TextInput>;
+  nomeInputRef?: React.RefObject<TextInput>;
 }
 
 const HomeTopContainer: React.FC<HomeTopContainerProps> = ({

@@ -215,7 +215,7 @@ type Action =
 
 export default function expenseReducer(
   state: ExpenseState = initialState,
-  action: any
+  action: Action
 ): ExpenseState {
   switch (action.type) {
     case FETCH_EXPENSES:
@@ -290,18 +290,18 @@ export default function expenseReducer(
   }
 }
 
-export const getExpenses = (state: any): ExpenseItem[] =>
+export const getExpenses = (state: { expenses: ExpenseState }): ExpenseItem[] =>
   state?.expenses?.list ?? [];
-export const getExpensesLoading = (state: any): boolean =>
+export const getExpensesLoading = (state: { expenses: ExpenseState }): boolean =>
   state?.expenses?.loading ?? false;
-export const getExpensesError = (state: any): string | null =>
+export const getExpensesError = (state: { expenses: ExpenseState }): string | null =>
   state?.expenses?.error ?? null;
-export const getMonthlyExpenses = (state: any): MonthlyExpenseItem[] =>
+export const getMonthlyExpenses = (state: { expenses: ExpenseState }): MonthlyExpenseItem[] =>
   state?.expenses?.monthlyList ?? [];
-export const getExpensesByMonthYear = (state: any): ExpenseItem[] =>
+export const getExpensesByMonthYear = (state: { expenses: ExpenseState }): ExpenseItem[] =>
   state?.expenses?.expensesByMonthYear ?? [];
-export const getTotalExpensesCurrentMonth = (state: any): number =>
+export const getTotalExpensesCurrentMonth = (state: { expenses: ExpenseState }): number =>
   state?.expenses?.totalExpensesCurrentMonth ?? 0;
 
-export const selectExpenseById = (id: number | string) => (state: any): ExpenseItem | undefined =>
+export const selectExpenseById = (id: number | string) => (state: { expenses: ExpenseState }): ExpenseItem | undefined =>
   state?.expenses?.expensesByMonthYear?.find((e: ExpenseItem) => Number(e.id) === Number(id));

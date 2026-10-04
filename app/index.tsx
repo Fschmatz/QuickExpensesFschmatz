@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View } from "react-native";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../redux/hooks";
 import Home from "./pages/home";
 import DatabaseInit from "../db/databaseInit";
 import { fetchAppParameters } from "@appParameterDuck";
@@ -9,7 +9,7 @@ import { useTheme } from "react-native-paper";
 export default function Index() {
   const theme = useTheme();
   const [isDbReady, setIsDbReady] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     async function initApp() {
