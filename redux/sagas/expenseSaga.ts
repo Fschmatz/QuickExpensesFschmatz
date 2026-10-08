@@ -1,40 +1,33 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import ExpenseService from "../../service/expenseService";
 import {
+  fetchExpenses,
   fetchExpensesSuccess,
   fetchExpensesFailure,
+  fetchMonthlyExpenses,
   fetchMonthlyExpensesSuccess,
   fetchMonthlyExpensesFailure,
+  addExpense,
   addExpenseSuccess,
   addExpenseFailure,
-  deleteExpenseSuccess,
-  deleteExpenseFailure,
-  deleteAllExpensesSuccess,
-  deleteAllExpensesFailure,
-  fetchByMonthYearSuccess,
-  fetchByMonthYearFailure,
-  fetchExpenses,
-  fetchMonthlyExpenses,
-  fetchByMonthYear,
-  fetchTotalExpensesCurrentMonthSuccess,
-  fetchTotalExpensesCurrentMonthFailure,
+  updateExpense,
   updateExpenseSuccess,
   updateExpenseFailure,
+  deleteExpense,
+  deleteExpenseSuccess,
+  deleteExpenseFailure,
+  deleteAllExpenses,
+  deleteAllExpensesSuccess,
+  deleteAllExpensesFailure,
+  fetchByMonthYear,
+  fetchByMonthYearSuccess,
+  fetchByMonthYearFailure,
+  clearExpensesByMonthYear,
   clearExpensesByMonthYearSuccess,
   clearExpensesByMonthYearFailure,
-  FETCH_EXPENSES,
-  FETCH_MONTHLY_EXPENSES,
-  ADD_EXPENSE,
-  DELETE_EXPENSE,
-  DELETE_ALL_EXPENSES,
-  FETCH_BY_MONTH_YEAR,
-  CLEAR_EXPENSES_BY_MONTH_YEAR,
-  FETCH_TOTAL_EXPENSES_CURRENT_MONTH,
-  UPDATE_EXPENSE,
   fetchTotalExpensesCurrentMonth,
-  addExpense,
-  updateExpense,
-  deleteExpense,
+  fetchTotalExpensesCurrentMonthSuccess,
+  fetchTotalExpensesCurrentMonthFailure,
 } from "@expenseDuck";
 import { addExpenseTag } from "@expenseTagDuck";
 import ExpenseTagService from "../../service/expenseTagService";
@@ -175,16 +168,13 @@ function* handleFetchTotalExpensesCurrentMonth(): Generator<any, void, any> {
 }
 
 export default function* expenseSaga() {
-  yield takeLatest(FETCH_EXPENSES, handleFetchExpenses);
-  yield takeLatest(FETCH_MONTHLY_EXPENSES, handleFetchMonthlyExpenses);
-  yield takeLatest(ADD_EXPENSE, handleAddExpense);
-  yield takeLatest(DELETE_EXPENSE, handleDeleteExpense);
-  yield takeLatest(DELETE_ALL_EXPENSES, handleDeleteAllExpenses);
-  yield takeLatest(FETCH_BY_MONTH_YEAR, handleFetchByMonthYear);
-  yield takeLatest(CLEAR_EXPENSES_BY_MONTH_YEAR, handleClearExpenses);
-  yield takeLatest(
-    FETCH_TOTAL_EXPENSES_CURRENT_MONTH,
-    handleFetchTotalExpensesCurrentMonth,
-  );
-  yield takeLatest(UPDATE_EXPENSE, handleUpdateExpense);
+  yield takeLatest(fetchExpenses.type, handleFetchExpenses);
+  yield takeLatest(fetchMonthlyExpenses.type, handleFetchMonthlyExpenses);
+  yield takeLatest(addExpense.type, handleAddExpense);
+  yield takeLatest(deleteExpense.type, handleDeleteExpense);
+  yield takeLatest(deleteAllExpenses.type, handleDeleteAllExpenses);
+  yield takeLatest(fetchByMonthYear.type, handleFetchByMonthYear);
+  yield takeLatest(clearExpensesByMonthYear.type, handleClearExpenses);
+  yield takeLatest(fetchTotalExpensesCurrentMonth.type, handleFetchTotalExpensesCurrentMonth);
+  yield takeLatest(updateExpense.type, handleUpdateExpense);
 }

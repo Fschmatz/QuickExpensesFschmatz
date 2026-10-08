@@ -6,10 +6,12 @@ import { ConfirmationDialog, EmptyState } from "@components";
 import { deleteLoan, getLoans, fetchLoans } from "@loanDuck";
 import LoanTile from "../../components/LoanTile";
 import { useTheme, FAB } from "react-native-paper";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LoanItem } from "../../entities/loan";
 
 const LoansList: React.FC = () => {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const loans = useAppSelector(getLoans);
@@ -61,7 +63,7 @@ const LoansList: React.FC = () => {
       }}
     >
       <FlatList
-        contentContainerStyle={{ gap: 8, paddingBottom: 75, flexGrow: 1 }}
+        contentContainerStyle={{ gap: 8, paddingBottom: 75 + insets.bottom, flexGrow: 1 }}
         data={loans}
         keyExtractor={(item) => item.id?.toString() ?? item.name}
         renderItem={({ item }) => (
@@ -96,7 +98,7 @@ const LoansList: React.FC = () => {
           position: "absolute",
           margin: 16,
           right: 0,
-          bottom: 0,
+          bottom: insets.bottom,
           borderRadius: 16,
           backgroundColor: theme.colors.primary,
         }}

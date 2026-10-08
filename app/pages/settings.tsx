@@ -84,7 +84,7 @@ const Settings: React.FC = () => {
             style={{
               color: theme.colors.onTertiaryContainer,
               fontSize: 14,
-              fontWeight: "600",
+              fontWeight: "800",
             }}
           >
             v{appDetails.appVersion}
@@ -92,14 +92,14 @@ const Settings: React.FC = () => {
         </View>
 
         <ListTile
-          title="Tema"
+          title="Aparência"
           titleColor={theme.colors.onPrimaryContainer}
           boldText={true}
           disabled={true}
         />
         <CardList>
           <SettingsThemeSegmented
-            title="Tema do Aplicativo"
+            title="Tema"
             subtitle="Escolha a aparência do aplicativo"
           />
         </CardList>

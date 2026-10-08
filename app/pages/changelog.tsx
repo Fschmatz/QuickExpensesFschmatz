@@ -25,7 +25,7 @@ const Changelog: React.FC = () => {
 
           <Card.Content>
             <Text
-              variant="bodyLarge"
+              variant="bodyMedium"
               style={{ color: theme.colors.onPrimaryContainer }}
             >
               {appDetails.currentChangelog}
@@ -35,7 +35,12 @@ const Changelog: React.FC = () => {
 
         <SizedBox height={16} />
 
-        <Card mode="contained">
+        <Card
+          mode="contained"
+          style={{
+            backgroundColor: theme.colors.elevation.level3,
+          }}
+        >
           <Card.Title
             title="Versões Anteriores:"
             style={{ paddingTop: 16 }}
@@ -43,7 +48,7 @@ const Changelog: React.FC = () => {
           />
           <Card.Content>
             <Text
-              variant="bodyLarge"
+              variant="bodyMedium"
               style={{ color: theme.colors.onBackground }}
             >
               {appDetails.changelog}

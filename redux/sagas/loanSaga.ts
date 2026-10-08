@@ -1,22 +1,18 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import LoanService from "../../service/loanService";
 import {
+  fetchLoans,
   fetchLoansSuccess,
   fetchLoansFailure,
+  deleteLoan,
   deleteLoanSuccess,
   deleteLoanFailure,
+  addLoan,
   addLoanSuccess,
   addLoanFailure,
-  fetchLoans,
+  updateLoan,
   updateLoanSuccess,
   updateLoanFailure,
-  FETCH_LOANS,
-  DELETE_LOAN,
-  ADD_LOAN,
-  UPDATE_LOAN,
-  deleteLoan,
-  addLoan,
-  updateLoan,
 } from "@loanDuck";
 
 function* handleFetchLoans(): Generator<any, void, any> {
@@ -65,8 +61,8 @@ function* handleUpdateLoan(
 }
 
 export default function* loanSaga() {
-  yield takeLatest(FETCH_LOANS, handleFetchLoans);
-  yield takeLatest(DELETE_LOAN, handleDeleteLoan);
-  yield takeLatest(ADD_LOAN, handleAddLoan);
-  yield takeLatest(UPDATE_LOAN, handleUpdateLoan);
+  yield takeLatest(fetchLoans.type, handleFetchLoans);
+  yield takeLatest(deleteLoan.type, handleDeleteLoan);
+  yield takeLatest(addLoan.type, handleAddLoan);
+  yield takeLatest(updateLoan.type, handleUpdateLoan);
 }

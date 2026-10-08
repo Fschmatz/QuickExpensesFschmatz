@@ -1,22 +1,18 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import TagService from "../../service/tagService";
 import {
+  fetchTags,
   fetchTagsSuccess,
   fetchTagsFailure,
-  deleteTagSuccess,
-  deleteTagFailure,
+  addTag,
   addTagSuccess,
   addTagFailure,
-  fetchTags,
+  updateTag,
   updateTagSuccess,
   updateTagFailure,
-  FETCH_TAGS,
-  DELETE_TAG,
-  ADD_TAG,
-  UPDATE_TAG,
   deleteTag,
-  addTag,
-  updateTag,
+  deleteTagSuccess,
+  deleteTagFailure,
 } from "@tagDuck";
 
 function* handleFetchTags(): Generator<any, void, any> {
@@ -46,7 +42,7 @@ function* handleAddTag(
   try {
     yield call(() => TagService.insert(action.payload));
     yield put(fetchTags());
-    yield put(addTagSuccess());    
+    yield put(addTagSuccess());
   } catch (error: any) {
     yield put(addTagFailure(error?.toString() ?? String(error)));
   }
@@ -58,15 +54,15 @@ function* handleUpdateTag(
   try {
     yield call(() => TagService.update(action.payload));
     yield put(fetchTags());
-    yield put(updateTagSuccess());    
+    yield put(updateTagSuccess());
   } catch (error: any) {
     yield put(updateTagFailure(error?.message ?? String(error)));
   }
 }
 
 export default function* tagSaga() {
-  yield takeLatest(FETCH_TAGS, handleFetchTags);
-  yield takeLatest(DELETE_TAG, handleDeleteTag);
-  yield takeLatest(ADD_TAG, handleAddTag);
-  yield takeLatest(UPDATE_TAG, handleUpdateTag);  
+  yield takeLatest(fetchTags.type, handleFetchTags);
+  yield takeLatest(deleteTag.type, handleDeleteTag);
+  yield takeLatest(addTag.type, handleAddTag);
+  yield takeLatest(updateTag.type, handleUpdateTag);
 }

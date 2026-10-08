@@ -51,7 +51,7 @@ const StoreLoan: React.FC = () => {
         return null;
       },
     });
-  }, [navigation, isInsert, isUpdate]);
+  }, [navigation, isInsertBool, isUpdateBool]);
 
   const handleConfirmDelete = () => {
     if (loanForUpdate?.id) {

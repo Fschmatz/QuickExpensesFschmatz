@@ -1,15 +1,13 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import AppParameterService from "../../service/appParameterService";
 import {
+  fetchAppParameters,
   fetchAppParametersSuccess,
   fetchAppParametersFailure,
+  setAppParameter,
   setAppParameterSuccess,
   setAppParameterFailure,
-  fetchAppParameters,
-  SET_APP_PARAMETER,
-  FETCH_APP_PARAMETERS,
-  UPDATE_LAST_BACKUP_DATE,
-  setAppParameter,
+  updateLastBackupDate,
 } from "../ducks/appParameterDuck";
 import { appParameters } from "@constants";
 
@@ -48,7 +46,7 @@ function* handleUpdateLastBackupDate(): Generator<any, void, any> {
 }
 
 export default function* appParameterSaga() {
-  yield takeLatest(FETCH_APP_PARAMETERS, handleFetchAppParameters);
-  yield takeLatest(SET_APP_PARAMETER, handleSetAppParameter);
-  yield takeLatest(UPDATE_LAST_BACKUP_DATE, handleUpdateLastBackupDate);
+  yield takeLatest(fetchAppParameters.type, handleFetchAppParameters);
+  yield takeLatest(setAppParameter.type, handleSetAppParameter);
+  yield takeLatest(updateLastBackupDate.type, handleUpdateLastBackupDate);
 }

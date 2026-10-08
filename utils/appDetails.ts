@@ -9,7 +9,7 @@ export interface AppDetailsType {
 }
 
 const AppDetails: AppDetailsType = {
-  appVersion: "2.1.0",
+  appVersion: "2.2.0",
   appName: "Quick Expenses Fschmatz",
   appNameHomePage: " Quick Expenses",
   repositoryLink: "https://github.com/Fschmatz/QuickExpensesFschmatz",
@@ -18,11 +18,15 @@ const AppDetails: AppDetailsType = {
 
 AppDetails.currentChangelog = `
 ${AppDetails.appVersion}
-- Adicionado gráfico de barras na página de detalhes mensal
-- Atualizações na interface
+- Migração para TypeScript 
+- Correções
 `;
 
 AppDetails.changelog = `
+2.1.0
+- Adicionado gráfico de barras na página de detalhes mensal
+- Atualizações na interface
+
 2.0.7
 - Update Expo 57
 - Update React Native

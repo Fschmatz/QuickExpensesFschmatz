@@ -1,10 +1,9 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import ExpenseTagService from "../../service/expenseTagService";
 import {
+  addExpenseTag,
   addExpenseTagFailure,
   addExpenseTagSuccess,
-  ADD_EXPENSE_TAG,
-  addExpenseTag,
 } from "@expenseTagDuck";
 
 function* handleAddExpenseTag(
@@ -20,5 +19,5 @@ function* handleAddExpenseTag(
 }
 
 export default function* expenseTagSaga() {
-  yield takeLatest(ADD_EXPENSE_TAG, handleAddExpenseTag);
+  yield takeLatest(addExpenseTag.type, handleAddExpenseTag);
 }

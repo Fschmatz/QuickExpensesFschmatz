@@ -1,5 +1,5 @@
 import { useColorScheme } from "react-native";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../redux/hooks";
 import { createMaterial3Theme } from "@pchmn/expo-material3-theme";
 import { selectAppParameterByKey } from "@appParameterSelector";
 import { appParameters } from "@constants";
@@ -10,7 +10,7 @@ export interface MaterialYouColors {
 }
 
 export const useMaterialYouColor = (sourceColor?: string | null): MaterialYouColors => {
-  const themePreference = useSelector(
+  const themePreference = useAppSelector(
     selectAppParameterByKey(appParameters.themePreferenceParameter, "system")
   );
 

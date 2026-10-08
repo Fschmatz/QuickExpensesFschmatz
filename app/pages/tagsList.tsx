@@ -3,12 +3,14 @@ import { View, FlatList } from "react-native";
 import { useAppSelector } from "../../redux/hooks";
 import { useRouter } from "expo-router";
 import { useTheme, FAB } from "react-native-paper";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TagTile, EmptyState } from "@components";
 import { getTags } from "@tagDuck";
 import { TagItem } from "../../entities/tag";
 
 const TagsList: React.FC = () => {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
   const router = useRouter();
   const tags = useAppSelector(getTags);
 
@@ -36,7 +38,7 @@ const TagsList: React.FC = () => {
     >
       <FlatList
         style={{ flex: 1 }}
-        contentContainerStyle={{ gap: 8, paddingBottom: 75, flexGrow: 1 }}
+        contentContainerStyle={{ gap: 8, paddingBottom: 75 + insets.bottom, flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
         data={tags}
         keyExtractor={(item) => item.id?.toString() ?? item.name}
@@ -62,7 +64,7 @@ const TagsList: React.FC = () => {
           position: "absolute",
           margin: 16,
           right: 0,
-          bottom: 0,
+          bottom: insets.bottom,
           borderRadius: 16,
           backgroundColor: theme.colors.primary,
         }}

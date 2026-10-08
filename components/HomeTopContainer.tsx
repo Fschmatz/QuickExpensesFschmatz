@@ -17,7 +17,7 @@ export interface HomeTopContainerProps {
   responsiveFontSize: number;
   maxLengthValue?: number;
   maxLengthName?: number;
-  nomeInputRef?: React.RefObject<TextInput>;
+  nomeInputRef?: React.RefObject<TextInput | null> | React.Ref<TextInput>;
 }
 
 const HomeTopContainer: React.FC<HomeTopContainerProps> = ({

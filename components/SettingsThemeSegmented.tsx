@@ -22,7 +22,7 @@ const SettingsThemeSegmented: React.FC<SettingsThemeSegmentedProps> = ({
   );
 
   const onValueChange = (newValue: string) => {
-    dispatch(setAppParameter(appParameters.themePreferenceParameter, newValue) as any);
+    dispatch(setAppParameter({ key: appParameters.themePreferenceParameter, value: newValue }));
   };
 
   return (
