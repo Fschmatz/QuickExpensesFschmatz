@@ -61,7 +61,7 @@ class ExpenseService {
             icon: tag_icon,
           });
         }
-      }
+      },
     );
 
     return Array.from(expenseMap.values());

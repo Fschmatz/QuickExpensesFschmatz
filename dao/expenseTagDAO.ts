@@ -55,7 +55,7 @@ class ExpenseTagDAO {
   }
 
   async importFromBackup(
-    expensesTags: Array<{ expense_id: number; tag_id: number }>,
+    expensesTags: Array<{ expense_id?: number; tag_id?: number; expenseId?: number; tagId?: number }>,
   ): Promise<void> {
     const db = await getDatabase();
 
@@ -67,10 +67,9 @@ class ExpenseTagDAO {
       const insertQuery = `INSERT INTO ${tables.EXPENSES_TAGS} (expense_id, tag_id) VALUES (?, ?);`;
 
       for (const expenseTag of expensesTags) {
-        await db.runAsync(insertQuery, [
-          expenseTag.expense_id,
-          expenseTag.tag_id,
-        ]);
+        const expenseId = (expenseTag as any).expense_id ?? (expenseTag as any).expenseId;
+        const tagId = (expenseTag as any).tag_id ?? (expenseTag as any).tagId;
+        await db.runAsync(insertQuery, [expenseId, tagId]);
       }
 
       await db.execAsync("COMMIT;");

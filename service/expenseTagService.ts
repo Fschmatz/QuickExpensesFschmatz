@@ -29,7 +29,7 @@ class ExpenseTagService {
   }
 
   async importFromBackup(
-    expensesTags: Array<{ expense_id: number; tag_id: number }>
+    expensesTags: Array<{ expense_id?: number; tag_id?: number; expenseId?: number; tagId?: number }>,
   ): Promise<void> {
     await ExpenseTagDAO.importFromBackup(expensesTags);
   }

@@ -2,8 +2,9 @@ import React, { Fragment } from "react";
 import { View, StyleSheet } from "react-native";
 import { Text, Divider } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
-import { formatMoney, formatDate, useStyles } from "@utils";
+import { Ionicons } from "@expo/vector-icons";
 import ExpenseCard from "./ExpenseCard";
+import { formatMoney, useStyles } from "@utils";
 import { TagItem } from "../entities/tag";
 import { ExpenseItem } from "../entities/expense";
 
@@ -11,7 +12,7 @@ export interface ExpensesDetailCardProps {
   tag: TagItem;
   expenses: ExpenseItem[];
   totalTag: number;
-  percentage: string;
+  percentage: number | string;
   onPressExpense: (expense: ExpenseItem) => void;
 }
 
@@ -25,43 +26,47 @@ const ExpensesDetailCard: React.FC<ExpensesDetailCardProps> = ({
   const styles = useStyles(createStyles);
 
   return (
-    <View style={styles.card}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerTitleRow}>
-          <Text variant="titleMedium" style={styles.tagName}>
+    <View style={styles.cardContainer}>
+      {/* Header com Ícone, Nome da Tag e Porcentagem */}
+      <View style={styles.headerRow}>
+        <View style={styles.tagInfo}>
+          <Ionicons
+            name={tag.icon as keyof typeof Ionicons.glyphMap}
+            size={20}
+            color={tag.color}
+          />
+          <Text variant="titleSmall" style={styles.tagName}>
             {tag.name}
           </Text>
-          <Text
-            variant="titleMedium"
-            style={[styles.percentage, { color: tag.color }]}
-          >
-            {percentage}%
-          </Text>
         </View>
-
-        <Text variant="titleMedium" style={styles.totalTag}>
-          R$ {formatMoney(totalTag)}
+        <Text
+          variant="titleSmall"
+          style={[styles.percentageText, { color: tag.color }]}
+        >
+          {percentage}%
         </Text>
       </View>
 
-      <Divider style={styles.divider} />
+      <Divider bold style={styles.divider} />
 
-      {/* Expenses List */}
-      <View style={styles.expensesContainer}>
+      {/* Lista de Despesas */}
+      <View style={styles.expensesListContainer}>
         {expenses.map((expense, index) => (
-          <Fragment key={expense.id ?? index}>
-            <ExpenseCard
-              title={formatDate(expense.createdDate, "dd/mm/yyyy")}
-              subtitle={expense.name}
-              value={formatMoney(expense.value)}
-              onPress={() => onPressExpense(expense)}
-            />
-            {index < expenses.length - 1 && (
-              <Divider style={styles.expenseDivider} />
-            )}
+          <Fragment key={expense.id || index}>
+            <ExpenseCard expense={expense} onPress={onPressExpense} />
+            <Divider bold style={styles.divider} />
           </Fragment>
         ))}
+      </View>
+
+      {/* Footer com Total */}
+      <View style={styles.footerRow}>
+        <Text variant="titleSmall" style={styles.footerLabel}>
+          Total:
+        </Text>
+        <Text variant="titleSmall" style={styles.footerValue}>
+          R$ {formatMoney(totalTag)}
+        </Text>
       </View>
     </View>
   );
@@ -69,45 +74,52 @@ const ExpensesDetailCard: React.FC<ExpensesDetailCardProps> = ({
 
 const createStyles = (theme: MD3Theme) =>
   StyleSheet.create({
-    card: {
-      elevation: 0,
-      backgroundColor: theme.colors.elevation.level3,
+    cardContainer: {
+      backgroundColor: theme.colors.elevation.level1,
       borderRadius: 20,
-      overflow: "hidden",
-      marginBottom: 16,
+      paddingBottom: 12,
+      marginVertical: 8,
     },
-    header: {
-      paddingHorizontal: 16,
-      paddingTop: 16,
-      paddingBottom: 8,
-    },
-    headerTitleRow: {
+    headerRow: {
       flexDirection: "row",
-      justifyContent: "space-between",
       alignItems: "center",
-      marginBottom: 4,
+      justifyContent: "space-between",
+      marginRight: 12,
+      marginLeft: 12,
+      marginVertical: 12,
+    },
+    tagInfo: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
     },
     tagName: {
-      fontWeight: "bold",
       color: theme.colors.onBackground,
-    },
-    percentage: {
       fontWeight: "bold",
     },
-    totalTag: {
+    percentageText: {
       fontWeight: "bold",
-      color: theme.colors.onBackground,
     },
     divider: {
       backgroundColor: theme.colors.background,
-      height: 1,
     },
-    expensesContainer: {
-      paddingVertical: 0,
+    expensesListContainer: {
+      backgroundColor: theme.colors.elevation.level3,
     },
-    expenseDivider: {
-      backgroundColor: theme.colors.background,
-      height: 1,
+    footerRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginTop: 12,
+      marginHorizontal: 12,
+    },
+    footerLabel: {
+      color: theme.colors.onBackground,
+      fontWeight: "bold",
+    },
+    footerValue: {
+      color: theme.colors.onBackground,
+      fontWeight: "bold",
     },
   });
 
