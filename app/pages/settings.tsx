@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useTheme, Portal, ActivityIndicator } from "react-native-paper";
+import type { MD3Theme } from "react-native-paper";
 import { Linking, View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 import { useNavigation } from "expo-router";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { appDetails, isLastBackupDateMoreThan30Days } from "@utils";
+import { appDetails, isLastBackupDateMoreThan30Days, useStyles } from "@utils";
 import {
   ListTile,
   ListTileIcon,
@@ -23,6 +24,7 @@ import { appParameters } from "@constants";
 const Settings: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
+  const styles = useStyles(createStyles);
   const dispatch = useAppDispatch();
   const navigation = useNavigation<any>();
   const lastBackupDate = useAppSelector(
@@ -60,33 +62,11 @@ const Settings: React.FC = () => {
   return (
     <>
       <DefaultPageContainer>
-        <View
-          style={{
-            height: 75,
-            backgroundColor: theme.colors.tertiaryContainer,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 25,
-            marginBottom: 10,
-            marginTop: 8,
-          }}
-        >
-          <Text
-            style={{
-              color: theme.colors.onTertiaryContainer,
-              fontSize: 16,
-              fontWeight: "600",
-            }}
-          >
+        <View style={styles.bannerContainer}>
+          <Text style={styles.appNameText}>
             {appDetails.appName}
           </Text>
-          <Text
-            style={{
-              color: theme.colors.onTertiaryContainer,
-              fontSize: 14,
-              fontWeight: "800",
-            }}
-          >
+          <Text style={styles.appVersionText}>
             v{appDetails.appVersion}
           </Text>
         </View>
@@ -193,17 +173,7 @@ const Settings: React.FC = () => {
 
       {isLoading && (
         <Portal>
-          <View
-            style={[
-              StyleSheet.absoluteFill,
-              {
-                backgroundColor: "rgba(0, 0, 0, 0.4)",
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 1000,
-              },
-            ]}
-          >
+          <View style={styles.loadingOverlay}>
             <ActivityIndicator size={60} color={theme.colors.primary} />
           </View>
         </Portal>
@@ -211,5 +181,35 @@ const Settings: React.FC = () => {
     </>
   );
 };
+
+const createStyles = (theme: MD3Theme) =>
+  StyleSheet.create({
+    bannerContainer: {
+      height: 75,
+      backgroundColor: theme.colors.tertiaryContainer,
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 25,
+      marginBottom: 10,
+      marginTop: 8,
+    },
+    appNameText: {
+      color: theme.colors.onTertiaryContainer,
+      fontSize: 16,
+      fontWeight: "600",
+    },
+    appVersionText: {
+      color: theme.colors.onTertiaryContainer,
+      fontSize: 14,
+      fontWeight: "800",
+    },
+    loadingOverlay: {
+      ...StyleSheet.absoluteFill,
+      backgroundColor: "rgba(0, 0, 0, 0.4)",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+    },
+  });
 
 export default Settings;

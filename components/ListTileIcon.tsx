@@ -9,7 +9,11 @@ export interface ListTileIconProps {
   style?: any;
 }
 
-const ListTileIcon: React.FC<ListTileIconProps> = ({ icon, iconColor, ...props }) => {
+const ListTileIcon: React.FC<ListTileIconProps> = ({
+  icon,
+  iconColor,
+  ...props
+}) => {
   const theme = useTheme();
   const resolvedIconColor = iconColor ?? theme.colors.onBackground;
 

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useTheme, Button, TextInput, IconButton } from "react-native-paper";
-import { TouchableOpacity, KeyboardAvoidingView, View } from "react-native";
+import type { MD3Theme } from "react-native-paper";
+import { TouchableOpacity, KeyboardAvoidingView, View, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { tagIcons, tagColors } from "@constants";
-import { showToast } from "@utils";
+import { showToast, useStyles } from "@utils";
 import { addTag, updateTag, deleteTag } from "@tagDuck";
 import { selectTagById } from "@tagSelector";
 import { createTag } from "../../entities/tag";
@@ -21,6 +22,7 @@ const chunkArray = <T,>(arr: T[], rows: number): T[][] => {
 
 const StoreTag: React.FC = () => {
   const theme = useTheme();
+  const styles = useStyles(createStyles);
   const { isInsert = "false", isUpdate = "false", tagId } = useLocalSearchParams<{
     isInsert?: string;
     isUpdate?: string;
@@ -50,16 +52,14 @@ const StoreTag: React.FC = () => {
             <IconButton
               icon="delete-outline"
               onPress={() => setIsDialogVisible(true)}
-              style={{
-                marginRight: -8,
-              }}
+              style={styles.headerDeleteButton}
             />
           );
         }
         return null;
       },
     });
-  }, [navigation, isInsertBool, isUpdateBool]);
+  }, [navigation, isInsertBool, isUpdateBool, styles.headerDeleteButton]);
 
   const handleConfirmDelete = () => {
     if (tagForUpdate?.id) {
@@ -113,7 +113,7 @@ const StoreTag: React.FC = () => {
   return (
     <DefaultPageContainer>
       <Animated.View entering={FadeIn.duration(400)}>
-        <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
+        <KeyboardAvoidingView behavior={"height"} style={styles.keyboardView}>
           <TextInput
             label="Nome"
             mode="outlined"
@@ -132,27 +132,14 @@ const StoreTag: React.FC = () => {
             disabled={true}
           />
 
-          <View style={{ gap: 12 }}>
+          <View style={styles.gridContainer}>
             {chunkArray(tagColors, 2).map((row, rowIndex) => (
-              <View
-                key={rowIndex}
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-evenly",
-                }}
-              >
+              <View key={rowIndex} style={styles.row}>
                 {row.map((color, index) => (
                   <TouchableOpacity
                     key={index}
                     onPress={() => setSelectedColor(color)}
-                    style={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: 24,
-                      backgroundColor: color,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
+                    style={[styles.colorCircle, { backgroundColor: color }]}
                   >
                     {selectedColor === color && (
                       <Ionicons name="checkmark" size={28} color="#000" />
@@ -172,59 +159,52 @@ const StoreTag: React.FC = () => {
             disabled={true}
           />
 
-          <View style={{ gap: 12 }}>
+          <View style={styles.gridContainer}>
             {chunkArray(tagIcons, 3).map((row, rowIndex) => (
-              <View
-                key={rowIndex}
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-evenly",
-                }}
-              >
-                {row.map((icon, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => setSelectedIcon(icon)}
-                    style={{
-                      borderRadius: 50,
-                      padding: 10,
-                      backgroundColor:
-                        selectedIcon === icon
-                          ? theme.colors.primary
-                          : "transparent",
-                    }}
-                  >
-                    <Ionicons
-                      name={icon as any}
-                      size={28}
-                      color={
-                        selectedIcon === icon
-                          ? theme.colors.onPrimary
-                          : theme.colors.onBackground
-                      }
-                    />
-                  </TouchableOpacity>
-                ))}
+              <View key={rowIndex} style={styles.row}>
+                {row.map((icon, index) => {
+                  const isSelected = selectedIcon === icon;
+                  return (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => setSelectedIcon(icon)}
+                      style={[
+                        styles.iconButton,
+                        isSelected && styles.iconButtonSelected,
+                      ]}
+                    >
+                      <Ionicons
+                        name={icon as any}
+                        size={28}
+                        color={
+                          isSelected
+                            ? theme.colors.onPrimary
+                            : theme.colors.onBackground
+                        }
+                      />
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             ))}
           </View>
 
-          <View style={{ marginTop: 25 }}>
+          <View style={styles.buttonContainer}>
             <Button
               mode="contained"
               icon="content-save-outline"
               buttonColor={theme.colors.primary}
               textColor={theme.colors.onPrimary}
               onPress={handleCreateTag}
-              style={{ borderRadius: 25 }}
-              labelStyle={{ fontSize: 16, fontWeight: "500" }}
+              style={styles.saveButton}
+              labelStyle={styles.buttonLabel}
             >
               Salvar
             </Button>
           </View>
         </KeyboardAvoidingView>
       </Animated.View>
-      
+
       <ConfirmationDialog
         visible={isDialogVisible}
         setVisible={setIsDialogVisible}
@@ -235,5 +215,47 @@ const StoreTag: React.FC = () => {
     </DefaultPageContainer>
   );
 };
+
+const createStyles = (theme: MD3Theme) =>
+  StyleSheet.create({
+    headerDeleteButton: {
+      marginRight: -8,
+    },
+    keyboardView: {
+      flex: 1,
+    },
+    gridContainer: {
+      gap: 12,
+    },
+    row: {
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+    },
+    colorCircle: {
+      width: 48,
+      height: 48,
+      borderRadius: 24,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    iconButton: {
+      borderRadius: 50,
+      padding: 10,
+      backgroundColor: "transparent",
+    },
+    iconButtonSelected: {
+      backgroundColor: theme.colors.primary,
+    },
+    buttonContainer: {
+      marginTop: 25,
+    },
+    saveButton: {
+      borderRadius: 25,
+    },
+    buttonLabel: {
+      fontSize: 16,
+      fontWeight: "500",
+    },
+  });
 
 export default StoreTag;

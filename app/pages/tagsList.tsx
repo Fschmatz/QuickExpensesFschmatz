@@ -1,8 +1,9 @@
-import React from "react";
-import { View, FlatList } from "react-native";
+import React, { useMemo } from "react";
+import { View, FlatList, StyleSheet } from "react-native";
 import { useAppSelector } from "../../redux/hooks";
 import { useRouter } from "expo-router";
 import { useTheme, FAB } from "react-native-paper";
+import type { MD3Theme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TagTile, EmptyState } from "@components";
 import { getTags } from "@tagDuck";
@@ -11,6 +12,7 @@ import { TagItem } from "../../entities/tag";
 const TagsList: React.FC = () => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+  const styles = useMemo(() => createStyles(theme, insets.bottom), [theme, insets.bottom]);
   const router = useRouter();
   const tags = useAppSelector(getTags);
 
@@ -29,16 +31,10 @@ const TagsList: React.FC = () => {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: theme.colors.background,
-        paddingHorizontal: 16,
-      }}
-    >
+    <View style={styles.container}>
       <FlatList
-        style={{ flex: 1 }}
-        contentContainerStyle={{ gap: 8, paddingBottom: 75 + insets.bottom, flexGrow: 1 }}
+        style={styles.flatList}
+        contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
         data={tags}
         keyExtractor={(item) => item.id?.toString() ?? item.name}
@@ -60,18 +56,36 @@ const TagsList: React.FC = () => {
       <FAB
         icon="plus"
         onPress={goToStoreTagForInsert}
-        style={{
-          position: "absolute",
-          margin: 16,
-          right: 0,
-          bottom: insets.bottom,
-          borderRadius: 16,
-          backgroundColor: theme.colors.primary,
-        }}
+        style={styles.fab}
         color={theme.colors.onPrimary}
       />
     </View>
   );
 };
+
+const createStyles = (theme: MD3Theme, bottomInset: number) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+      paddingHorizontal: 16,
+    },
+    flatList: {
+      flex: 1,
+    },
+    listContent: {
+      gap: 8,
+      paddingBottom: 75 + bottomInset,
+      flexGrow: 1,
+    },
+    fab: {
+      position: "absolute",
+      margin: 16,
+      right: 0,
+      bottom: bottomInset,
+      borderRadius: 16,
+      backgroundColor: theme.colors.primary,
+    },
+  });
 
 export default TagsList;

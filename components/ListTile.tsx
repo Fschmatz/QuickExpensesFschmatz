@@ -1,5 +1,8 @@
 import React from "react";
+import { StyleSheet } from "react-native";
 import { useTheme, List } from "react-native-paper";
+import type { MD3Theme } from "react-native-paper";
+import { useStyles } from "@utils";
 
 type ListItemProps = React.ComponentProps<typeof List.Item>;
 
@@ -25,24 +28,41 @@ const ListTile: React.FC<ListTileProps> = ({
   right,
 }) => {
   const theme = useTheme();
+  const styles = useStyles(createStyles);
   const resolvedTitleColor = titleColor ?? theme.colors.onBackground;
 
   return (
     <List.Item
       title={title}
       description={subtitle || null}
-      titleStyle={{
-        color: resolvedTitleColor,
-        fontWeight: boldText ? "600" : "400",
-      }}
-      descriptionStyle={{ color: theme.colors.outline }}
+      titleStyle={[
+        styles.title,
+        {
+          color: resolvedTitleColor,
+          fontWeight: boldText ? "600" : "400",
+        },
+      ]}
+      descriptionStyle={styles.description}
       left={left}
       onPress={onPress}
       disabled={disabled}
-      style={{ paddingHorizontal: 0 }}
+      style={styles.listItem}
       right={right}
     />
   );
 };
+
+const createStyles = (theme: MD3Theme) =>
+  StyleSheet.create({
+    listItem: {
+      paddingHorizontal: 0,
+    },
+    title: {
+      color: theme.colors.onBackground,
+    },
+    description: {
+      color: theme.colors.outline,
+    },
+  });
 
 export default ListTile;

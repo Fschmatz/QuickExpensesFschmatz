@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTheme, Button, TextInput, IconButton } from "react-native-paper";
-import { KeyboardAvoidingView, View } from "react-native";
+import { KeyboardAvoidingView, View, StyleSheet } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import { showToast, formatCurrencyInput, completeCurrencyZeros } from "@utils";
@@ -42,9 +42,7 @@ const StoreLoan: React.FC = () => {
             <IconButton
               icon="delete-outline"
               onPress={() => setIsDialogVisible(true)}
-              style={{
-                marginRight: -8,
-              }}
+              style={styles.headerDeleteButton}
             />
           );
         }
@@ -108,7 +106,7 @@ const StoreLoan: React.FC = () => {
 
   return (
     <DefaultPageContainer>
-      <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
+      <KeyboardAvoidingView behavior={"height"} style={styles.keyboardView}>
         <TextInput
           label="Nome"
           mode="outlined"
@@ -141,15 +139,15 @@ const StoreLoan: React.FC = () => {
           numberOfLines={5}
         />
 
-        <View style={{ marginTop: 25 }}>
+        <View style={styles.buttonContainer}>
           <Button
             mode="contained"
             icon="content-save-outline"
             buttonColor={theme.colors.primary}
             textColor={theme.colors.onPrimary}
             onPress={handleSaveLoan}
-            style={{ borderRadius: 25 }}
-            labelStyle={{ fontSize: 16, fontWeight: "500" }}
+            style={styles.saveButton}
+            labelStyle={styles.buttonLabel}
           >
             Salvar
           </Button>
@@ -166,5 +164,24 @@ const StoreLoan: React.FC = () => {
     </DefaultPageContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  headerDeleteButton: {
+    marginRight: -8,
+  },
+  keyboardView: {
+    flex: 1,
+  },
+  buttonContainer: {
+    marginTop: 25,
+  },
+  saveButton: {
+    borderRadius: 25,
+  },
+  buttonLabel: {
+    fontSize: 16,
+    fontWeight: "500",
+  },
+});
 
 export default StoreLoan;

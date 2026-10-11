@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { View, FlatList } from "react-native";
+import React, { useState, useEffect, useMemo } from "react";
+import { View, FlatList, StyleSheet } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useRouter } from "expo-router";
 import { ConfirmationDialog, EmptyState } from "@components";
 import { deleteLoan, getLoans, fetchLoans } from "@loanDuck";
 import LoanTile from "../../components/LoanTile";
 import { useTheme, FAB } from "react-native-paper";
+import type { MD3Theme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LoanItem } from "../../entities/loan";
 
 const LoansList: React.FC = () => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+  const styles = useMemo(() => createStyles(theme, insets.bottom), [theme, insets.bottom]);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const loans = useAppSelector(getLoans);
@@ -55,15 +57,9 @@ const LoansList: React.FC = () => {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: theme.colors.background,
-        paddingHorizontal: 16,
-      }}
-    >
+    <View style={styles.container}>
       <FlatList
-        contentContainerStyle={{ gap: 8, paddingBottom: 75 + insets.bottom, flexGrow: 1 }}
+        contentContainerStyle={styles.listContent}
         data={loans}
         keyExtractor={(item) => item.id?.toString() ?? item.name}
         renderItem={({ item }) => (
@@ -73,7 +69,7 @@ const LoansList: React.FC = () => {
             onEdit={goToStoreLoanForUpdate}
           />
         )}
-        ItemSeparatorComponent={() => <View style={{ height: 2 }} />}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
         ListEmptyComponent={
           <EmptyState
             icon="cash-outline"
@@ -94,18 +90,36 @@ const LoansList: React.FC = () => {
       <FAB
         icon="plus"
         onPress={goToStoreLoanForInsert}
-        style={{
-          position: "absolute",
-          margin: 16,
-          right: 0,
-          bottom: insets.bottom,
-          borderRadius: 16,
-          backgroundColor: theme.colors.primary,
-        }}
+        style={styles.fab}
         color={theme.colors.onPrimary}
       />
     </View>
   );
 };
+
+const createStyles = (theme: MD3Theme, bottomInset: number) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+      paddingHorizontal: 16,
+    },
+    listContent: {
+      gap: 8,
+      paddingBottom: 75 + bottomInset,
+      flexGrow: 1,
+    },
+    separator: {
+      height: 2,
+    },
+    fab: {
+      position: "absolute",
+      margin: 16,
+      right: 0,
+      bottom: bottomInset,
+      borderRadius: 16,
+      backgroundColor: theme.colors.primary,
+    },
+  });
 
 export default LoansList;

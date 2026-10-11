@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { View, Dimensions } from "react-native";
+import { View, Dimensions, StyleSheet } from "react-native";
 import { useTheme, Menu, IconButton } from "react-native-paper";
+import type { MD3Theme } from "react-native-paper";
 import { useNavigation } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useStyles } from "@utils";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -11,6 +13,7 @@ export interface HomeHeaderButtonsProps {}
 const HomeHeaderButtons: React.FC<HomeHeaderButtonsProps> = () => {
   const theme = useTheme();
   const navigation = useNavigation<any>();
+  const styles = useStyles(createStyles);
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);
@@ -22,14 +25,7 @@ const HomeHeaderButtons: React.FC<HomeHeaderButtonsProps> = () => {
   };
 
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        marginRight: -12,
-      }}
-    >
+    <View style={styles.container}>
       <IconButton
         icon={({ size, color }) => (
           <Ionicons name="receipt-outline" size={size} color={color} />
@@ -40,13 +36,7 @@ const HomeHeaderButtons: React.FC<HomeHeaderButtonsProps> = () => {
       <Menu
         visible={menuVisible}
         onDismiss={closeMenu}
-        contentStyle={{
-          backgroundColor: theme.colors.elevation.level5,
-          borderRadius: 20,
-          marginTop: -35,
-          marginLeft: screenWidth - 235,
-          elevation: 2,
-        }}
+        contentStyle={styles.menuContent}
         anchor={
           <IconButton
             icon="dots-vertical"
@@ -65,7 +55,7 @@ const HomeHeaderButtons: React.FC<HomeHeaderButtonsProps> = () => {
           )}
           onPress={() => navigate("pages/loansList")}
           title="Empréstimos"
-          titleStyle={{ color: theme.colors.onBackground }}
+          titleStyle={styles.menuItemTitle}
         />
         <Menu.Item
           leadingIcon={({ size }) => (
@@ -77,7 +67,7 @@ const HomeHeaderButtons: React.FC<HomeHeaderButtonsProps> = () => {
           )}
           onPress={() => navigate("pages/tagsList")}
           title="Tags"
-          titleStyle={{ color: theme.colors.onBackground }}
+          titleStyle={styles.menuItemTitle}
         />
         <Menu.Item
           leadingIcon={({ size }) => (
@@ -89,11 +79,31 @@ const HomeHeaderButtons: React.FC<HomeHeaderButtonsProps> = () => {
           )}
           onPress={() => navigate("pages/settings")}
           title="Configurações"
-          titleStyle={{ color: theme.colors.onBackground }}
+          titleStyle={styles.menuItemTitle}
         />
       </Menu>
     </View>
   );
 };
+
+const createStyles = (theme: MD3Theme) =>
+  StyleSheet.create({
+    container: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      marginRight: -12,
+    },
+    menuContent: {
+      backgroundColor: theme.colors.elevation.level5,
+      borderRadius: 20,
+      marginTop: -35,
+      marginLeft: screenWidth - 235,
+      elevation: 2,
+    },
+    menuItemTitle: {
+      color: theme.colors.onBackground,
+    },
+  });
 
 export default HomeHeaderButtons;

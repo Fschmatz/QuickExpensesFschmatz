@@ -1,31 +1,28 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { useTheme } from "react-native-paper";
+import type { MD3Theme } from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { View, useWindowDimensions, TextInput } from "react-native";
+import { View, TextInput, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { HomeTopContainer, HomeBottomContainer } from "@components";
 import { greaterThanZero, showToast, formatCurrencyInput } from "@utils";
-import { fetchTags, getTags } from "@tagDuck";
+import { fetchTags } from "@tagDuck";
 import {
   addExpense,
   fetchTotalExpensesCurrentMonth,
-  getTotalExpensesCurrentMonth,
 } from "@expenseDuck";
 import { TagItem } from "../../entities/tag";
+
+const MAX_LENGTH_VALUE = 8;
 
 const Home: React.FC = () => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+  const styles = useMemo(() => createStyles(theme, insets.bottom), [theme, insets.bottom]);
   const [inputValue, setInputValue] = useState("0");
   const [nome, setNome] = useState("");
   const [selectedTag, setSelectedTag] = useState<TagItem | null>(null);
-  const { height } = useWindowDimensions();
-  const responsiveFontSize = Math.min(height * 0.08, 70);
   const dispatch = useAppDispatch();
-  const tags = useAppSelector(getTags);
-  const totalExpensesCurrentMonth = useAppSelector(getTotalExpensesCurrentMonth);
-  const maxLengthValue = 8;
-  const maxLengthName = 30;
   const [containerSize, setContainerSize] = useState<{
     height: number | "auto";
     width: number | "auto";
@@ -41,7 +38,7 @@ const Home: React.FC = () => {
   }, [dispatch]);
 
   const handlePress = (value: string) => {
-    setInputValue((prev) => formatCurrencyInput(prev + value, maxLengthValue));
+    setInputValue((prev) => formatCurrencyInput(prev + value, MAX_LENGTH_VALUE));
   };
 
   const handleDelete = () => {
@@ -93,7 +90,7 @@ const Home: React.FC = () => {
 
   return (
     <View
-      style={{ flex: 1 }}
+      style={styles.root}
       onLayout={(e) => {
         const { height: layoutHeight, width: layoutWidth } = e.nativeEvent.layout;
 
@@ -111,29 +108,16 @@ const Home: React.FC = () => {
     >
       <View
         style={[
-          {
-            padding: 0,
-            flex: 1,
-            width: "100%",
-            backgroundColor: theme.colors.background,
-            paddingBottom: insets.bottom,
-          },
-          containerSize.height !== "auto"
-            ? { minHeight: containerSize.height }
-            : {},
+          styles.content,
+          containerSize.height !== "auto" && { minHeight: containerSize.height },
         ]}
       >
         <HomeTopContainer
           inputValue={inputValue}
           nome={nome}
           setNome={setNome}
-          tags={tags}
           selectedTag={selectedTag}
           onSelectTag={handleSelectTag}
-          totalExpensesCurrentMonth={totalExpensesCurrentMonth}
-          responsiveFontSize={responsiveFontSize}
-          maxLengthValue={maxLengthValue}
-          maxLengthName={maxLengthName}
           nomeInputRef={nomeInputRef}
         />
 
@@ -147,5 +131,19 @@ const Home: React.FC = () => {
     </View>
   );
 };
+
+const createStyles = (theme: MD3Theme, bottomInset: number) =>
+  StyleSheet.create({
+    root: {
+      flex: 1,
+    },
+    content: {
+      padding: 0,
+      flex: 1,
+      width: "100%",
+      backgroundColor: theme.colors.background,
+      paddingBottom: bottomInset,
+    },
+  });
 
 export default Home;

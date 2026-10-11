@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo } from "react";
-import { View } from "react-native";
+import React from "react";
+import { StyleSheet } from "react-native";
 import { useTheme, Text } from "react-native-paper";
+import type { MD3Theme } from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   fetchByMonthYear,
@@ -16,7 +17,7 @@ import {
   SizedBox,
   EmptyState,
 } from "@components";
-import { formatDate, isEmpty, formatMoney } from "@utils";
+import { formatDate, isEmpty, formatMoney, useStyles } from "@utils";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { ExpenseItem } from "../../entities/expense";
 import { TagItem } from "../../entities/tag";
@@ -28,6 +29,7 @@ interface TagExpenseEntry {
 
 const MonthYearExpensesDetail: React.FC = () => {
   const theme = useTheme();
+  const styles = useStyles(createStyles);
   const { date } = useLocalSearchParams<{ date?: string }>();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -35,11 +37,11 @@ const MonthYearExpensesDetail: React.FC = () => {
   const expensesByMonthYear = useAppSelector(getExpensesByMonthYear);
   const loading = useAppSelector(getExpensesLoading);
 
-  const tagExpenseMap = useMemo(() => {
+  const tagExpenseMap = React.useMemo(() => {
     return createTagExpenseMap(expensesByMonthYear || []);
   }, [expensesByMonthYear]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     navigation.setOptions({
       title: "Despesas de " + formatDate(date ?? "", "mm/yyyy"),
     });
@@ -103,18 +105,11 @@ const MonthYearExpensesDetail: React.FC = () => {
   return (
     <DefaultPageContainer>
       {loading ? (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            paddingTop: 100,
-          }}
-        />
+        <Animated.View style={styles.loadingContainer} />
       ) : tagExpenseMap.size === 0 ? (
         <Animated.View
           entering={FadeIn.duration(400)}
-          style={{ flex: 1 }}
+          style={styles.emptyContainer}
         >
           <EmptyState
             icon="receipt-outline"
@@ -130,14 +125,7 @@ const MonthYearExpensesDetail: React.FC = () => {
 
           <SizedBox height={12} />
 
-          <Text
-            style={{
-              fontSize: 18,
-              textAlign: "center",
-              fontWeight: "500",
-              color: theme.colors.onBackground,
-            }}
-          >
+          <Text style={styles.monthTotalText}>
             Total Mensal: R$ {formatMoney(totalAllExpenses)}
           </Text>
 
@@ -175,5 +163,24 @@ const MonthYearExpensesDetail: React.FC = () => {
     </DefaultPageContainer>
   );
 };
+
+const createStyles = (theme: MD3Theme) =>
+  StyleSheet.create({
+    loadingContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      paddingTop: 100,
+    },
+    emptyContainer: {
+      flex: 1,
+    },
+    monthTotalText: {
+      fontSize: 18,
+      textAlign: "center",
+      fontWeight: "500",
+      color: theme.colors.onBackground,
+    },
+  });
 
 export default MonthYearExpensesDetail;

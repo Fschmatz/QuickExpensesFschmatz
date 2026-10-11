@@ -8,7 +8,7 @@ class ExpenseTagDAO {
     const db = await getDatabase();
     await db.runAsync(
       `INSERT INTO ${tables.EXPENSES_TAGS} (expense_id, tag_id) VALUES (?, ?);`,
-      [expenseId, tagId]
+      [expenseId, tagId],
     );
   }
 
@@ -19,7 +19,7 @@ class ExpenseTagDAO {
        FROM ${tables.TAGS} t
        INNER JOIN ${tables.EXPENSES_TAGS} et ON et.tag_id = t.id
        WHERE et.expense_id = ?;`,
-      [expense.id ?? 0]
+      [expense.id ?? 0],
     );
   }
 
@@ -30,14 +30,14 @@ class ExpenseTagDAO {
        FROM ${tables.EXPENSES} e
        INNER JOIN ${tables.EXPENSES_TAGS} et ON et.expense_id = e.id
        WHERE et.tag_id = ?;`,
-      [tag.id ?? 0]
+      [tag.id ?? 0],
     );
   }
 
   async fetchAll(): Promise<ExpenseTagItem[]> {
     const db = await getDatabase();
     return await db.getAllAsync<ExpenseTagItem>(
-      `SELECT expense_id as expenseId, tag_id as tagId FROM ${tables.EXPENSES_TAGS};`
+      `SELECT expense_id as expenseId, tag_id as tagId FROM ${tables.EXPENSES_TAGS};`,
     );
   }
 
@@ -45,7 +45,7 @@ class ExpenseTagDAO {
     const db = await getDatabase();
     await db.runAsync(
       `DELETE FROM ${tables.EXPENSES_TAGS} WHERE expense_id = ?;`,
-      [expenseId]
+      [expenseId],
     );
   }
 
@@ -55,7 +55,7 @@ class ExpenseTagDAO {
   }
 
   async importFromBackup(
-    expensesTags: Array<{ expense_id: number; tag_id: number }>
+    expensesTags: Array<{ expense_id: number; tag_id: number }>,
   ): Promise<void> {
     const db = await getDatabase();
 

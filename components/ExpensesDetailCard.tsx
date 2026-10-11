@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
-import { View } from "react-native";
-import { useTheme, Text, Divider } from "react-native-paper";
-import { Ionicons } from "@expo/vector-icons";
+import { View, StyleSheet } from "react-native";
+import { Text, Divider } from "react-native-paper";
+import type { MD3Theme } from "react-native-paper";
+import { formatMoney, formatDate, useStyles } from "@utils";
 import ExpenseCard from "./ExpenseCard";
-import { formatMoney } from "@utils";
 import { TagItem } from "../entities/tag";
 import { ExpenseItem } from "../entities/expense";
 
@@ -11,7 +11,7 @@ export interface ExpensesDetailCardProps {
   tag: TagItem;
   expenses: ExpenseItem[];
   totalTag: number;
-  percentage: number | string;
+  percentage: string;
   onPressExpense: (expense: ExpenseItem) => void;
 }
 
@@ -22,109 +22,93 @@ const ExpensesDetailCard: React.FC<ExpensesDetailCardProps> = ({
   percentage,
   onPressExpense,
 }) => {
-  const theme = useTheme();
+  const styles = useStyles(createStyles);
 
   return (
-    <View
-      style={{
-        backgroundColor: theme.colors.elevation.level1,
-        borderRadius: 20,
-        paddingBottom: 12,
-        marginVertical: 8,
-      }}
-    >
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginRight: 12,
-          marginLeft: 12,
-          marginVertical: 12,
-        }}
-      >
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <Ionicons
-            name={tag.icon as keyof typeof Ionicons.glyphMap}
-            size={20}
-            color={tag.color}
-          />
-          <Text
-            variant="titleSmall"
-            style={{
-              color: theme.colors.onBackground,
-              fontWeight: "bold",
-            }}
-          >
+    <View style={styles.card}>
+      {/* Header */}
+      <View style={styles.header}>
+        <View style={styles.headerTitleRow}>
+          <Text variant="titleMedium" style={styles.tagName}>
             {tag.name}
           </Text>
+          <Text
+            variant="titleMedium"
+            style={[styles.percentage, { color: tag.color }]}
+          >
+            {percentage}%
+          </Text>
         </View>
-        <Text
-          variant="titleSmall"
-          style={{
-            color: tag.color,
-            fontWeight: "bold",
-          }}
-        >
-          {percentage}%
-        </Text>
-      </View>
 
-      <Divider
-        bold
-        style={{
-          backgroundColor: theme.colors.background,
-        }}
-      />
-
-      <View
-        style={{
-          backgroundColor: theme.colors.elevation.level3,
-        }}
-      >
-        {expenses.map((expense, index) => (
-          <Fragment key={expense.id || index}>
-            <ExpenseCard expense={expense} onPress={onPressExpense} />
-            <Divider
-              bold
-              style={{
-                backgroundColor: theme.colors.background,
-              }}
-            />
-          </Fragment>
-        ))}
-      </View>
-
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginTop: 12,
-          marginHorizontal: 12,
-        }}
-      >
-        <Text
-          variant="titleSmall"
-          style={{
-            color: theme.colors.onBackground,
-            fontWeight: "bold",
-          }}
-        >
-          Total:
-        </Text>
-        <Text
-          variant="titleSmall"
-          style={{
-            color: theme.colors.onBackground,
-            fontWeight: "bold",
-          }}
-        >
+        <Text variant="titleMedium" style={styles.totalTag}>
           R$ {formatMoney(totalTag)}
         </Text>
+      </View>
+
+      <Divider style={styles.divider} />
+
+      {/* Expenses List */}
+      <View style={styles.expensesContainer}>
+        {expenses.map((expense, index) => (
+          <Fragment key={expense.id ?? index}>
+            <ExpenseCard
+              title={formatDate(expense.createdDate, "dd/mm/yyyy")}
+              subtitle={expense.name}
+              value={formatMoney(expense.value)}
+              onPress={() => onPressExpense(expense)}
+            />
+            {index < expenses.length - 1 && (
+              <Divider style={styles.expenseDivider} />
+            )}
+          </Fragment>
+        ))}
       </View>
     </View>
   );
 };
+
+const createStyles = (theme: MD3Theme) =>
+  StyleSheet.create({
+    card: {
+      elevation: 0,
+      backgroundColor: theme.colors.elevation.level3,
+      borderRadius: 20,
+      overflow: "hidden",
+      marginBottom: 16,
+    },
+    header: {
+      paddingHorizontal: 16,
+      paddingTop: 16,
+      paddingBottom: 8,
+    },
+    headerTitleRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 4,
+    },
+    tagName: {
+      fontWeight: "bold",
+      color: theme.colors.onBackground,
+    },
+    percentage: {
+      fontWeight: "bold",
+    },
+    totalTag: {
+      fontWeight: "bold",
+      color: theme.colors.onBackground,
+    },
+    divider: {
+      backgroundColor: theme.colors.background,
+      height: 1,
+    },
+    expensesContainer: {
+      paddingVertical: 0,
+    },
+    expenseDivider: {
+      backgroundColor: theme.colors.background,
+      height: 1,
+    },
+  });
 
 export default ExpensesDetailCard;

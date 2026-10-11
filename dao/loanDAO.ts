@@ -6,19 +6,19 @@ class LoanDAO {
     name: string,
     value: number,
     note: string | null,
-    createdDate: string
+    createdDate: string,
   ): Promise<void> {
     const db = await getDatabase();
     await db.runAsync(
       `INSERT INTO ${tables.LOANS} (name, value, note, createdDate) VALUES (?, ?, ?, ?);`,
-      [name, value, note, createdDate]
+      [name, value, note, createdDate],
     );
   }
 
   async fetchAll(): Promise<LoanItem[]> {
     const db = await getDatabase();
     return await db.getAllAsync<LoanItem>(
-      `SELECT * FROM ${tables.LOANS} ORDER BY createdDate DESC;`
+      `SELECT * FROM ${tables.LOANS} ORDER BY createdDate DESC;`,
     );
   }
 
@@ -46,7 +46,7 @@ class LoanDAO {
       `UPDATE ${tables.LOANS}
        SET name = ?, value = ?, note = ?, createdDate = ?
        WHERE id = ?;`,
-      [loan.name, loan.value, loan.note, loan.createdDate, loan.id ?? 0]
+      [loan.name, loan.value, loan.note, loan.createdDate, loan.id ?? 0],
     );
   }
 

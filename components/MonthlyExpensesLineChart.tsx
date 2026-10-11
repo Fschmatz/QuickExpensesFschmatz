@@ -1,8 +1,9 @@
 import React, { useMemo } from "react";
-import { View, Dimensions } from "react-native";
+import { View, Dimensions, StyleSheet } from "react-native";
 import { useTheme } from "react-native-paper";
+import type { MD3Theme } from "react-native-paper";
 import { BarChart } from "react-native-gifted-charts";
-import { getMonthName } from "@utils";
+import { getMonthName, useStyles } from "@utils";
 import { MonthlyExpenseItem } from "../entities/monthlyExpense";
 
 export interface MonthlyExpensesLineChartProps {
@@ -13,6 +14,7 @@ const MonthlyExpensesLineChart: React.FC<MonthlyExpensesLineChartProps> = ({
   filteredExpenses,
 }) => {
   const theme = useTheme();
+  const styles = useStyles(createStyles);
   const windowWidth = Dimensions.get("window").width;
 
   const chartData = useMemo(() => {
@@ -52,12 +54,7 @@ const MonthlyExpensesLineChart: React.FC<MonthlyExpensesLineChartProps> = ({
   const barWidth = (chartWidth * 0.75) / totalItems;
 
   return (
-    <View
-      style={{
-        paddingHorizontal: 16,
-        paddingVertical: 4,
-      }}
-    >
+    <View style={styles.container}>
       <BarChart
         data={chartData}
         width={chartWidth}
@@ -73,10 +70,7 @@ const MonthlyExpensesLineChart: React.FC<MonthlyExpensesLineChartProps> = ({
         xAxisColor={theme.colors.outlineVariant}
         yAxisColor="transparent"
         yAxisLabelWidth={0}
-        xAxisLabelTextStyle={{
-          color: theme.colors.onSurfaceVariant,
-          fontSize: 11,
-        }}
+        xAxisLabelTextStyle={styles.xAxisLabel}
         noOfSections={3}
         rulesColor={theme.colors.outlineVariant}
         showVerticalLines={false}
@@ -87,5 +81,17 @@ const MonthlyExpensesLineChart: React.FC<MonthlyExpensesLineChartProps> = ({
     </View>
   );
 };
+
+const createStyles = (theme: MD3Theme) =>
+  StyleSheet.create({
+    container: {
+      paddingHorizontal: 16,
+      paddingVertical: 4,
+    },
+    xAxisLabel: {
+      color: theme.colors.onSurfaceVariant,
+      fontSize: 11,
+    },
+  });
 
 export default MonthlyExpensesLineChart;

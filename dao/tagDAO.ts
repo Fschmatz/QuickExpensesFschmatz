@@ -6,14 +6,14 @@ class TagDAO {
     const db = await getDatabase();
     await db.runAsync(
       `INSERT INTO ${tables.TAGS} (name, color, icon) VALUES (?, ?, ?);`,
-      [name, color, icon]
+      [name, color, icon],
     );
   }
 
   async fetchAll(): Promise<TagItem[]> {
     const db = await getDatabase();
     return await db.getAllAsync<TagItem>(
-      `SELECT * FROM ${tables.TAGS} order by name;`
+      `SELECT * FROM ${tables.TAGS} order by name;`,
     );
   }
 
@@ -26,7 +26,7 @@ class TagDAO {
     try {
       await db.runAsync(
         `DELETE FROM ${tables.EXPENSES_TAGS} WHERE tag_id = ?;`,
-        [tagId]
+        [tagId],
       );
 
       await db.runAsync(`DELETE FROM ${tables.TAGS} WHERE id = ?;`, [tagId]);
@@ -48,7 +48,7 @@ class TagDAO {
       `UPDATE ${tables.TAGS} 
        SET name = ?, color = ?, icon = ?
        WHERE id = ?;`,
-      [tag.name, tag.color, tag.icon, tag.id ?? 0]
+      [tag.name, tag.color, tag.icon, tag.id ?? 0],
     );
   }
 

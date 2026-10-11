@@ -1,6 +1,8 @@
 import React, { ReactNode } from "react";
-import { View, StyleProp, ViewStyle } from "react-native";
-import { useTheme, Divider, Card } from "react-native-paper";
+import { View, StyleProp, ViewStyle, StyleSheet } from "react-native";
+import { Divider, Card } from "react-native-paper";
+import type { MD3Theme } from "react-native-paper";
+import { useStyles } from "@utils";
 
 export interface CardListProps {
   children?: ReactNode;
@@ -8,41 +10,41 @@ export interface CardListProps {
   mode?: "elevated" | "outlined" | "contained";
 }
 
-const CardList: React.FC<CardListProps> = ({ children, style, mode = "contained" }) => {
+const CardList: React.FC<CardListProps> = ({
+  children,
+  style,
+  mode = "contained",
+}) => {
   const childArray = React.Children.toArray(children).filter(Boolean);
-  const theme = useTheme();
+  const styles = useStyles(createStyles);
 
   return (
-    <Card
-      mode={mode}
-      style={[
-        {
-          elevation: 0,
-          borderRadius: 20,
-          overflow: "hidden",
-          backgroundColor:
-            theme?.colors?.elevation?.level3 ||
-            theme?.colors?.surfaceVariant ||
-            theme?.colors?.surface,
-        },
-        style,
-      ]}
-    >
+    <Card mode={mode} style={[styles.card, style]}>
       {childArray.map((child, index) => (
         <View key={index}>
           {child}
-          {index < childArray.length - 1 && (
-            <Divider
-              style={{
-                backgroundColor: theme?.colors?.background || "#00000020",
-                height: 1,
-              }}
-            />
-          )}
+          {index < childArray.length - 1 && <Divider style={styles.divider} />}
         </View>
       ))}
     </Card>
   );
 };
+
+const createStyles = (theme: MD3Theme) =>
+  StyleSheet.create({
+    card: {
+      elevation: 0,
+      borderRadius: 20,
+      overflow: "hidden",
+      backgroundColor:
+        theme?.colors?.elevation?.level3 ||
+        theme?.colors?.surfaceVariant ||
+        theme?.colors?.surface,
+    },
+    divider: {
+      backgroundColor: theme?.colors?.background || "#00000020",
+      height: 1,
+    },
+  });
 
 export default CardList;

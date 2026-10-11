@@ -7,11 +7,8 @@ export type { ExpenseCardProps } from "./ExpenseCard";
 export { default as ExpensePieChart } from "./ExpensePieChart";
 export type { ExpensePieChartProps } from "./ExpensePieChart";
 
-export { default as HomeHeaderButtons } from "./HomeHeaderButtons";
-export type { HomeHeaderButtonsProps } from "./HomeHeaderButtons";
-
-export { default as HomeTagsList } from "./HomeTagsList";
-export type { HomeTagsListProps } from "./HomeTagsList";
+export { default as TagSelectorList } from "./TagSelectorList";
+export type { TagSelectorListProps } from "./TagSelectorList";
 
 export { default as IconButton } from "./IconButton";
 export type { IconButtonProps } from "./IconButton";
@@ -49,12 +46,6 @@ export type { ExpensesDetailCardProps } from "./ExpensesDetailCard";
 export { default as SettingsThemeSegmented } from "./SettingsThemeSegmented";
 export type { SettingsThemeSegmentedProps } from "./SettingsThemeSegmented";
 
-export { default as HomeTopContainer } from "./HomeTopContainer";
-export type { HomeTopContainerProps } from "./HomeTopContainer";
-
-export { default as HomeBottomContainer } from "./HomeBottomContainer";
-export type { HomeBottomContainerProps } from "./HomeBottomContainer";
-
 export { default as EmptyState } from "./EmptyState";
 export type { EmptyStateProps } from "./EmptyState";
 
@@ -69,3 +60,5 @@ export type { ListTileIconProps } from "./ListTileIcon";
 
 export { default as YearFilterList } from "./YearFilterList";
 export type { YearFilterListProps } from "./YearFilterList";
+
+export * from "./home";

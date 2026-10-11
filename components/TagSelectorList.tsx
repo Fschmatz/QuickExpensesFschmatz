@@ -1,32 +1,31 @@
 import React from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, StyleSheet } from "react-native";
 import TagChip from "./TagChip";
 import { TagItem } from "../entities/tag";
+import { useAppSelector } from "../redux/hooks";
+import { getTags } from "@tagDuck";
 
-export interface HomeTagsListProps {
-  tags: TagItem[];
+export interface TagSelectorListProps {
+  tags?: TagItem[];
   selectedTag?: TagItem | null;
   onSelectTag: (tag: TagItem) => void;
   isStoreExpensePage?: boolean;
 }
 
-const HomeTagsList: React.FC<HomeTagsListProps> = ({
-  tags,
+const TagSelectorList: React.FC<TagSelectorListProps> = ({
+  tags: propsTags,
   selectedTag,
   onSelectTag,
   isStoreExpensePage = false,
 }) => {
+  const reduxTags = useAppSelector(getTags);
+  const tags = propsTags ?? reduxTags;
+
   const isSelected = (tagId?: number) =>
     Boolean(selectedTag?.id && tagId && selectedTag.id === tagId);
 
   const content = (
-    <View
-      style={{
-        flexDirection: "row",
-        flexWrap: "wrap",
-        gap: 6,
-      }}
-    >
+    <View style={styles.tagsContainer}>
       {tags.map((tag) => (
         <TagChip
           key={tag.id}
@@ -43,7 +42,7 @@ const HomeTagsList: React.FC<HomeTagsListProps> = ({
     content
   ) : (
     <ScrollView
-      style={{ flex: 1, width: "100%" }}
+      style={styles.scrollView}
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
     >
@@ -52,4 +51,16 @@ const HomeTagsList: React.FC<HomeTagsListProps> = ({
   );
 };
 
-export default HomeTagsList;
+const styles = StyleSheet.create({
+  tagsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 6,
+  },
+  scrollView: {
+    flex: 1,
+    width: "100%",
+  },
+});
+
+export default TagSelectorList;

@@ -5,12 +5,12 @@ import {
   IconButton,
   TextInput,
 } from "react-native-paper";
-import { KeyboardAvoidingView } from "react-native";
+import { KeyboardAvoidingView, StyleSheet } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
 import { showToast, formatCurrencyInput, completeCurrencyZeros } from "@utils";
 import {
-  HomeTagsList,
+  TagSelectorList,
   DefaultPageContainer,
   SizedBox,
   ConfirmationDialog,
@@ -79,9 +79,7 @@ const StoreExpense: React.FC = () => {
             <IconButton
               icon="delete-outline"
               onPress={() => setIsDialogVisible(true)}
-              style={{
-                marginRight: -8,
-              }}
+              style={styles.headerDeleteButton}
             />
           );
         }
@@ -184,7 +182,7 @@ const StoreExpense: React.FC = () => {
 
         <SizedBox height={24} />
 
-        <HomeTagsList
+        <TagSelectorList
           tags={tags}
           selectedTag={selectedTag}
           onSelectTag={handleSelectTag}
@@ -199,8 +197,8 @@ const StoreExpense: React.FC = () => {
           buttonColor={theme.colors.primary}
           textColor={theme.colors.onPrimary}
           onPress={handleSaveExpense}
-          style={{ borderRadius: 25 }}
-          labelStyle={{ fontSize: 16, fontWeight: "500" }}
+          style={styles.saveButton}
+          labelStyle={styles.buttonLabel}
         >
           Salvar
         </Button>
@@ -216,5 +214,18 @@ const StoreExpense: React.FC = () => {
     </DefaultPageContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  headerDeleteButton: {
+    marginRight: -8,
+  },
+  saveButton: {
+    borderRadius: 25,
+  },
+  buttonLabel: {
+    fontSize: 16,
+    fontWeight: "500",
+  },
+});
 
 export default StoreExpense;

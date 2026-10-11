@@ -4,8 +4,10 @@ import {
   View,
   ActivityIndicator,
   Animated,
+  StyleSheet,
 } from "react-native";
 import { useTheme } from "react-native-paper";
+import type { MD3Theme } from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   MonthlyExpenseCard,
@@ -21,9 +23,11 @@ import {
 } from "@expenseDuck";
 import { selectAppParameterByKeyAsBoolean } from "@appParameterSelector";
 import { appParameters } from "@constants";
+import { useStyles } from "@utils";
 
 const MonthlyExpensesList: React.FC = () => {
   const theme = useTheme();
+  const styles = useStyles(createStyles);
   const dispatch = useAppDispatch();
   const monthlyExpenses = useAppSelector(getMonthlyExpenses);
   const loading = useAppSelector(getExpensesLoading);
@@ -77,25 +81,13 @@ const MonthlyExpensesList: React.FC = () => {
   }, [filteredExpenses]);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: theme.colors.background,
-      }}
-    >
+    <View style={styles.container}>
       {loading ? (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            paddingTop: 100,
-          }}
-        >
+        <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={theme.colors.onBackground} />
         </View>
       ) : (
-        <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+        <Animated.View style={[styles.contentContainer, { opacity: fadeAnim }]}>
           <YearFilterList
             availableYears={availableYears}
             selectedYear={selectedYear}
@@ -118,7 +110,7 @@ const MonthlyExpensesList: React.FC = () => {
           <FlatList
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ gap: 8, paddingBottom: 50 }}
+            contentContainerStyle={styles.listContent}
             data={filteredExpenses}
             keyExtractor={(item) => item.date.toString()}
             renderItem={({ item }) => (
@@ -130,5 +122,26 @@ const MonthlyExpensesList: React.FC = () => {
     </View>
   );
 };
+
+const createStyles = (theme: MD3Theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
+    loadingContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      paddingTop: 100,
+    },
+    contentContainer: {
+      flex: 1,
+    },
+    listContent: {
+      gap: 8,
+      paddingBottom: 50,
+    },
+  });
 
 export default MonthlyExpensesList;

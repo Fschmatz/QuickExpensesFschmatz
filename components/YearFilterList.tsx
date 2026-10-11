@@ -1,6 +1,8 @@
 import React from "react";
-import { View, ScrollView } from "react-native";
-import { useTheme, TouchableRipple, Text } from "react-native-paper";
+import { View, ScrollView, StyleSheet } from "react-native";
+import { TouchableRipple, Text } from "react-native-paper";
+import type { MD3Theme } from "react-native-paper";
+import { useStyles } from "@utils";
 
 export interface YearFilterListProps {
   availableYears: (string | number)[];
@@ -13,56 +15,83 @@ const YearFilterList: React.FC<YearFilterListProps> = ({
   selectedYear,
   setSelectedYear,
 }) => {
-  const theme = useTheme();
+  const styles = useStyles(createStyles);
 
   return (
     <ScrollView
       horizontal
-      style={{ flexGrow: 0, flexShrink: 0 }}
+      style={styles.scrollView}
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{
-        gap: 12,
-        paddingHorizontal: 16,
-        paddingTop: 8,
-        paddingBottom: 16,
-      }}
+      contentContainerStyle={styles.contentContainer}
     >
-      {availableYears.map((year) => (
-        <View
-          key={year.toString()}
-          style={{
-            borderRadius: 50,
-            overflow: "hidden",
-            backgroundColor:
-              year === selectedYear
-                ? theme.colors.primary
-                : theme.colors.elevation.level3,
-          }}
-        >
-          <TouchableRipple
-            onPress={() => setSelectedYear(year)}
-            style={{
-              paddingHorizontal: 16,
-              paddingVertical: 8,
-            }}
+      {availableYears.map((year) => {
+        const isSelected = year === selectedYear;
+        return (
+          <View
+            key={year.toString()}
+            style={[
+              styles.chipContainer,
+              isSelected ? styles.chipSelected : styles.chipUnselected,
+            ]}
           >
-            <Text
-              style={{
-                color:
-                  year === selectedYear
-                    ? theme.colors.onPrimary
-                    : theme.colors.onBackground,
-                fontWeight: "bold",
-                fontSize: 16,
-              }}
+            <TouchableRipple
+              onPress={() => setSelectedYear(year)}
+              style={styles.touchable}
             >
-              {year}
-            </Text>
-          </TouchableRipple>
-        </View>
-      ))}
+              <Text
+                style={[
+                  styles.yearText,
+                  isSelected
+                    ? styles.yearTextSelected
+                    : styles.yearTextUnselected,
+                ]}
+              >
+                {year}
+              </Text>
+            </TouchableRipple>
+          </View>
+        );
+      })}
     </ScrollView>
   );
 };
+
+const createStyles = (theme: MD3Theme) =>
+  StyleSheet.create({
+    scrollView: {
+      flexGrow: 0,
+      flexShrink: 0,
+    },
+    contentContainer: {
+      gap: 12,
+      paddingHorizontal: 16,
+      paddingTop: 8,
+      paddingBottom: 16,
+    },
+    chipContainer: {
+      borderRadius: 50,
+      overflow: "hidden",
+    },
+    chipSelected: {
+      backgroundColor: theme.colors.primary,
+    },
+    chipUnselected: {
+      backgroundColor: theme.colors.elevation.level3,
+    },
+    touchable: {
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+    },
+    yearText: {
+      fontWeight: "bold",
+      fontSize: 16,
+    },
+    yearTextSelected: {
+      color: theme.colors.onPrimary,
+    },
+    yearTextUnselected: {
+      color: theme.colors.onBackground,
+    },
+  });
 
 export default YearFilterList;

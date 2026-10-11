@@ -1,6 +1,6 @@
 import React from "react";
-import { Chip } from "react-native-paper";
-import { useTheme } from "react-native-paper";
+import { StyleSheet } from "react-native";
+import { Chip, useTheme } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import { useMaterialYouColor } from "@utils";
 import { TagItem } from "../entities/tag";
@@ -44,27 +44,31 @@ const TagChip: React.FC<TagChipProps> = ({
         />
       )}
       onPress={() => onSelectTag(tag)}
-      style={{
-        backgroundColor: getBackgroundColor(),
-        borderRadius: 50,
-      }}
+      style={[styles.chip, { backgroundColor: getBackgroundColor() }]}
       {...({
-        contentStyle: {
-          paddingLeft: 6,
-          paddingRight: 0,
-        },
+        contentStyle: styles.content,
       } as any)}
-      textStyle={{
-        color: getTextColor(),
-        fontSize: 14,
-        fontWeight: "500",
-        marginRight: 12,
-        marginLeft: 8,
-      }}
+      textStyle={[styles.text, { color: getTextColor() }]}
     >
       {tag.name}
     </Chip>
   );
 };
+
+const styles = StyleSheet.create({
+  chip: {
+    borderRadius: 50,
+  },
+  content: {
+    paddingLeft: 6,
+    paddingRight: 0,
+  },
+  text: {
+    fontSize: 14,
+    fontWeight: "500",
+    marginRight: 12,
+    marginLeft: 8,
+  },
+});
 
 export default TagChip;

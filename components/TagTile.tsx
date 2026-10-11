@@ -15,7 +15,11 @@ const TagTile: React.FC<TagTileProps> = ({ tag, onPress }) => {
         title={tag.name}
         boldText={true}
         left={(props) => (
-          <ListTileIcon {...props} icon={tag.icon as any} iconColor={tag.color} />
+          <ListTileIcon
+            {...props}
+            icon={tag.icon as any}
+            iconColor={tag.color}
+          />
         )}
       />
     </CardList>

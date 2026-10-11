@@ -1,5 +1,8 @@
 import React from "react";
+import { View, StyleSheet } from "react-native";
 import { Dialog, Portal, Button, Text, useTheme } from "react-native-paper";
+import type { MD3Theme } from "react-native-paper";
+import { useStyles } from "@utils";
 
 export interface ConfirmationDialogProps {
   message: string;
@@ -17,24 +20,18 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   handleCancel,
 }) => {
   const theme = useTheme();
+  const styles = useStyles(createStyles);
+
   return (
     <Portal>
       <Dialog
         visible={visible}
         onDismiss={() => setVisible(false)}
-        style={{
-          backgroundColor: theme.colors.elevation.level3,
-          borderRadius: 20,
-          elevation: 0,
-        }}
+        style={styles.dialog}
       >
-        <Dialog.Title style={{ color: theme.colors.onBackground }}>
-          Confirmar
-        </Dialog.Title>
+        <Dialog.Title style={styles.title}>Confirmar</Dialog.Title>
         <Dialog.Content>
-          <Text style={{ color: theme.colors.onBackground, fontSize: 16 }}>
-            {message}
-          </Text>
+          <Text style={styles.messageText}>{message}</Text>
         </Dialog.Content>
         <Dialog.Actions>
           <Button onPress={handleCancel} textColor={theme.colors.onBackground}>
@@ -48,5 +45,21 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
     </Portal>
   );
 };
+
+const createStyles = (theme: MD3Theme) =>
+  StyleSheet.create({
+    dialog: {
+      backgroundColor: theme.colors.elevation.level3,
+      borderRadius: 20,
+      elevation: 0,
+    },
+    title: {
+      color: theme.colors.onBackground,
+    },
+    messageText: {
+      color: theme.colors.onBackground,
+      fontSize: 16,
+    },
+  });
 
 export default ConfirmationDialog;

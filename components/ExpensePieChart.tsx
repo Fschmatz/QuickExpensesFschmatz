@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useTheme } from "react-native-paper";
-import { View, Dimensions } from "react-native";
+import type { MD3Theme } from "react-native-paper";
+import { View, Dimensions, StyleSheet } from "react-native";
 import { PieChart } from "react-native-gifted-charts";
 import { TagItem } from "../entities/tag";
 import { ExpenseItem } from "../entities/expense";
+import { useStyles } from "@utils";
 
 export interface ExpensePieChartProps {
-  tagExpenseMap?: Map<number | string, { tag: TagItem; expenses: ExpenseItem[] }>;
+  tagExpenseMap?: Map<
+    number | string,
+    { tag: TagItem; expenses: ExpenseItem[] }
+  >;
 }
 
 interface PieDataItem {
@@ -16,6 +21,7 @@ interface PieDataItem {
 
 const ExpensePieChart: React.FC<ExpensePieChartProps> = ({ tagExpenseMap }) => {
   const theme = useTheme();
+  const styles = useStyles(createStyles);
   const [pieData, setPieData] = useState<PieDataItem[]>([]);
   const windowWidth = Dimensions.get("window").width;
   const chartSize = windowWidth * 0.45;
@@ -51,14 +57,9 @@ const ExpensePieChart: React.FC<ExpensePieChartProps> = ({ tagExpenseMap }) => {
   const hasData = pieData.length > 0;
 
   return (
-    <View
-      style={{
-        backgroundColor: theme.colors.background,
-        alignItems: "center",
-      }}
-    >
+    <View style={styles.container}>
       {hasData && (
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <View style={styles.chartWrapper}>
           <PieChart
             data={pieData}
             radius={chartSize / 2.3}
@@ -71,5 +72,17 @@ const ExpensePieChart: React.FC<ExpensePieChartProps> = ({ tagExpenseMap }) => {
     </View>
   );
 };
+
+const createStyles = (theme: MD3Theme) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: theme.colors.background,
+      alignItems: "center",
+    },
+    chartWrapper: {
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  });
 
 export default ExpensePieChart;

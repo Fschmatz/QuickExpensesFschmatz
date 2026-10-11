@@ -1,33 +1,26 @@
 import React from "react";
-import { View } from "react-native";
-import { useTheme, Text, Card } from "react-native-paper";
-import { appDetails } from "@utils";
+import { View, StyleSheet } from "react-native";
+import { Text, Card } from "react-native-paper";
+import type { MD3Theme } from "react-native-paper";
+import { appDetails, useStyles } from "@utils";
 import { DefaultPageContainer, SizedBox } from "@components";
 
 const Changelog: React.FC = () => {
-  const theme = useTheme();
+  const styles = useStyles(createStyles);
+
   return (
     <DefaultPageContainer>
       <View>
         <SizedBox height={8} />
 
-        <Card
-          mode="contained"
-          style={{
-            backgroundColor: theme.colors.primaryContainer,
-          }}
-        >
+        <Card mode="contained" style={styles.currentVersionCard}>
           <Card.Title
-            style={{ paddingTop: 16 }}
+            style={styles.cardTitle}
             title="Versão Atual:"
-            titleStyle={{ fontWeight: "bold" }}
+            titleStyle={styles.boldTitle}
           />
-
           <Card.Content>
-            <Text
-              variant="bodyMedium"
-              style={{ color: theme.colors.onPrimaryContainer }}
-            >
+            <Text variant="bodyMedium" style={styles.currentVersionText}>
               {appDetails.currentChangelog}
             </Text>
           </Card.Content>
@@ -35,22 +28,14 @@ const Changelog: React.FC = () => {
 
         <SizedBox height={16} />
 
-        <Card
-          mode="contained"
-          style={{
-            backgroundColor: theme.colors.elevation.level3,
-          }}
-        >
+        <Card mode="contained" style={styles.previousVersionCard}>
           <Card.Title
             title="Versões Anteriores:"
-            style={{ paddingTop: 16 }}
-            titleStyle={{ fontWeight: "bold" }}
+            style={styles.cardTitle}
+            titleStyle={styles.boldTitle}
           />
           <Card.Content>
-            <Text
-              variant="bodyMedium"
-              style={{ color: theme.colors.onBackground }}
-            >
+            <Text variant="bodyMedium" style={styles.previousVersionText}>
               {appDetails.changelog}
             </Text>
           </Card.Content>
@@ -59,5 +44,27 @@ const Changelog: React.FC = () => {
     </DefaultPageContainer>
   );
 };
+
+const createStyles = (theme: MD3Theme) =>
+  StyleSheet.create({
+    currentVersionCard: {
+      backgroundColor: theme.colors.primaryContainer,
+    },
+    previousVersionCard: {
+      backgroundColor: theme.colors.elevation.level3,
+    },
+    cardTitle: {
+      paddingTop: 16,
+    },
+    boldTitle: {
+      fontWeight: "bold",
+    },
+    currentVersionText: {
+      color: theme.colors.onPrimaryContainer,
+    },
+    previousVersionText: {
+      color: theme.colors.onBackground,
+    },
+  });
 
 export default Changelog;
