@@ -12,7 +12,6 @@ import {
   formatDate,
   formatDateForBackup,
   showToast,
-  isEmpty,
   appDetails,
 } from "@utils";
 
@@ -25,7 +24,7 @@ export const exportBackup = async (): Promise<void> => {
     const appParameters = await AppParameterService.getAll();
     const backupDate = formatDate(
       new Date().toISOString().split("T")[0],
-      "dd/mm/yyyy"
+      "dd/mm/yyyy",
     );
 
     const backupData = {
@@ -42,8 +41,8 @@ export const exportBackup = async (): Promise<void> => {
 
     const jsonData = JSON.stringify(backupData, null, 2);
     const filename = `${appDetails.backupFileName}_${formatDateForBackup()}.json`;
-
     const file = new File(Paths.cache, filename);
+    
     file.write(jsonData);
 
     if (!file.exists) {
@@ -67,7 +66,7 @@ export const exportBackup = async (): Promise<void> => {
   }
 };
 
-export const importBackup = async (): Promise<void> => {
+export const importBackup = async (): Promise<boolean> => {
   try {
     const result = await DocumentPicker.getDocumentAsync({
       type: "application/json",
@@ -75,45 +74,52 @@ export const importBackup = async (): Promise<void> => {
     });
 
     if (result.canceled) {
-      return;
+      return false;
     }
 
     const file = result.assets[0];
-
     const response = await fetch(file.uri);
     const text = await response.text();
     const jsonData = JSON.parse(text);
-    const expenses = jsonData?.data?.expenses ?? [];
-    const tags = jsonData?.data?.tags ?? [];
-    const expensesTags = jsonData?.data?.expensesTags ?? [];
-    const loans = jsonData?.data?.loans ?? [];
-    const appParameters = jsonData?.data?.appParameters ?? {};
 
-    if (!isEmpty(expenses)) {
+    const expenses = jsonData?.data?.expenses;
+    const tags = jsonData?.data?.tags;
+    const expensesTags = jsonData?.data?.expensesTags;
+    const loans = jsonData?.data?.loans;
+    const appParameters = jsonData?.data?.appParameters;
+
+    if (Array.isArray(expenses)) {
       await ExpenseService.importFromBackup(expenses);
     }
 
-    if (!isEmpty(tags)) {
+    if (Array.isArray(tags)) {
       await TagService.importFromBackup(tags);
     }
 
-    if (!isEmpty(expensesTags)) {
+    if (Array.isArray(expensesTags)) {
       await ExpenseTagService.importFromBackup(expensesTags);
     }
 
-    if (!isEmpty(loans)) {
+    if (Array.isArray(loans)) {
       await LoanService.importFromBackup(loans);
     }
 
-    if (!isEmpty(Object.keys(appParameters))) {
+    if (
+      appParameters &&
+      typeof appParameters === "object" &&
+      !Array.isArray(appParameters)
+    ) {
       for (const [key, value] of Object.entries(appParameters)) {
         await AppParameterService.update(key, value);
       }
     }
 
     showToast("Backup importado com sucesso!");
+    return true;
   } catch (error) {
+    console.error("Erro ao importar backup: ", error);
     showToast("Erro ao importar backup!");
+    return false;
   }
 };
 

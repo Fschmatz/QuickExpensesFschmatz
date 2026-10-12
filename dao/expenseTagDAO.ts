@@ -6,6 +6,7 @@ import { ExpenseTagItem } from "../entities/expenseTag";
 class ExpenseTagDAO {
   async insert(expenseId: number, tagId: number): Promise<void> {
     const db = await getDatabase();
+
     await db.runAsync(
       `INSERT INTO ${tables.EXPENSES_TAGS} (expense_id, tag_id) VALUES (?, ?);`,
       [expenseId, tagId],
@@ -14,6 +15,7 @@ class ExpenseTagDAO {
 
   async getTagsForExpense(expense: { id?: number }): Promise<TagItem[]> {
     const db = await getDatabase();
+
     return await db.getAllAsync<TagItem>(
       `SELECT t.* 
        FROM ${tables.TAGS} t
@@ -25,6 +27,7 @@ class ExpenseTagDAO {
 
   async getExpensesForTag(tag: { id?: number }): Promise<ExpenseItem[]> {
     const db = await getDatabase();
+
     return await db.getAllAsync<ExpenseItem>(
       `SELECT e.* 
        FROM ${tables.EXPENSES} e
@@ -36,6 +39,7 @@ class ExpenseTagDAO {
 
   async fetchAll(): Promise<ExpenseTagItem[]> {
     const db = await getDatabase();
+
     return await db.getAllAsync<ExpenseTagItem>(
       `SELECT expense_id as expenseId, tag_id as tagId FROM ${tables.EXPENSES_TAGS};`,
     );
@@ -43,6 +47,7 @@ class ExpenseTagDAO {
 
   async deleteByExpenseId(expenseId: number): Promise<void> {
     const db = await getDatabase();
+
     await db.runAsync(
       `DELETE FROM ${tables.EXPENSES_TAGS} WHERE expense_id = ?;`,
       [expenseId],
@@ -51,6 +56,7 @@ class ExpenseTagDAO {
 
   async deleteAll(): Promise<void> {
     const db = await getDatabase();
+    
     await db.runAsync(`DELETE FROM ${tables.EXPENSES_TAGS};`);
   }
 
@@ -69,12 +75,16 @@ class ExpenseTagDAO {
       for (const expenseTag of expensesTags) {
         const expenseId = (expenseTag as any).expense_id ?? (expenseTag as any).expenseId;
         const tagId = (expenseTag as any).tag_id ?? (expenseTag as any).tagId;
-        await db.runAsync(insertQuery, [expenseId, tagId]);
+        if (expenseId != null && tagId != null) {
+          await db.runAsync(insertQuery, [expenseId, tagId]);
+        }
       }
 
       await db.execAsync("COMMIT;");
     } catch (error) {
+      console.error("Erro ao importar tags de despesas do backup: ", error);
       await db.execAsync("ROLLBACK;");
+      throw error;
     }
   }
 }

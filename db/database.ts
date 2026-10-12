@@ -21,7 +21,7 @@ export const initializeTables = async (): Promise<void> => {
   const database = await getDatabase();
 
   const checkTableExists = await database.getFirstAsync<{ name: string }>(
-    `SELECT name FROM sqlite_master WHERE type='table' AND name='${tables.TAGS}';`
+    `SELECT name FROM sqlite_master WHERE type='table' AND name='${tables.TAGS}';`,
   );
 
   // Se as tabelas existem, não continua
@@ -37,7 +37,7 @@ export const initializeTables = async (): Promise<void> => {
       createdDate TEXT NOT NULL,
       value REAL NOT NULL,
       name TEXT
-    );`
+    );`,
   );
 
   await database.execAsync(
@@ -46,7 +46,7 @@ export const initializeTables = async (): Promise<void> => {
       name TEXT NOT NULL,
       color TEXT NOT NULL,
       icon TEXT NOT NULL
-    );`
+    );`,
   );
 
   await database.execAsync(
@@ -56,7 +56,7 @@ export const initializeTables = async (): Promise<void> => {
       PRIMARY KEY (expense_id, tag_id),
       FOREIGN KEY (expense_id) REFERENCES expenses(id),
       FOREIGN KEY (tag_id) REFERENCES tags(id)
-    );`
+    );`,
   );
 
   await database.execAsync(
@@ -66,14 +66,14 @@ export const initializeTables = async (): Promise<void> => {
       value REAL NOT NULL,
       note TEXT NOT NULL,
       createdDate TEXT NOT NULL
-    );`
+    );`,
   );
 
   await database.execAsync(
     `CREATE TABLE IF NOT EXISTS ${tables.APP_PARAMETERS} (
       key TEXT PRIMARY KEY,
       value TEXT NOT NULL
-    );`
+    );`,
   );
 
   console.log("Tabelas criadas com sucesso!");
@@ -106,7 +106,7 @@ export const initializeTables = async (): Promise<void> => {
       "Mercado",
       "#4CAF50",
       "cart-outline",
-    ]
+    ],
   );
 
   await database.execAsync("PRAGMA user_version = 2;");
@@ -129,7 +129,7 @@ export const runDatabaseUpdates = async (): Promise<void> => {
 
   try {
     const result = await database.getFirstAsync<{ user_version: number }>(
-      "PRAGMA user_version;"
+      "PRAGMA user_version;",
     );
     let currentDbVersion = result?.user_version ?? 0;
 
@@ -137,14 +137,14 @@ export const runDatabaseUpdates = async (): Promise<void> => {
       console.log("Running database updates... version 0 to 1");
 
       const tableInfo = await database.getAllAsync<{ name: string }>(
-        `PRAGMA table_info(${tables.EXPENSES});`
+        `PRAGMA table_info(${tables.EXPENSES});`,
       );
       const hasNameColumn = tableInfo.some((column) => column.name === "name");
 
       if (!hasNameColumn) {
         console.log("Adding 'name' column to 'expenses' table...");
         await database.execAsync(
-          `ALTER TABLE ${tables.EXPENSES} ADD COLUMN name TEXT;`
+          `ALTER TABLE ${tables.EXPENSES} ADD COLUMN name TEXT;`,
         );
       }
 
@@ -159,7 +159,7 @@ export const runDatabaseUpdates = async (): Promise<void> => {
         `CREATE TABLE IF NOT EXISTS ${tables.APP_PARAMETERS} (
           key TEXT PRIMARY KEY,
           value TEXT NOT NULL
-        );`
+        );`,
       );
       await database.execAsync("PRAGMA user_version = 2;");
       console.log("Database updated to version 2.");

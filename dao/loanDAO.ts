@@ -11,7 +11,7 @@ class LoanDAO {
     const db = await getDatabase();
     await db.runAsync(
       `INSERT INTO ${tables.LOANS} (name, value, note, createdDate) VALUES (?, ?, ?, ?);`,
-      [name, value, note, createdDate],
+      [name, value, note ?? "", createdDate],
     );
   }
 
@@ -25,6 +25,7 @@ class LoanDAO {
   async deleteById(loan: { id?: number } | number): Promise<void> {
     const db = await getDatabase();
     const loanId = typeof loan === "number" ? loan : (loan?.id ?? 0);
+
     await db.runAsync("BEGIN TRANSACTION");
 
     try {
@@ -32,21 +33,24 @@ class LoanDAO {
       await db.runAsync("COMMIT");
     } catch (error) {
       await db.runAsync("ROLLBACK");
+      throw error;
     }
   }
 
   async deleteAll(): Promise<void> {
     const db = await getDatabase();
+
     await db.runAsync(`DELETE FROM ${tables.LOANS};`);
   }
 
   async update(loan: LoanItem): Promise<void> {
     const db = await getDatabase();
+
     await db.runAsync(
       `UPDATE ${tables.LOANS}
        SET name = ?, value = ?, note = ?, createdDate = ?
        WHERE id = ?;`,
-      [loan.name, loan.value, loan.note, loan.createdDate, loan.id ?? 0],
+      [loan.name, loan.value, loan.note ?? "", loan.createdDate, loan.id ?? 0],
     );
   }
 
@@ -65,14 +69,16 @@ class LoanDAO {
           loan.id ?? null,
           loan.name,
           loan.value,
-          loan.note,
-          loan.createdDate,
+          loan.note ?? "",
+          loan.createdDate || new Date().toISOString().split("T")[0],
         ]);
       }
 
       await db.execAsync("COMMIT;");
     } catch (error) {
+      console.error("Erro ao importar empréstimos do backup: ", error);
       await db.execAsync("ROLLBACK;");
+      throw error;
     }
   }
 }

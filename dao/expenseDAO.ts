@@ -41,6 +41,7 @@ class ExpenseDAO {
 
   async fetchAll(): Promise<ExpenseItem[]> {
     const db = await getDatabase();
+
     return await db.getAllAsync<ExpenseItem>(
       `SELECT * FROM ${tables.EXPENSES};`,
     );
@@ -48,6 +49,7 @@ class ExpenseDAO {
 
   async fetchMonthly(): Promise<MonthlyExpenseItem[]> {
     const db = await getDatabase();
+
     return await db.getAllAsync<MonthlyExpenseItem>(
       `SELECT substr(createdDate, 1, 7) || '-01' AS date, 
        SUM(value) AS value
@@ -69,20 +71,23 @@ class ExpenseDAO {
       );
 
       await db.runAsync(`DELETE FROM ${tables.EXPENSES} WHERE id = ?;`, [id]);
-
       await db.runAsync("COMMIT");
     } catch (error) {
+      console.error("Erro ao deletar despesa: ", error);
       await db.runAsync("ROLLBACK");
+      throw error;
     }
   }
 
   async deleteAll(): Promise<void> {
     const db = await getDatabase();
+
     await db.runAsync(`DELETE FROM ${tables.EXPENSES};`);
   }
 
   async update(expense: UpdateExpenseData): Promise<void> {
     const db = await getDatabase();
+
     await db.runAsync(
       `UPDATE ${tables.EXPENSES} 
        SET value = ?, name = ?
@@ -157,7 +162,9 @@ class ExpenseDAO {
 
       await db.execAsync("COMMIT;");
     } catch (error) {
+      console.error("Erro ao importar despesas do backup: ", error);
       await db.execAsync("ROLLBACK;");
+      throw error;
     }
   }
 

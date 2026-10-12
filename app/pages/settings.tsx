@@ -17,7 +17,8 @@ import {
 import { exportBackup, importBackup } from "../../db/backup";
 import { fetchTags } from "@tagDuck";
 import { fetchAppParameters } from "@appParameterDuck";
-import { fetchTotalExpensesCurrentMonth } from "@expenseDuck";
+import { fetchTotalExpensesCurrentMonth, fetchMonthlyExpenses } from "@expenseDuck";
+import { fetchLoans } from "@loanDuck";
 import { selectAppParameterByKey } from "@appParameterSelector";
 import { appParameters } from "@constants";
 
@@ -49,10 +50,18 @@ const Settings: React.FC = () => {
 
   const handleImportBackup = async () => {
     setIsLoading(true);
-    await importBackup();
-    dispatch(fetchTags());
-    dispatch(fetchTotalExpensesCurrentMonth());
-    setIsLoading(false);
+    try {
+      const success = await importBackup();
+      if (success) {
+        dispatch(fetchTags());
+        dispatch(fetchTotalExpensesCurrentMonth());
+        dispatch(fetchMonthlyExpenses());
+        dispatch(fetchLoans());
+        dispatch(fetchAppParameters());
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const isBackupOld = useMemo(() => {

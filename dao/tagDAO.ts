@@ -12,6 +12,7 @@ class TagDAO {
 
   async fetchAll(): Promise<TagItem[]> {
     const db = await getDatabase();
+
     return await db.getAllAsync<TagItem>(
       `SELECT * FROM ${tables.TAGS} order by name;`,
     );
@@ -33,7 +34,9 @@ class TagDAO {
 
       await db.runAsync("COMMIT");
     } catch (error) {
+      console.error("Erro ao deletar tag: ", error);
       await db.runAsync("ROLLBACK");
+      throw error;
     }
   }
 
@@ -44,6 +47,7 @@ class TagDAO {
 
   async update(tag: TagItem): Promise<void> {
     const db = await getDatabase();
+
     await db.runAsync(
       `UPDATE ${tables.TAGS} 
        SET name = ?, color = ?, icon = ?
@@ -66,14 +70,16 @@ class TagDAO {
         await db.runAsync(insertQuery, [
           tag.id ?? null,
           tag.name,
-          tag.color,
-          tag.icon,
+          tag.color || "#9E9E9E",
+          tag.icon || "pricetag-outline",
         ]);
       }
 
       await db.execAsync("COMMIT;");
     } catch (error) {
+      console.error("Erro ao importar tags do backup: ", error);
       await db.execAsync("ROLLBACK;");
+      throw error;
     }
   }
 }

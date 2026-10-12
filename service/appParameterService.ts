@@ -1,20 +1,25 @@
-import {
-  getAppParameter,
-  getAllAppParameters,
-  setAppParameter,
-  deleteAppParameter,
-} from "../dao/appParameterDAO";
+import AppParameterDAO from "../dao/appParameterDAO";
 
-export const appParameterService = {
-  get: async <T = any>(key: string): Promise<T | null> =>
-    await getAppParameter<T>(key),
-  getAll: async (): Promise<Record<string, any>> => await getAllAppParameters(),
-  insert: async (key: string, value: any): Promise<boolean> =>
-    await setAppParameter(key, value),
-  update: async (key: string, value: any): Promise<boolean> =>
-    await setAppParameter(key, value),
-  remove: async (key: string): Promise<boolean> =>
-    await deleteAppParameter(key),
-};
+class AppParameterService {
+  async get<T = any>(key: string): Promise<T | null> {
+    return await AppParameterDAO.get<T>(key);
+  }
 
-export default appParameterService;
+  async getAll(): Promise<Record<string, any>> {
+    return await AppParameterDAO.getAll();
+  }
+
+  async insert(key: string, value: any): Promise<boolean> {
+    return await AppParameterDAO.set(key, value);
+  }
+
+  async update(key: string, value: any): Promise<boolean> {
+    return await AppParameterDAO.set(key, value);
+  }
+
+  async remove(key: string): Promise<boolean> {
+    return await AppParameterDAO.delete(key);
+  }
+}
+
+export default new AppParameterService();
