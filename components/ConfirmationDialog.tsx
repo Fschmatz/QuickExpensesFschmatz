@@ -31,7 +31,9 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
       >
         <Dialog.Title style={styles.title}>Confirmar</Dialog.Title>
         <Dialog.Content>
-          <Text style={styles.messageText}>{message}</Text>
+          <Text variant="bodyMedium" style={styles.messageText}>
+            {message}
+          </Text>
         </Dialog.Content>
         <Dialog.Actions>
           <Button onPress={handleCancel} textColor={theme.colors.onBackground}>
@@ -58,7 +60,6 @@ const createStyles = (theme: MD3Theme) =>
     },
     messageText: {
       color: theme.colors.onBackground,
-      fontSize: 16,
     },
   });
 

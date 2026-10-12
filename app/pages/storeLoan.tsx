@@ -8,6 +8,7 @@ import { selectLoanById } from "@loanSelector";
 import { createLoan } from "../../entities/loan";
 import { addLoan, updateLoan, deleteLoan } from "@loanDuck";
 import { DefaultPageContainer, SizedBox, ConfirmationDialog } from "@components";
+import { FONT_WEIGHT } from "@constants";
 
 const StoreLoan: React.FC = () => {
   const theme = useTheme();
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
   },
   buttonLabel: {
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: FONT_WEIGHT.default,
   },
 });
 

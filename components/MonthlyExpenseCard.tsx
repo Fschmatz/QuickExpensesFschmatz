@@ -5,6 +5,7 @@ import type { MD3Theme } from "react-native-paper";
 import { useRouter } from "expo-router";
 import { getMonthName, formatMoney, useStyles } from "@utils";
 import { MonthlyExpenseItem } from "../entities/monthlyExpense";
+import { CARD, FONT_WEIGHT } from "@constants";
 
 export interface MonthlyExpenseCardProps {
   monthlyExpense: MonthlyExpenseItem;
@@ -47,7 +48,7 @@ const createStyles = (theme: MD3Theme) =>
     cardContainer: {
       marginHorizontal: 16,
       backgroundColor: theme.colors.elevation.level3,
-      borderRadius: 20,
+      borderRadius: CARD.borderRadius,
       overflow: "hidden",
     },
     touchable: {
@@ -65,7 +66,7 @@ const createStyles = (theme: MD3Theme) =>
     },
     valueText: {
       color: theme.colors.onBackground,
-      fontWeight: "bold",
+      fontWeight: FONT_WEIGHT.bold,
     },
   });
 

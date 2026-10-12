@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 import { useTheme, List } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
 import { useStyles } from "@utils";
+import { FONT_WEIGHT } from "@constants";
 
 type ListItemProps = React.ComponentProps<typeof List.Item>;
 
@@ -39,7 +40,7 @@ const ListTile: React.FC<ListTileProps> = ({
         styles.title,
         {
           color: resolvedTitleColor,
-          fontWeight: boldText ? "600" : "400",
+          fontWeight: boldText ? FONT_WEIGHT.bold : FONT_WEIGHT.default,
         },
       ]}
       descriptionStyle={styles.description}

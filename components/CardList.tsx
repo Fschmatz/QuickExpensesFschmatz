@@ -3,6 +3,7 @@ import { View, StyleProp, ViewStyle, StyleSheet } from "react-native";
 import { Divider, Card } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
 import { useStyles } from "@utils";
+import { CARD } from "@constants";
 
 export interface CardListProps {
   children?: ReactNode;
@@ -34,7 +35,7 @@ const createStyles = (theme: MD3Theme) =>
   StyleSheet.create({
     card: {
       elevation: 0,
-      borderRadius: 20,
+      borderRadius: CARD.borderRadius,
       overflow: "hidden",
       backgroundColor:
         theme?.colors?.elevation?.level3 ||

@@ -1,9 +1,10 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { useTheme, TouchableRipple } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
-import { useStyles } from "@utils";
+import Animated from "react-native-reanimated";
+import { useStyles, useAnimatedPressRadius } from "@utils";
 
 export interface HomeBottomDeleteButtonProps {
   onDelete: () => void;
@@ -16,12 +17,15 @@ const HomeBottomDeleteButton: React.FC<HomeBottomDeleteButtonProps> = ({
 }) => {
   const theme = useTheme();
   const styles = useStyles(createStyles);
+  const { animatedStyle, onPressIn, onPressOut } = useAnimatedPressRadius();
 
   return (
-    <View style={styles.deleteKeyWrapper}>
+    <Animated.View style={[styles.deleteKeyWrapper, animatedStyle]}>
       <TouchableRipple
         onPress={onDelete}
         onLongPress={onDeleteAll}
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}
         style={styles.deleteRipple}
       >
         <Ionicons
@@ -30,7 +34,7 @@ const HomeBottomDeleteButton: React.FC<HomeBottomDeleteButtonProps> = ({
           color={theme.colors.onTertiaryContainer}
         />
       </TouchableRipple>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -41,7 +45,6 @@ const createStyles = (theme: MD3Theme) =>
       height: "23.5%",
       minHeight: 50,
       marginBottom: 15,
-      borderRadius: 50,
       overflow: "hidden",
     },
     deleteRipple: {

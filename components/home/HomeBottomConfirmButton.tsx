@@ -1,9 +1,10 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { useTheme, TouchableRipple } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
-import { useStyles } from "@utils";
+import Animated from "react-native-reanimated";
+import { useStyles, useAnimatedPressRadius } from "@utils";
 
 export interface HomeBottomConfirmButtonProps {
   onConfirm: () => void;
@@ -14,13 +15,19 @@ const HomeBottomConfirmButton: React.FC<HomeBottomConfirmButtonProps> = ({
 }) => {
   const theme = useTheme();
   const styles = useStyles(createStyles);
+  const { animatedStyle, onPressIn, onPressOut } = useAnimatedPressRadius();
 
   return (
-    <View style={styles.confirmKeyWrapper}>
-      <TouchableRipple onPress={onConfirm} style={styles.confirmRipple}>
+    <Animated.View style={[styles.confirmKeyWrapper, animatedStyle]}>
+      <TouchableRipple
+        onPress={onConfirm}
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}
+        style={styles.confirmRipple}
+      >
         <Ionicons name="checkmark" size={38} color={theme.colors.onPrimary} />
       </TouchableRipple>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -29,7 +36,6 @@ const createStyles = (theme: MD3Theme) =>
     confirmKeyWrapper: {
       width: "100%",
       flex: 1,
-      borderRadius: 50,
       overflow: "hidden",
     },
     confirmRipple: {

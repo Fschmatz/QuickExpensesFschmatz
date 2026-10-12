@@ -3,6 +3,7 @@ import { View, ScrollView, StyleSheet } from "react-native";
 import { TouchableRipple, Text } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
 import { useStyles } from "@utils";
+import { FONT_WEIGHT } from "@constants";
 
 export interface YearFilterListProps {
   availableYears: (string | number)[];
@@ -83,7 +84,7 @@ const createStyles = (theme: MD3Theme) =>
       paddingVertical: 8,
     },
     yearText: {
-      fontWeight: "bold",
+      fontWeight: FONT_WEIGHT.bold,
       fontSize: 16,
     },
     yearTextSelected: {

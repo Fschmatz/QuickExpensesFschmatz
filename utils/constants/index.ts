@@ -8,3 +8,4 @@ export {
   showChartTotalMonthParameter,
 } from "./appParameters";
 export type { AppParameterKey } from "./appParameters";
+export * from "./layout";

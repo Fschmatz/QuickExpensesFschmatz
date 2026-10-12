@@ -17,10 +17,13 @@ import {
 import { exportBackup, importBackup } from "../../db/backup";
 import { fetchTags } from "@tagDuck";
 import { fetchAppParameters } from "@appParameterDuck";
-import { fetchTotalExpensesCurrentMonth, fetchMonthlyExpenses } from "@expenseDuck";
+import {
+  fetchTotalExpensesCurrentMonth,
+  fetchMonthlyExpenses,
+} from "@expenseDuck";
 import { fetchLoans } from "@loanDuck";
 import { selectAppParameterByKey } from "@appParameterSelector";
-import { appParameters } from "@constants";
+import { appParameters, FONT_WEIGHT } from "@constants";
 
 const Settings: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -72,10 +75,10 @@ const Settings: React.FC = () => {
     <>
       <DefaultPageContainer>
         <View style={styles.bannerContainer}>
-          <Text style={styles.appNameText}>
+          <Text variant="titleMedium" style={styles.appNameText}>
             {appDetails.appName}
           </Text>
-          <Text style={styles.appVersionText}>
+          <Text variant="titleSmall" style={styles.appVersionText}>
             v{appDetails.appVersion}
           </Text>
         </View>
@@ -204,12 +207,10 @@ const createStyles = (theme: MD3Theme) =>
     },
     appNameText: {
       color: theme.colors.onTertiaryContainer,
-      fontSize: 16,
-      fontWeight: "600",
+      fontWeight: FONT_WEIGHT.default,
     },
     appVersionText: {
       color: theme.colors.onTertiaryContainer,
-      fontSize: 14,
       fontWeight: "800",
     },
     loadingOverlay: {

@@ -1,8 +1,10 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { Text, TouchableRipple } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
-import { useStyles } from "@utils";
+import Animated from "react-native-reanimated";
+import { useStyles, useAnimatedPressRadius } from "@utils";
+import { FONT_WEIGHT } from "@constants";
 
 export interface HomeBottomNumberButtonProps {
   num: string;
@@ -14,18 +16,25 @@ const HomeBottomNumberButton: React.FC<HomeBottomNumberButtonProps> = ({
   onPress,
 }) => {
   const styles = useStyles(createStyles);
+  const { animatedStyle, onPressIn, onPressOut } = useAnimatedPressRadius();
 
   return (
-    <View
+    <Animated.View
       style={[
         styles.numKey,
         num === "0" ? styles.numKeyWide : styles.numKeyNormal,
+        animatedStyle,
       ]}
     >
-      <TouchableRipple onPress={() => onPress(num)} style={styles.numRipple}>
+      <TouchableRipple
+        onPress={() => onPress(num)}
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}
+        style={styles.numRipple}
+      >
         <Text style={styles.numText}>{num}</Text>
       </TouchableRipple>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -34,7 +43,6 @@ const createStyles = (theme: MD3Theme) =>
     numKey: {
       height: "23.5%",
       minHeight: 50,
-      borderRadius: 50,
       overflow: "hidden",
     },
     numKeyNormal: {
@@ -52,7 +60,7 @@ const createStyles = (theme: MD3Theme) =>
     numText: {
       color: theme.colors.onBackground,
       fontSize: 38,
-      fontWeight: "600",
+      fontWeight: FONT_WEIGHT.bold,
     },
   });
 

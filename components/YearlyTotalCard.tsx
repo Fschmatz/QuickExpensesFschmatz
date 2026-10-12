@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
 import { formatMoney, useStyles } from "@utils";
+import { CARD, FONT_WEIGHT } from "@constants";
 
 export interface YearlyTotalCardProps {
   selectedYear?: string | number;
@@ -22,14 +23,14 @@ const YearlyTotalCard: React.FC<YearlyTotalCardProps> = ({ yearlyTotal }) => {
 const createStyles = (theme: MD3Theme) =>
   StyleSheet.create({
     container: {
-      borderRadius: 20,
+      borderRadius: CARD.borderRadius,
       marginHorizontal: 16,
       alignItems: "center",
       justifyContent: "center",
     },
     totalText: {
       fontSize: 24,
-      fontWeight: "bold",
+      fontWeight: FONT_WEIGHT.bold,
       color: theme.colors.onTertiaryContainer,
     },
   });

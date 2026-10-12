@@ -6,13 +6,17 @@ import { useTheme, FAB } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TagTile, EmptyState } from "@components";
+import { FAB_BUTTON } from "@constants";
 import { getTags } from "@tagDuck";
 import { TagItem } from "../../entities/tag";
 
 const TagsList: React.FC = () => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
-  const styles = useMemo(() => createStyles(theme, insets.bottom), [theme, insets.bottom]);
+  const styles = useMemo(
+    () => createStyles(theme, insets.bottom),
+    [theme, insets.bottom],
+  );
   const router = useRouter();
   const tags = useAppSelector(getTags);
 
@@ -39,10 +43,7 @@ const TagsList: React.FC = () => {
         data={tags}
         keyExtractor={(item) => item.id?.toString() ?? item.name}
         renderItem={({ item }) => (
-          <TagTile
-            tag={item}
-            onPress={() => goToStoreTagForUpdate(item)}
-          />
+          <TagTile tag={item} onPress={() => goToStoreTagForUpdate(item)} />
         )}
         ListEmptyComponent={
           <EmptyState
@@ -83,7 +84,7 @@ const createStyles = (theme: MD3Theme, bottomInset: number) =>
       margin: 16,
       right: 0,
       bottom: bottomInset,
-      borderRadius: 16,
+      borderRadius: FAB_BUTTON.borderRadius,
       backgroundColor: theme.colors.primary,
     },
   });

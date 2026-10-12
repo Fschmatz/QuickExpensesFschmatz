@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  useTheme,
-  Button,
-  IconButton,
-  TextInput,
-} from "react-native-paper";
+import { useTheme, Button, IconButton, TextInput } from "react-native-paper";
 import { KeyboardAvoidingView, StyleSheet } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
@@ -23,6 +18,7 @@ import {
   deleteExpense,
 } from "@expenseDuck";
 import { TagItem } from "../../entities/tag";
+import { FONT_WEIGHT } from "@constants";
 
 const StoreExpense: React.FC = () => {
   const theme = useTheme();
@@ -113,7 +109,9 @@ const StoreExpense: React.FC = () => {
             name: name || null,
             value: numericValue,
             tagId: selectedTag?.id || null,
-            date: date || (expenseForUpdate ? expenseForUpdate.createdDate : undefined),
+            date:
+              date ||
+              (expenseForUpdate ? expenseForUpdate.createdDate : undefined),
           }),
         );
         showToast("Despesa atualizada com sucesso!");
@@ -136,7 +134,9 @@ const StoreExpense: React.FC = () => {
       dispatch(
         deleteExpense({
           expenseId: Number(expenseId),
-          date: (date || (expenseForUpdate ? expenseForUpdate.createdDate : "")) ?? "",
+          date:
+            (date || (expenseForUpdate ? expenseForUpdate.createdDate : "")) ??
+            "",
         }),
       );
     }
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   },
   buttonLabel: {
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: FONT_WEIGHT.default,
   },
 });
 

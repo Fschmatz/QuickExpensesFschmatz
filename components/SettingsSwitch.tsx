@@ -28,7 +28,9 @@ const SettingsSwitch: React.FC<SettingsSwitchProps> = ({
   );
 
   const onToggle = (newValue: boolean) => {
-    dispatch(setAppParameter({ key: parameterKey, value: newValue.toString() }));
+    dispatch(
+      setAppParameter({ key: parameterKey, value: newValue.toString() }),
+    );
   };
 
   return (

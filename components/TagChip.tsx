@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 import { Chip, useTheme } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import { useMaterialYouColor } from "@utils";
+import { FONT_WEIGHT } from "@constants";
 import { TagItem } from "../entities/tag";
 
 export interface TagChipProps {
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: FONT_WEIGHT.default,
     marginRight: 12,
     marginLeft: 8,
   },

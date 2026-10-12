@@ -17,10 +17,17 @@ import {
   SizedBox,
   EmptyState,
 } from "@components";
-import { formatDate, isEmpty, formatMoney, useStyles } from "@utils";
+import {
+  formatDate,
+  isEmpty,
+  formatMoney,
+  useStyles,
+  getMonthName,
+} from "@utils";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { ExpenseItem } from "../../entities/expense";
 import { TagItem } from "../../entities/tag";
+import { FONT_WEIGHT } from "@constants";
 
 interface TagExpenseEntry {
   tag: TagItem;
@@ -42,8 +49,11 @@ const MonthYearExpensesDetail: React.FC = () => {
   }, [expensesByMonthYear]);
 
   React.useEffect(() => {
+    const year = formatDate(date, "yyyy");
+    const monthName = getMonthName(date);
+
     navigation.setOptions({
-      title: "Despesas de " + formatDate(date ?? "", "mm/yyyy"),
+      title: date ? `${monthName} de ${year}` : "Despesas",
     });
     if (date) {
       dispatch(fetchByMonthYear(date));
@@ -54,7 +64,9 @@ const MonthYearExpensesDetail: React.FC = () => {
     };
   }, [dispatch, navigation, date]);
 
-  function createTagExpenseMap(expenses: ExpenseItem[]): Map<string | number, TagExpenseEntry> {
+  function createTagExpenseMap(
+    expenses: ExpenseItem[],
+  ): Map<string | number, TagExpenseEntry> {
     const map = new Map<string | number, TagExpenseEntry>();
     const untaggedExpenses: ExpenseItem[] = [];
 
@@ -125,8 +137,8 @@ const MonthYearExpensesDetail: React.FC = () => {
 
           <SizedBox height={12} />
 
-          <Text style={styles.monthTotalText}>
-            Total Mensal: R$ {formatMoney(totalAllExpenses)}
+          <Text variant="titleMedium" style={styles.monthTotalText}>
+            Total: R$ {formatMoney(totalAllExpenses)}
           </Text>
 
           <SizedBox height={12} />
@@ -139,7 +151,8 @@ const MonthYearExpensesDetail: React.FC = () => {
             })
             .map(({ tag, expenses }) => {
               const totalTag = expenses.reduce((sum, expense) => {
-                const amount = parseFloat((expense?.value ?? 0).toString()) || 0;
+                const amount =
+                  parseFloat((expense?.value ?? 0).toString()) || 0;
                 return sum + amount;
               }, 0);
               const percentage = (
@@ -176,9 +189,8 @@ const createStyles = (theme: MD3Theme) =>
       flex: 1,
     },
     monthTotalText: {
-      fontSize: 18,
       textAlign: "center",
-      fontWeight: "500",
+      fontWeight: FONT_WEIGHT.default,
       color: theme.colors.onBackground,
     },
   });

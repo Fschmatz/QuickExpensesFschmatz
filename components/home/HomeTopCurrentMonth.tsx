@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import { formatMoney, getMonthName, useStyles } from "@utils";
 import { useAppSelector } from "../../redux/hooks";
 import { getTotalExpensesCurrentMonth } from "@expenseDuck";
+import { CARD } from "@constants";
 
 export interface HomeTopCurrentMonthProps {}
 
@@ -58,16 +59,16 @@ const createStyles = (theme: MD3Theme) =>
   StyleSheet.create({
     monthCard: {
       width: "100%",
-      borderRadius: 25,
+      borderRadius: CARD.borderRadius,
       overflow: "hidden",
     },
     monthRipple: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.secondaryContainer,
     },
     monthRow: {
       flexDirection: "row",
       justifyContent: "space-between",
-      paddingHorizontal: 24,
+      paddingHorizontal: 16,
       paddingVertical: 12,
       width: "100%",
     },

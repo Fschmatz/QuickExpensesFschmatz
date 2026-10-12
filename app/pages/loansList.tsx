@@ -2,9 +2,9 @@ import React, { useState, useEffect, useMemo } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useRouter } from "expo-router";
-import { ConfirmationDialog, EmptyState } from "@components";
+import { ConfirmationDialog, EmptyState, LoanTile } from "@components";
+import { FAB_BUTTON } from "@constants";
 import { deleteLoan, getLoans, fetchLoans } from "@loanDuck";
-import LoanTile from "../../components/LoanTile";
 import { useTheme, FAB } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -117,7 +117,7 @@ const createStyles = (theme: MD3Theme, bottomInset: number) =>
       margin: 16,
       right: 0,
       bottom: bottomInset,
-      borderRadius: 16,
+      borderRadius: FAB_BUTTON.borderRadius,
       backgroundColor: theme.colors.primary,
     },
   });

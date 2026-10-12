@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Text, Divider } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
@@ -7,6 +7,7 @@ import ExpenseCard from "./ExpenseCard";
 import { formatMoney, useStyles } from "@utils";
 import { TagItem } from "../entities/tag";
 import { ExpenseItem } from "../entities/expense";
+import { CARD, FONT_WEIGHT } from "@constants";
 
 export interface ExpensesDetailCardProps {
   tag: TagItem;
@@ -27,42 +28,37 @@ const ExpensesDetailCard: React.FC<ExpensesDetailCardProps> = ({
 
   return (
     <View style={styles.cardContainer}>
-      {/* Header com Ícone, Nome da Tag e Porcentagem */}
+      {/* Header com Ícone, Nome da Tag e Porcentagem juntos */}
       <View style={styles.headerRow}>
-        <View style={styles.tagInfo}>
-          <Ionicons
-            name={tag.icon as keyof typeof Ionicons.glyphMap}
-            size={20}
-            color={tag.color}
-          />
-          <Text variant="titleSmall" style={styles.tagName}>
-            {tag.name}
-          </Text>
-        </View>
-        <Text
-          variant="titleSmall"
-          style={[styles.percentageText, { color: tag.color }]}
-        >
-          {percentage}%
+        <Ionicons
+          name={tag.icon as keyof typeof Ionicons.glyphMap}
+          size={22}
+          color={tag.color}
+        />
+        <Text variant="titleSmall" style={styles.headerTitle}>
+          {tag.name} - {percentage}%
         </Text>
       </View>
-
-      <Divider bold style={styles.divider} />
 
       {/* Lista de Despesas */}
       <View style={styles.expensesListContainer}>
         {expenses.map((expense, index) => (
-          <Fragment key={expense.id || index}>
+          <React.Fragment key={expense.id || index}>
             <ExpenseCard expense={expense} onPress={onPressExpense} />
-            <Divider bold style={styles.divider} />
-          </Fragment>
+            {index < expenses.length - 1 && (
+              <Divider style={styles.itemDivider} />
+            )}
+          </React.Fragment>
         ))}
       </View>
 
-      {/* Footer com Total */}
+      {/* Divisor único antes do total */}
+      <Divider style={styles.divider} />
+
+      {/* Footer com Total da categoria */}
       <View style={styles.footerRow}>
         <Text variant="titleSmall" style={styles.footerLabel}>
-          Total:
+          Total
         </Text>
         <Text variant="titleSmall" style={styles.footerValue}>
           R$ {formatMoney(totalTag)}
@@ -75,51 +71,55 @@ const ExpensesDetailCard: React.FC<ExpensesDetailCardProps> = ({
 const createStyles = (theme: MD3Theme) =>
   StyleSheet.create({
     cardContainer: {
-      backgroundColor: theme.colors.elevation.level1,
-      borderRadius: 20,
-      paddingBottom: 12,
+      backgroundColor: theme.colors.elevation.level3,
+      borderRadius: CARD.borderRadius,
+      paddingTop: 14,
+      paddingBottom: 14,
+      paddingHorizontal: 0,
+      overflow: "hidden",
       marginVertical: 8,
+      elevation: 0,
+      shadowColor: "transparent",
     },
     headerRow: {
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "space-between",
-      marginRight: 12,
-      marginLeft: 12,
-      marginVertical: 12,
+      gap: 10,
+      marginBottom: 8,
+      paddingHorizontal: 16,
     },
-    tagInfo: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: 8,
-    },
-    tagName: {
+    headerTitle: {
       color: theme.colors.onBackground,
-      fontWeight: "bold",
-    },
-    percentageText: {
-      fontWeight: "bold",
-    },
-    divider: {
-      backgroundColor: theme.colors.background,
+      fontWeight: FONT_WEIGHT.bold,
     },
     expensesListContainer: {
-      backgroundColor: theme.colors.elevation.level3,
+      gap: 0,
+    },
+    itemDivider: {
+      marginHorizontal: 16,
+      marginVertical: 0,
+      backgroundColor: theme.colors.outline,
+      opacity: 0.2,
+    },
+    divider: {
+      marginHorizontal: 16,
+      backgroundColor: theme.colors.outline,
+      opacity: 0.6,
     },
     footerRow: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      marginTop: 12,
-      marginHorizontal: 12,
+      paddingHorizontal: 16,
+      marginTop: 10,
     },
     footerLabel: {
       color: theme.colors.onBackground,
-      fontWeight: "bold",
+      fontWeight: FONT_WEIGHT.bold,
     },
     footerValue: {
       color: theme.colors.onBackground,
-      fontWeight: "bold",
+      fontWeight: FONT_WEIGHT.bold,
     },
   });
 

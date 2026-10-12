@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useTheme, Button, TextInput, IconButton } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
-import { TouchableOpacity, KeyboardAvoidingView, View, StyleSheet } from "react-native";
+import {
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  View,
+  StyleSheet,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useRouter, useLocalSearchParams, useNavigation } from "expo-router";
@@ -11,7 +16,13 @@ import { showToast, useStyles } from "@utils";
 import { addTag, updateTag, deleteTag } from "@tagDuck";
 import { selectTagById } from "@tagSelector";
 import { createTag } from "../../entities/tag";
-import { DefaultPageContainer, SizedBox, ListTile, ConfirmationDialog } from "@components";
+import {
+  DefaultPageContainer,
+  SizedBox,
+  ListTile,
+  ConfirmationDialog,
+} from "@components";
+import { FONT_WEIGHT } from "@constants";
 
 const chunkArray = <T,>(arr: T[], rows: number): T[][] => {
   const perRow = Math.ceil(arr.length / rows);
@@ -23,7 +34,11 @@ const chunkArray = <T,>(arr: T[], rows: number): T[][] => {
 const StoreTag: React.FC = () => {
   const theme = useTheme();
   const styles = useStyles(createStyles);
-  const { isInsert = "false", isUpdate = "false", tagId } = useLocalSearchParams<{
+  const {
+    isInsert = "false",
+    isUpdate = "false",
+    tagId,
+  } = useLocalSearchParams<{
     isInsert?: string;
     isUpdate?: string;
     tagId?: string;
@@ -34,7 +49,9 @@ const StoreTag: React.FC = () => {
   const isUpdateBool = isUpdate === "true";
   const isInsertBool = isInsert === "true";
   const tagForUpdate = useAppSelector(selectTagById(tagId ?? ""));
-  const [name, setName] = useState(isUpdateBool ? (tagForUpdate?.name ?? "") : "");
+  const [name, setName] = useState(
+    isUpdateBool ? (tagForUpdate?.name ?? "") : "",
+  );
   const [selectedColor, setSelectedColor] = useState(
     isUpdateBool ? (tagForUpdate?.color ?? "#18c435") : "#18c435",
   );
@@ -254,7 +271,7 @@ const createStyles = (theme: MD3Theme) =>
     },
     buttonLabel: {
       fontSize: 16,
-      fontWeight: "500",
+      fontWeight: FONT_WEIGHT.default,
     },
   });
 

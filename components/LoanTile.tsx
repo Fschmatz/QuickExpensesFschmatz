@@ -5,6 +5,7 @@ import type { MD3Theme } from "react-native-paper";
 import IconButton from "./IconButton";
 import { formatDate, formatMoney, useStyles } from "@utils";
 import { LoanItem } from "../entities/loan";
+import { CARD, FONT_WEIGHT } from "@constants";
 
 export interface LoanTileProps {
   loan: LoanItem;
@@ -50,7 +51,7 @@ const createStyles = (theme: MD3Theme) =>
   StyleSheet.create({
     card: {
       elevation: 0,
-      borderRadius: 20,
+      borderRadius: CARD.borderRadius,
       overflow: "hidden",
       backgroundColor: theme.colors.elevation.level3,
     },
@@ -59,12 +60,10 @@ const createStyles = (theme: MD3Theme) =>
     },
     title: {
       color: theme.colors.onBackground,
-      fontWeight: "bold",
-      fontSize: 17,
+      fontWeight: FONT_WEIGHT.bold,
     },
     subtitle: {
       color: theme.colors.onSurfaceVariant,
-      fontSize: 14,
       marginTop: 4,
       lineHeight: 20,
     },

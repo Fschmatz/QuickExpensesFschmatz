@@ -6,6 +6,7 @@ import TagSelectorList from "../TagSelectorList";
 import HomeTopCurrentMonth from "./HomeTopCurrentMonth";
 import { TagItem } from "../../entities/tag";
 import { useStyles } from "@utils";
+import { FONT_WEIGHT } from "@constants";
 
 export interface HomeTopContainerProps {
   inputValue: string;
@@ -38,37 +39,41 @@ const HomeTopContainer: React.FC<HomeTopContainerProps> = ({
   const responsiveFontSize = customFontSize ?? Math.min(height * 0.08, 70);
 
   return (
-    <View style={styles.container}>
+    <>
       {/* Total mensal */}
-      <HomeTopCurrentMonth />
+      <View style={styles.containerCurrentMonth}>
+        <HomeTopCurrentMonth />
+      </View>
 
-      {/* Value Input */}
-      <TextInput
-        value={inputValue}
-        editable={false}
-        maxLength={maxLengthValue}
-        numberOfLines={1}
-        {...({ adjustsFontSizeToFit: true } as any)}
-        style={[styles.valueInput, { fontSize: responsiveFontSize }]}
-      />
+      <View style={styles.container}>
+        {/* Value Input */}
+        <TextInput
+          value={inputValue}
+          editable={false}
+          maxLength={maxLengthValue}
+          numberOfLines={1}
+          {...({ adjustsFontSizeToFit: true } as any)}
+          style={[styles.valueInput, { fontSize: responsiveFontSize }]}
+        />
 
-      {/* Nome Input */}
-      <TextInput
-        ref={nomeInputRef}
-        placeholder="Nome"
-        placeholderTextColor={theme.colors.outline}
-        value={nome}
-        maxLength={maxLengthName}
-        onChangeText={setNome}
-        style={styles.nameInput}
-      />
+        {/* Nome Input */}
+        <TextInput
+          ref={nomeInputRef}
+          placeholder="Nome"
+          placeholderTextColor={theme.colors.outline}
+          value={nome}
+          maxLength={maxLengthName}
+          onChangeText={setNome}
+          style={styles.nameInput}
+        />
 
-      <TagSelectorList
-        tags={tags}
-        selectedTag={selectedTag}
-        onSelectTag={onSelectTag}
-      />
-    </View>
+        <TagSelectorList
+          tags={tags}
+          selectedTag={selectedTag}
+          onSelectTag={onSelectTag}
+        />
+      </View>
+    </>
   );
 };
 
@@ -80,20 +85,25 @@ const createStyles = (theme: MD3Theme) =>
       padding: 16,
       borderRadius: 40,
     },
+    containerCurrentMonth: {
+      paddingHorizontal: 16,
+      marginBottom: 16,
+      marginTop: 4,
+    },
     valueInput: {
       color: theme.colors.onBackground,
-      fontWeight: "700",
+      fontWeight: FONT_WEIGHT.bold,
       textAlign: "right",
       alignSelf: "flex-end",
       marginRight: 5,
-      marginTop: "1%",
-      marginBottom: "1.7%",
-      flex: 1,
+      // marginTop: "0.1%",
+      marginBottom: "1.5%",
+      flex: 0.90,
     },
     nameInput: {
       color: theme.colors.onBackground,
       fontSize: 16,
-      fontWeight: "500",
+      fontWeight: FONT_WEIGHT.default,
       backgroundColor: theme.colors.background,
       borderRadius: 25,
       paddingHorizontal: 20,

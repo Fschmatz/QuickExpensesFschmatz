@@ -3,6 +3,7 @@ import { View, useWindowDimensions, StyleSheet } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
+import { FONT_WEIGHT } from "@constants";
 
 export interface EmptyStateProps {
   icon?: keyof typeof Ionicons.glyphMap;
@@ -60,7 +61,7 @@ const createStyles = (theme: MD3Theme, windowHeight: number) =>
       backgroundColor: theme.colors.surfaceVariant,
     },
     title: {
-      fontWeight: "600",
+      fontWeight: FONT_WEIGHT.bold,
       textAlign: "center",
       color: theme.colors.onBackground,
     },

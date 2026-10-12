@@ -2,7 +2,7 @@ import { ToastAndroid } from "react-native";
 
 export const formatDate = (
   dateString?: string | null,
-  format?: "dd/mm/yyyy" | "mm/yyyy" | string
+  format?: "dd/mm/yyyy" | "mm/yyyy" | "dd/mm" | "yyyy" | string,
 ): string => {
   if (!dateString) return "";
 
@@ -13,6 +13,10 @@ export const formatDate = (
       return `${day}/${month}/${year}`;
     case "mm/yyyy":
       return `${month}/${year}`;
+    case "dd/mm":
+      return `${day}/${month}`;
+    case "yyyy":
+      return `${year}`;
     default:
       throw new Error("Unsupported date format");
   }
@@ -85,7 +89,10 @@ export const getLastDayOfMonth = (dateString: string): string => {
   return `${year}-${month.toString().padStart(2, "0")}-${lastDay}`;
 };
 
-export const formatCurrencyInput = (text: string, maxLength: number = 8): string => {
+export const formatCurrencyInput = (
+  text: string,
+  maxLength: number = 8,
+): string => {
   if (text === "," || text === ".") {
     return "0,";
   }
@@ -138,7 +145,8 @@ export const completeCurrencyZeros = (text?: string | null): string => {
   return beforeComma + "," + afterComma;
 };
 
-export const isEmpty = <T>(array?: T[] | null): boolean => !array || array.length === 0;
+export const isEmpty = <T>(array?: T[] | null): boolean =>
+  !array || array.length === 0;
 
 export const getMonthName = (monthStr?: string | null): string => {
   if (!monthStr) return "";
@@ -164,7 +172,7 @@ export const getMonthName = (monthStr?: string | null): string => {
 };
 
 export const isLastBackupDateMoreThan30Days = (
-  lastBackupDate?: string | null
+  lastBackupDate?: string | null,
 ): boolean => {
   if (!lastBackupDate) return true; // Nunca fez backup
 
@@ -172,7 +180,7 @@ export const isLastBackupDateMoreThan30Days = (
     const [datePart, timePart] = lastBackupDate.split(" ");
     const [day, month, year] = datePart.split("/");
     const backupDate = new Date(
-      `${year}-${month}-${day}T${timePart || "00:00"}:00`
+      `${year}-${month}-${day}T${timePart || "00:00"}:00`,
     );
 
     const diffTime = new Date().getTime() - backupDate.getTime();
