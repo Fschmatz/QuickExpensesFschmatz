@@ -99,7 +99,7 @@ const createStyles = (theme: MD3Theme) =>
       borderRadius: 20,
       marginTop: -35,
       marginLeft: screenWidth - 235,
-      elevation: 2,
+      elevation: 3,
     },
     menuItemTitle: {
       color: theme.colors.onBackground,

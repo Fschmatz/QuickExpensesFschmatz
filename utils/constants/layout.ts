@@ -1,6 +1,6 @@
 export const KEYPAD_BUTTON = {
   radius: {
-    initial: 50,
+    initial: 40,
     pressed: 20,
   },
   animationDuration: {
@@ -27,11 +27,4 @@ export const LAYOUT = {
   fab: FAB_BUTTON,
   keypad: KEYPAD_BUTTON,
   fontWeight: FONT_WEIGHT,
-  borderRadius: {
-    card: 20,
-    fab: 20,
-    dialog: 20,
-    input: 25,
-    full: 50,
-  },
 };

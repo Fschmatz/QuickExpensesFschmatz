@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { Chip, useTheme } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import { useMaterialYouColor } from "@utils";
-import { FONT_WEIGHT } from "@constants";
+import { FONT_WEIGHT, CARD } from "@constants";
 import { TagItem } from "../entities/tag";
 
 export interface TagChipProps {
@@ -58,7 +58,7 @@ const TagChip: React.FC<TagChipProps> = ({
 
 const styles = StyleSheet.create({
   chip: {
-    borderRadius: 50,
+    borderRadius: CARD.borderRadius,
   },
   content: {
     paddingLeft: 6,

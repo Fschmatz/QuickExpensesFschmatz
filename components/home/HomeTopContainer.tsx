@@ -6,7 +6,7 @@ import TagSelectorList from "../TagSelectorList";
 import HomeTopCurrentMonth from "./HomeTopCurrentMonth";
 import { TagItem } from "../../entities/tag";
 import { useStyles } from "@utils";
-import { FONT_WEIGHT } from "@constants";
+import { FONT_WEIGHT, CARD } from "@constants";
 
 export interface HomeTopContainerProps {
   inputValue: string;
@@ -36,7 +36,7 @@ const HomeTopContainer: React.FC<HomeTopContainerProps> = ({
   const theme = useTheme();
   const styles = useStyles(createStyles);
   const { height } = useWindowDimensions();
-  const responsiveFontSize = customFontSize ?? Math.min(height * 0.08, 70);
+  const responsiveFontSize = customFontSize ?? Math.min(height * 0.08, 80);
 
   return (
     <>
@@ -95,17 +95,16 @@ const createStyles = (theme: MD3Theme) =>
       fontWeight: FONT_WEIGHT.bold,
       textAlign: "right",
       alignSelf: "flex-end",
-      marginRight: 5,
-      // marginTop: "0.1%",
-      marginBottom: "1.5%",
-      flex: 0.90,
+      marginTop: "0.4%",
+      marginBottom: "1.2%",
+      flex: 0.8,
     },
     nameInput: {
       color: theme.colors.onBackground,
       fontSize: 16,
       fontWeight: FONT_WEIGHT.default,
       backgroundColor: theme.colors.background,
-      borderRadius: 25,
+      borderRadius: CARD.borderRadius,
       paddingHorizontal: 20,
       paddingVertical: 10,
       marginBottom: 10,
