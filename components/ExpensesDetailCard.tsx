@@ -99,7 +99,7 @@ const createStyles = (theme: MD3Theme) =>
       marginHorizontal: 16,
       marginVertical: 0,
       backgroundColor: theme.colors.outline,
-      opacity: 0.2,
+      opacity: 0.3,
     },
     divider: {
       marginHorizontal: 16,

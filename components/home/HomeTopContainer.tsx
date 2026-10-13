@@ -97,7 +97,7 @@ const createStyles = (theme: MD3Theme) =>
       alignSelf: "flex-end",
       marginTop: "0.4%",
       marginBottom: "1.2%",
-      flex: 0.8,
+      flex: 0.9,
     },
     nameInput: {
       color: theme.colors.onBackground,

@@ -45,7 +45,7 @@ const HomeBottomContainer: React.FC<HomeBottomContainerProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1.25,
+    flex: 1,
     padding: 16,
   },
   row: {
