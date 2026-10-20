@@ -22,9 +22,14 @@ export const FONT_WEIGHT = {
   bold: "600" as const,
 };
 
+export const MONTH_PROGRESS_BAR = {
+  height: 25,
+};
+
 export const LAYOUT = {
   card: CARD,
   fab: FAB_BUTTON,
   keypad: KEYPAD_BUTTON,
   fontWeight: FONT_WEIGHT,
+  monthProgressBar: MONTH_PROGRESS_BAR,
 };

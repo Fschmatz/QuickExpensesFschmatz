@@ -1,5 +1,7 @@
 import React from "react";
-import { ListTile, ListTileIcon, CardList } from "@components";
+import ListTile from "./ListTile";
+import ListTileIcon from "./ListTileIcon";
+import CardList from "./CardList";
 import { TagItem } from "../entities/tag";
 
 export interface TagTileProps {

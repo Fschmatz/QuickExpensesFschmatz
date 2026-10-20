@@ -24,12 +24,16 @@ const createStyles = (theme: MD3Theme) =>
   StyleSheet.create({
     container: {
       borderRadius: CARD.borderRadius,
+      borderWidth: 1,
+      borderColor: theme.colors.tertiaryContainer,
+      paddingVertical: 12,
+      paddingHorizontal: 16,
       marginHorizontal: 16,
       alignItems: "center",
       justifyContent: "center",
     },
     totalText: {
-      fontSize: 24,
+      fontSize: 18,
       fontWeight: FONT_WEIGHT.bold,
       color: theme.colors.onTertiaryContainer,
     },

@@ -85,8 +85,7 @@ const MonthlyExpensesLineChart: React.FC<MonthlyExpensesLineChartProps> = ({
 const createStyles = (theme: MD3Theme) =>
   StyleSheet.create({
     container: {
-      paddingHorizontal: 16,
-      paddingVertical: 4,
+      paddingHorizontal: 16,      
     },
     xAxisLabel: {
       color: theme.colors.onSurfaceVariant,

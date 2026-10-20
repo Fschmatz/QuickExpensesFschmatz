@@ -7,6 +7,8 @@ import { formatMoney, getMonthName, useStyles } from "@utils";
 import { useAppSelector } from "../../redux/hooks";
 import { getTotalExpensesCurrentMonth } from "@expenseDuck";
 import { CARD } from "@constants";
+import HomeMonthProgressBar from "./HomeMonthProgressBar";
+import SizedBox from "../SizedBox";
 
 export interface HomeTopCurrentMonthProps {}
 
@@ -40,15 +42,21 @@ const HomeTopCurrentMonth: React.FC<HomeTopCurrentMonthProps> = () => {
     <View style={styles.monthCard}>
       <TouchableRipple
         onPress={navigateToCurrentMonthDetail}
-        style={styles.monthRipple}
+        style={styles.ripple}
       >
-        <View style={styles.monthRow}>
-          <Text variant="titleMedium" style={styles.monthText}>
-            {displayLabel}
-          </Text>
-          <Text variant="titleMedium" style={styles.monthText}>
-            R$ {formatMoney(totalExpensesCurrentMonth)}
-          </Text>
+        <View>
+          <View style={styles.monthRow}>
+            <Text variant="titleMedium" style={styles.monthText}>
+              {displayLabel}
+            </Text>
+            <Text variant="titleMedium" style={styles.monthText}>
+              R$ {formatMoney(totalExpensesCurrentMonth)}
+            </Text>
+          </View>
+
+          <SizedBox height={8} />
+
+          <HomeMonthProgressBar />
         </View>
       </TouchableRipple>
     </View>
@@ -61,15 +69,16 @@ const createStyles = (theme: MD3Theme) =>
       width: "100%",
       borderRadius: CARD.borderRadius,
       overflow: "hidden",
+      backgroundColor: theme.colors.elevation.level3,
     },
-    monthRipple: {
-      backgroundColor: theme.colors.secondaryContainer,
+    ripple: {
+      width: "100%",
     },
     monthRow: {
       flexDirection: "row",
       justifyContent: "space-between",
       paddingHorizontal: 16,
-      paddingVertical: 12,
+      paddingTop: 12,
       width: "100%",
     },
     monthText: {

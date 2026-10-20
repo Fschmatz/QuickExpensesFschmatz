@@ -179,6 +179,19 @@ class ExpenseDAO {
 
     return await db.getFirstAsync<{ value: number }>(query, [currentYearMonth]);
   }
+
+  async fetchExpenseDaysCurrentMonth(): Promise<{ day: number }[]> {
+    const db = await getDatabase();
+    const currentDate = new Date();
+    const currentYearMonth = currentDate.toISOString().slice(0, 7);
+
+    const query = `SELECT DISTINCT CAST(substr(createdDate, 9, 2) AS INTEGER) AS day
+       FROM ${tables.EXPENSES}
+       WHERE substr(createdDate, 1, 7) = ?
+       ORDER BY day ASC;`;
+
+    return await db.getAllAsync<{ day: number }>(query, [currentYearMonth]);
+  }
 }
 
 export default new ExpenseDAO();

@@ -101,6 +101,8 @@ const MonthlyExpensesList: React.FC = () => {
             />
           )}
 
+          <SizedBox height={12} />
+
           {showChartTotalMonth && (
             <MonthlyExpensesLineChart filteredExpenses={filteredExpenses} />
           )}

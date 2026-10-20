@@ -28,6 +28,9 @@ import {
   fetchTotalExpensesCurrentMonth,
   fetchTotalExpensesCurrentMonthSuccess,
   fetchTotalExpensesCurrentMonthFailure,
+  fetchExpenseDaysCurrentMonth,
+  fetchExpenseDaysCurrentMonthSuccess,
+  fetchExpenseDaysCurrentMonthFailure,
 } from "@expenseDuck";
 import { addExpenseTag } from "@expenseTagDuck";
 import ExpenseTagService from "../../service/expenseTagService";
@@ -69,6 +72,7 @@ function* handleAddExpense(
     yield put(addExpenseSuccess());
     yield put(fetchMonthlyExpenses());
     yield put(fetchTotalExpensesCurrentMonth());
+    yield put(fetchExpenseDaysCurrentMonth());
   } catch (error: any) {
     yield put(addExpenseFailure(error?.toString() ?? String(error)));
   }
@@ -95,6 +99,7 @@ function* handleUpdateExpense(
     yield put(updateExpenseSuccess());
     yield put(fetchMonthlyExpenses());
     yield put(fetchTotalExpensesCurrentMonth());
+    yield put(fetchExpenseDaysCurrentMonth());
     if (date) {
       yield put(fetchByMonthYear(date));
     }
@@ -114,6 +119,7 @@ function* handleDeleteExpense(
     yield call(() => ExpenseService.deleteById(expenseId));
     yield put(fetchMonthlyExpenses());
     yield put(fetchTotalExpensesCurrentMonth());
+    yield put(fetchExpenseDaysCurrentMonth());
     if (date) {
       yield put(fetchByMonthYear(date));
     }
@@ -167,6 +173,15 @@ function* handleFetchTotalExpensesCurrentMonth(): Generator<any, void, any> {
   }
 }
 
+function* handleFetchExpenseDaysCurrentMonth(): Generator<any, void, any> {
+  try {
+    const days = yield call([ExpenseService, "fetchExpenseDaysCurrentMonth"]);
+    yield put(fetchExpenseDaysCurrentMonthSuccess(days));
+  } catch (error: any) {
+    yield put(fetchExpenseDaysCurrentMonthFailure(error?.toString() ?? String(error)));
+  }
+}
+
 export default function* expenseSaga() {
   yield takeLatest(fetchExpenses.type, handleFetchExpenses);
   yield takeLatest(fetchMonthlyExpenses.type, handleFetchMonthlyExpenses);
@@ -176,5 +191,6 @@ export default function* expenseSaga() {
   yield takeLatest(fetchByMonthYear.type, handleFetchByMonthYear);
   yield takeLatest(clearExpensesByMonthYear.type, handleClearExpenses);
   yield takeLatest(fetchTotalExpensesCurrentMonth.type, handleFetchTotalExpensesCurrentMonth);
+  yield takeLatest(fetchExpenseDaysCurrentMonth.type, handleFetchExpenseDaysCurrentMonth);
   yield takeLatest(updateExpense.type, handleUpdateExpense);
 }

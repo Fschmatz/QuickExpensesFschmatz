@@ -9,7 +9,7 @@ export interface AppDetailsType {
 }
 
 const AppDetails: AppDetailsType = {
-  appVersion: "2.2.5",
+  appVersion: "2.2.6",
   appName: "Quick Expenses Fschmatz",
   appNameHomePage: " Quick Expenses",
   repositoryLink: "https://github.com/Fschmatz/QuickExpensesFschmatz",
@@ -22,6 +22,7 @@ ${AppDetails.appVersion}
 - Reimplementação de StyleSheet
 - Correções
 - Alterações na interface
+- Adicionada barra de progresso do mês
 - Melhorias de código
 `;
 

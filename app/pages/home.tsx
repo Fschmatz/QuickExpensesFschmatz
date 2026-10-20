@@ -10,6 +10,7 @@ import { fetchTags } from "@tagDuck";
 import {
   addExpense,
   fetchTotalExpensesCurrentMonth,
+  fetchExpenseDaysCurrentMonth,
 } from "@expenseDuck";
 import { TagItem } from "../../entities/tag";
 
@@ -35,6 +36,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     dispatch(fetchTags());
     dispatch(fetchTotalExpensesCurrentMonth());
+    dispatch(fetchExpenseDaysCurrentMonth());
   }, [dispatch]);
 
   const handlePress = (value: string) => {

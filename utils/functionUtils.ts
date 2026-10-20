@@ -171,8 +171,9 @@ export const getMonthName = (monthStr?: string | null): string => {
   return `${months[parseInt(month, 10) - 1]}`;
 };
 
-export const isLastBackupDateMoreThan30Days = (
+export const isLastBackupDateMoreThanDays = (
   lastBackupDate?: string | null,
+  days: number = 30,
 ): boolean => {
   if (!lastBackupDate) return true; // Nunca fez backup
 
@@ -185,7 +186,7 @@ export const isLastBackupDateMoreThan30Days = (
 
     const diffTime = new Date().getTime() - backupDate.getTime();
     const diffDays = diffTime / (1000 * 60 * 60 * 24);
-    return diffDays > 30;
+    return diffDays > days;
   } catch (e) {
     return false;
   }
@@ -206,5 +207,5 @@ export default {
   formatCurrencyInput,
   completeCurrencyZeros,
   getMonthName,
-  isLastBackupDateMoreThan30Days,
+  isLastBackupDateMoreThanDays,
 };

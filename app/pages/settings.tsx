@@ -5,7 +5,7 @@ import { Linking, View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 import { useNavigation } from "expo-router";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { appDetails, isLastBackupDateMoreThan30Days, useStyles } from "@utils";
+import { appDetails, isLastBackupDateMoreThanDays, useStyles } from "@utils";
 import {
   ListTile,
   ListTileIcon,
@@ -68,7 +68,7 @@ const Settings: React.FC = () => {
   };
 
   const isBackupOld = useMemo(() => {
-    return isLastBackupDateMoreThan30Days(lastBackupDate);
+    return isLastBackupDateMoreThanDays(lastBackupDate, 15);
   }, [lastBackupDate]);
 
   return (
