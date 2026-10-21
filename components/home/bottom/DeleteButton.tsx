@@ -6,12 +6,12 @@ import { Ionicons } from "@expo/vector-icons";
 import Animated from "react-native-reanimated";
 import { useStyles, useAnimatedPressRadius } from "@utils";
 
-export interface HomeBottomDeleteButtonProps {
+export interface DeleteButtonProps {
   onDelete: () => void;
   onDeleteAll: () => void;
 }
 
-const HomeBottomDeleteButton: React.FC<HomeBottomDeleteButtonProps> = ({
+const DeleteButton: React.FC<DeleteButtonProps> = ({
   onDelete,
   onDeleteAll,
 }) => {
@@ -55,4 +55,4 @@ const createStyles = (theme: MD3Theme) =>
     },
   });
 
-export default HomeBottomDeleteButton;
+export default DeleteButton;

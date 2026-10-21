@@ -1,7 +1,9 @@
+const DEFAULT_BORDER_RADIUS = 20;
+
 export const KEYPAD_BUTTON = {
   radius: {
     initial: 40,
-    pressed: 20,
+    pressed: DEFAULT_BORDER_RADIUS,
   },
   animationDuration: {
     pressIn: 100,
@@ -10,11 +12,11 @@ export const KEYPAD_BUTTON = {
 };
 
 export const FAB_BUTTON = {
-  borderRadius: 20,
+  borderRadius: DEFAULT_BORDER_RADIUS,
 };
 
 export const CARD = {
-  borderRadius: 20,
+  borderRadius: DEFAULT_BORDER_RADIUS,
 };
 
 export const FONT_WEIGHT = {

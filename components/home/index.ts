@@ -1,20 +1,33 @@
-export { default as HomeBottomConfirmButton } from "./HomeBottomConfirmButton";
-export type { HomeBottomConfirmButtonProps } from "./HomeBottomConfirmButton";
+// Top components
+export * from "./top";
 
-export { default as HomeBottomContainer } from "./HomeBottomContainer";
-export type { HomeBottomContainerProps } from "./HomeBottomContainer";
+// Bottom components
+export * from "./bottom";
 
-export { default as HomeBottomDeleteButton } from "./HomeBottomDeleteButton";
-export type { HomeBottomDeleteButtonProps } from "./HomeBottomDeleteButton";
+// Header
+export { default as HeaderButtons } from "./HeaderButtons";
+export type { HeaderButtonsProps } from "./HeaderButtons";
 
-export { default as HomeBottomNumberButton } from "./HomeBottomNumberButton";
-export type { HomeBottomNumberButtonProps } from "./HomeBottomNumberButton";
+// Backward compatibility aliases
+export { default as HomeTopContainer } from "./top/TopContainer";
+export type { TopContainerProps as HomeTopContainerProps } from "./top/TopContainer";
 
-export { default as HomeHeaderButtons } from "./HomeHeaderButtons";
-export type { HomeHeaderButtonsProps } from "./HomeHeaderButtons";
+export { default as HomeTopCurrentMonth } from "./top/CurrentMonth";
+export type { CurrentMonthProps as HomeTopCurrentMonthProps } from "./top/CurrentMonth";
 
-export { default as HomeTopContainer } from "./HomeTopContainer";
-export type { HomeTopContainerProps } from "./HomeTopContainer";
+export { default as HomeMonthProgressBar } from "./top/MonthProgressBar";
+export type { MonthProgressBarProps as HomeMonthProgressBarProps } from "./top/MonthProgressBar";
 
-export { default as HomeTopCurrentMonth } from "./HomeTopCurrentMonth";
-export type { HomeTopCurrentMonthProps } from "./HomeTopCurrentMonth";
+export { default as HomeBottomContainer } from "./bottom/BottomContainer";
+export type { BottomContainerProps as HomeBottomContainerProps } from "./bottom/BottomContainer";
+
+export { default as HomeBottomConfirmButton } from "./bottom/ConfirmButton";
+export type { ConfirmButtonProps as HomeBottomConfirmButtonProps } from "./bottom/ConfirmButton";
+
+export { default as HomeBottomDeleteButton } from "./bottom/DeleteButton";
+export type { DeleteButtonProps as HomeBottomDeleteButtonProps } from "./bottom/DeleteButton";
+
+export { default as HomeBottomNumberButton } from "./bottom/NumberButton";
+export type { NumberButtonProps as HomeBottomNumberButtonProps } from "./bottom/NumberButton";
+
+export { default as HomeHeaderButtons } from "./HeaderButtons";

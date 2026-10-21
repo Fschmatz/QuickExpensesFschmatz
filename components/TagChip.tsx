@@ -46,9 +46,6 @@ const TagChip: React.FC<TagChipProps> = ({
       )}
       onPress={() => onSelectTag(tag)}
       style={[styles.chip, { backgroundColor: getBackgroundColor() }]}
-      {...({
-        contentStyle: styles.content,
-      } as any)}
       textStyle={[styles.text, { color: getTextColor() }]}
     >
       {tag.name}
@@ -59,10 +56,7 @@ const TagChip: React.FC<TagChipProps> = ({
 const styles = StyleSheet.create({
   chip: {
     borderRadius: CARD.borderRadius,
-  },
-  content: {
-    paddingLeft: 6,
-    paddingRight: 0,
+    paddingHorizontal: 4,
   },
   text: {
     fontSize: 14,

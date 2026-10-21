@@ -8,9 +8,9 @@ import { useStyles } from "@utils";
 
 const { width: screenWidth } = Dimensions.get("window");
 
-export interface HomeHeaderButtonsProps {}
+export interface HeaderButtonsProps {}
 
-const HomeHeaderButtons: React.FC<HomeHeaderButtonsProps> = () => {
+const HeaderButtons: React.FC<HeaderButtonsProps> = () => {
   const theme = useTheme();
   const navigation = useNavigation<any>();
   const styles = useStyles(createStyles);
@@ -106,4 +106,4 @@ const createStyles = (theme: MD3Theme) =>
     },
   });
 
-export default HomeHeaderButtons;
+export default HeaderButtons;

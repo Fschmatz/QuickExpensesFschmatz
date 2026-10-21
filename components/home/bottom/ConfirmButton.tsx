@@ -6,13 +6,11 @@ import { Ionicons } from "@expo/vector-icons";
 import Animated from "react-native-reanimated";
 import { useStyles, useAnimatedPressRadius } from "@utils";
 
-export interface HomeBottomConfirmButtonProps {
+export interface ConfirmButtonProps {
   onConfirm: () => void;
 }
 
-const HomeBottomConfirmButton: React.FC<HomeBottomConfirmButtonProps> = ({
-  onConfirm,
-}) => {
+const ConfirmButton: React.FC<ConfirmButtonProps> = ({ onConfirm }) => {
   const theme = useTheme();
   const styles = useStyles(createStyles);
   const { animatedStyle, onPressIn, onPressOut } = useAnimatedPressRadius();
@@ -46,4 +44,4 @@ const createStyles = (theme: MD3Theme) =>
     },
   });
 
-export default HomeBottomConfirmButton;
+export default ConfirmButton;

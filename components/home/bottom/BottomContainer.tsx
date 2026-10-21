@@ -1,19 +1,19 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import HomeBottomNumberButton from "./HomeBottomNumberButton";
-import HomeBottomDeleteButton from "./HomeBottomDeleteButton";
-import HomeBottomConfirmButton from "./HomeBottomConfirmButton";
+import NumberButton from "./NumberButton";
+import DeleteButton from "./DeleteButton";
+import ConfirmButton from "./ConfirmButton";
 
 const numPad = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", ","];
 
-export interface HomeBottomContainerProps {
+export interface BottomContainerProps {
   onPress: (digit: string) => void;
   onDelete: () => void;
   onDeleteAll: () => void;
   onConfirm: () => void;
 }
 
-const HomeBottomContainer: React.FC<HomeBottomContainerProps> = ({
+const BottomContainer: React.FC<BottomContainerProps> = ({
   onPress,
   onDelete,
   onDeleteAll,
@@ -25,18 +25,15 @@ const HomeBottomContainer: React.FC<HomeBottomContainerProps> = ({
         {/* Numbers */}
         <View style={styles.numGrid}>
           {numPad.map((num) => (
-            <HomeBottomNumberButton key={num} num={num} onPress={onPress} />
+            <NumberButton key={num} num={num} onPress={onPress} />
           ))}
         </View>
 
         {/* Delete + Confirm */}
         <View style={styles.actionsCol}>
-          <HomeBottomDeleteButton
-            onDelete={onDelete}
-            onDeleteAll={onDeleteAll}
-          />
+          <DeleteButton onDelete={onDelete} onDeleteAll={onDeleteAll} />
 
-          <HomeBottomConfirmButton onConfirm={onConfirm} />
+          <ConfirmButton onConfirm={onConfirm} />
         </View>
       </View>
     </View>
@@ -68,4 +65,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeBottomContainer;
+export default BottomContainer;

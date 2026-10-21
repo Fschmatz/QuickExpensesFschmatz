@@ -6,15 +6,12 @@ import Animated from "react-native-reanimated";
 import { useStyles, useAnimatedPressRadius } from "@utils";
 import { FONT_WEIGHT } from "@constants";
 
-export interface HomeBottomNumberButtonProps {
+export interface NumberButtonProps {
   num: string;
   onPress: (digit: string) => void;
 }
 
-const HomeBottomNumberButton: React.FC<HomeBottomNumberButtonProps> = ({
-  num,
-  onPress,
-}) => {
+const NumberButton: React.FC<NumberButtonProps> = ({ num, onPress }) => {
   const styles = useStyles(createStyles);
   const { animatedStyle, onPressIn, onPressOut } = useAnimatedPressRadius();
 
@@ -64,4 +61,4 @@ const createStyles = (theme: MD3Theme) =>
     },
   });
 
-export default HomeBottomNumberButton;
+export default NumberButton;

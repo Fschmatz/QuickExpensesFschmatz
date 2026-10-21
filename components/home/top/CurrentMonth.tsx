@@ -4,15 +4,15 @@ import { Text, TouchableRipple } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
 import { useRouter } from "expo-router";
 import { formatMoney, getMonthName, useStyles } from "@utils";
-import { useAppSelector } from "../../redux/hooks";
+import { useAppSelector } from "../../../redux/hooks";
 import { getTotalExpensesCurrentMonth } from "@expenseDuck";
 import { CARD } from "@constants";
-import HomeMonthProgressBar from "./HomeMonthProgressBar";
-import SizedBox from "../SizedBox";
+import MonthProgressBar from "./MonthProgressBar";
+import SizedBox from "../../SizedBox";
 
-export interface HomeTopCurrentMonthProps {}
+export interface CurrentMonthProps {}
 
-const HomeTopCurrentMonth: React.FC<HomeTopCurrentMonthProps> = () => {
+const CurrentMonth: React.FC<CurrentMonthProps> = () => {
   const router = useRouter();
   const styles = useStyles(createStyles);
   const totalExpensesCurrentMonth = useAppSelector(
@@ -56,7 +56,7 @@ const HomeTopCurrentMonth: React.FC<HomeTopCurrentMonthProps> = () => {
 
           <SizedBox height={8} />
 
-          <HomeMonthProgressBar />
+          <MonthProgressBar />
         </View>
       </TouchableRipple>
     </View>
@@ -86,4 +86,4 @@ const createStyles = (theme: MD3Theme) =>
     },
   });
 
-export default HomeTopCurrentMonth;
+export default CurrentMonth;

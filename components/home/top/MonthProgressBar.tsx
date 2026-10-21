@@ -4,12 +4,12 @@ import { Text } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
 import { useStyles } from "@utils";
 import { MONTH_PROGRESS_BAR, CARD } from "@constants";
-import { useAppSelector } from "../../redux/hooks";
+import { useAppSelector } from "../../../redux/hooks";
 import { getExpenseDaysCurrentMonth } from "@expenseDuck";
 
-export interface HomeMonthProgressBarProps {}
+export interface MonthProgressBarProps {}
 
-const HomeMonthProgressBar: React.FC<HomeMonthProgressBarProps> = () => {
+const MonthProgressBar: React.FC<MonthProgressBarProps> = () => {
   const styles = useStyles(createStyles);
   const expenseDays = useAppSelector(getExpenseDaysCurrentMonth);
 
@@ -95,4 +95,4 @@ const createStyles = (theme: MD3Theme) =>
     },
   });
 
-export default HomeMonthProgressBar;
+export default MonthProgressBar;
