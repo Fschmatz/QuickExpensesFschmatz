@@ -81,6 +81,11 @@ class ExpenseService {
     const rows = await ExpenseDAO.fetchExpenseDaysCurrentMonth();
     return rows.map((r) => r.day);
   }
+
+  async fetchCountExpensesCurrentMonth(): Promise<number> {
+    const result = await ExpenseDAO.fetchCountExpensesCurrentMonth();
+    return result?.count ?? 0;
+  }
 }
 
 export default new ExpenseService();

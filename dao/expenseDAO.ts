@@ -171,7 +171,9 @@ class ExpenseDAO {
   async fetchTotalExpensesCurrentMonth(): Promise<{ value: number } | null> {
     const db = await getDatabase();
     const currentDate = new Date();
-    const currentYearMonth = currentDate.toISOString().slice(0, 7);
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const currentYearMonth = `${year}-${month}`;
 
     const query = `SELECT SUM(value) AS value
        FROM ${tables.EXPENSES}
@@ -183,7 +185,9 @@ class ExpenseDAO {
   async fetchExpenseDaysCurrentMonth(): Promise<{ day: number }[]> {
     const db = await getDatabase();
     const currentDate = new Date();
-    const currentYearMonth = currentDate.toISOString().slice(0, 7);
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const currentYearMonth = `${year}-${month}`;
 
     const query = `SELECT DISTINCT CAST(substr(createdDate, 9, 2) AS INTEGER) AS day
        FROM ${tables.EXPENSES}
@@ -191,6 +195,20 @@ class ExpenseDAO {
        ORDER BY day ASC;`;
 
     return await db.getAllAsync<{ day: number }>(query, [currentYearMonth]);
+  }
+
+  async fetchCountExpensesCurrentMonth(): Promise<{ count: number } | null> {
+    const db = await getDatabase();
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const currentYearMonth = `${year}-${month}`;
+
+    const query = `SELECT COUNT(*) AS count
+       FROM ${tables.EXPENSES}
+       WHERE substr(createdDate, 1, 7) = ?`;
+
+    return await db.getFirstAsync<{ count: number }>(query, [currentYearMonth]);
   }
 }
 

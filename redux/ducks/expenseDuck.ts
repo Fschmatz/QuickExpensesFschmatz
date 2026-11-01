@@ -26,6 +26,7 @@ export interface ExpenseState {
   monthlyList: MonthlyExpenseItem[];
   expensesByMonthYear: ExpenseItem[];
   totalExpensesCurrentMonth: number;
+  countExpensesCurrentMonth: number;
   expenseDaysCurrentMonth: number[];
   loading: boolean;
   error: string | null;
@@ -36,6 +37,7 @@ const initialState: ExpenseState = {
   monthlyList: [],
   expensesByMonthYear: [],
   totalExpensesCurrentMonth: 0,
+  countExpensesCurrentMonth: 0,
   expenseDaysCurrentMonth: [],
   loading: false,
   error: null,
@@ -161,6 +163,18 @@ const expenseSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    fetchCountExpensesCurrentMonth: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    fetchCountExpensesCurrentMonthSuccess: (state, action: PayloadAction<number>) => {
+      state.loading = false;
+      state.countExpensesCurrentMonth = action.payload;
+    },
+    fetchCountExpensesCurrentMonthFailure: (state, action: PayloadAction<string>) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -195,6 +209,9 @@ export const {
   fetchExpenseDaysCurrentMonth,
   fetchExpenseDaysCurrentMonthSuccess,
   fetchExpenseDaysCurrentMonthFailure,
+  fetchCountExpensesCurrentMonth,
+  fetchCountExpensesCurrentMonthSuccess,
+  fetchCountExpensesCurrentMonthFailure,
 } = expenseSlice.actions;
 
 export default expenseSlice.reducer;
@@ -214,6 +231,8 @@ export const getTotalExpensesCurrentMonth = (state: { expenses: ExpenseState }):
   state?.expenses?.totalExpensesCurrentMonth ?? 0;
 export const getExpenseDaysCurrentMonth = (state: { expenses: ExpenseState }): number[] =>
   state?.expenses?.expenseDaysCurrentMonth ?? [];
+export const getCountExpensesCurrentMonth = (state: { expenses: ExpenseState }): number =>
+  state?.expenses?.countExpensesCurrentMonth ?? 0;
 
 export const selectExpenseById =
   (id: number | string) =>

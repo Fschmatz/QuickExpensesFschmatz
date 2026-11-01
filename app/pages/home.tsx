@@ -11,6 +11,7 @@ import {
   addExpense,
   fetchTotalExpensesCurrentMonth,
   fetchExpenseDaysCurrentMonth,
+  fetchCountExpensesCurrentMonth,
 } from "@expenseDuck";
 import { TagItem } from "../../entities/tag";
 
@@ -37,6 +38,7 @@ const Home: React.FC = () => {
     dispatch(fetchTags());
     dispatch(fetchTotalExpensesCurrentMonth());
     dispatch(fetchExpenseDaysCurrentMonth());
+    dispatch(fetchCountExpensesCurrentMonth());
   }, [dispatch]);
 
   const handlePress = (value: string) => {

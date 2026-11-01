@@ -116,6 +116,12 @@ const Settings: React.FC = () => {
             parameterKey={appParameters.showChartTotalMonthParameter}
             defaultValue={true}
           />
+          <SettingsSwitch
+            title="Expandir resumo do mês atual"
+            subtitle="Exibe informações extras no card do mês atual da tela inicial"
+            parameterKey={appParameters.expandCurrentMonthSummaryParameter}
+            defaultValue={true}
+          />
         </CardList>
 
         <ListTile

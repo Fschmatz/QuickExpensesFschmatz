@@ -31,6 +31,9 @@ import {
   fetchExpenseDaysCurrentMonth,
   fetchExpenseDaysCurrentMonthSuccess,
   fetchExpenseDaysCurrentMonthFailure,
+  fetchCountExpensesCurrentMonth,
+  fetchCountExpensesCurrentMonthSuccess,
+  fetchCountExpensesCurrentMonthFailure,
 } from "@expenseDuck";
 import { addExpenseTag } from "@expenseTagDuck";
 import ExpenseTagService from "../../service/expenseTagService";
@@ -73,6 +76,7 @@ function* handleAddExpense(
     yield put(fetchMonthlyExpenses());
     yield put(fetchTotalExpensesCurrentMonth());
     yield put(fetchExpenseDaysCurrentMonth());
+    yield put(fetchCountExpensesCurrentMonth());
   } catch (error: any) {
     yield put(addExpenseFailure(error?.toString() ?? String(error)));
   }
@@ -100,6 +104,7 @@ function* handleUpdateExpense(
     yield put(fetchMonthlyExpenses());
     yield put(fetchTotalExpensesCurrentMonth());
     yield put(fetchExpenseDaysCurrentMonth());
+    yield put(fetchCountExpensesCurrentMonth());
     if (date) {
       yield put(fetchByMonthYear(date));
     }
@@ -120,6 +125,7 @@ function* handleDeleteExpense(
     yield put(fetchMonthlyExpenses());
     yield put(fetchTotalExpensesCurrentMonth());
     yield put(fetchExpenseDaysCurrentMonth());
+    yield put(fetchCountExpensesCurrentMonth());
     if (date) {
       yield put(fetchByMonthYear(date));
     }
@@ -135,6 +141,8 @@ function* handleDeleteAllExpenses(): Generator<any, void, any> {
     yield put(deleteAllExpensesSuccess());
     yield put(fetchExpenses());
     yield put(fetchMonthlyExpenses());
+    yield put(fetchTotalExpensesCurrentMonth());
+    yield put(fetchCountExpensesCurrentMonth());
   } catch (error: any) {
     yield put(deleteAllExpensesFailure(error?.toString() ?? String(error)));
   }
@@ -182,6 +190,15 @@ function* handleFetchExpenseDaysCurrentMonth(): Generator<any, void, any> {
   }
 }
 
+function* handleFetchCountExpensesCurrentMonth(): Generator<any, void, any> {
+  try {
+    const count = yield call([ExpenseService, "fetchCountExpensesCurrentMonth"]);
+    yield put(fetchCountExpensesCurrentMonthSuccess(count));
+  } catch (error: any) {
+    yield put(fetchCountExpensesCurrentMonthFailure(error?.toString() ?? String(error)));
+  }
+}
+
 export default function* expenseSaga() {
   yield takeLatest(fetchExpenses.type, handleFetchExpenses);
   yield takeLatest(fetchMonthlyExpenses.type, handleFetchMonthlyExpenses);
@@ -192,5 +209,6 @@ export default function* expenseSaga() {
   yield takeLatest(clearExpensesByMonthYear.type, handleClearExpenses);
   yield takeLatest(fetchTotalExpensesCurrentMonth.type, handleFetchTotalExpensesCurrentMonth);
   yield takeLatest(fetchExpenseDaysCurrentMonth.type, handleFetchExpenseDaysCurrentMonth);
+  yield takeLatest(fetchCountExpensesCurrentMonth.type, handleFetchCountExpensesCurrentMonth);
   yield takeLatest(updateExpense.type, handleUpdateExpense);
 }
