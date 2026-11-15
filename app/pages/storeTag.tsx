@@ -213,8 +213,6 @@ const StoreTag: React.FC = () => {
               buttonColor={theme.colors.primary}
               textColor={theme.colors.onPrimary}
               onPress={handleCreateTag}
-              style={styles.saveButton}
-              labelStyle={styles.buttonLabel}
             >
               Salvar
             </Button>
@@ -265,13 +263,6 @@ const createStyles = (theme: MD3Theme) =>
     },
     buttonContainer: {
       marginTop: 25,
-    },
-    saveButton: {
-      borderRadius: 25,
-    },
-    buttonLabel: {
-      fontSize: 16,
-      fontWeight: FONT_WEIGHT.default,
     },
   });
 

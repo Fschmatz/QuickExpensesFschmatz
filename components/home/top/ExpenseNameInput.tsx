@@ -51,13 +51,13 @@ const createStyles = (theme: MD3Theme) =>
       flexDirection: "row",
       alignItems: "center",
       backgroundColor: theme.colors.background,
-      borderRadius: CARD.borderRadius,
-      paddingHorizontal: 12,
+      borderRadius: 12,
+      paddingHorizontal: 8,
       marginBottom: 10,
       width: "100%",
     },
     icon: {
-      marginRight: 6,
+      marginRight: 4,
     },
     input: {
       color: theme.colors.onBackground,

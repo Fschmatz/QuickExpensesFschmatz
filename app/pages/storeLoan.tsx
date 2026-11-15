@@ -7,12 +7,20 @@ import { showToast, formatCurrencyInput, completeCurrencyZeros } from "@utils";
 import { selectLoanById } from "@loanSelector";
 import { createLoan } from "../../entities/loan";
 import { addLoan, updateLoan, deleteLoan } from "@loanDuck";
-import { DefaultPageContainer, SizedBox, ConfirmationDialog } from "@components";
+import {
+  DefaultPageContainer,
+  SizedBox,
+  ConfirmationDialog,
+} from "@components";
 import { FONT_WEIGHT } from "@constants";
 
 const StoreLoan: React.FC = () => {
   const theme = useTheme();
-  const { isInsert = "false", isUpdate = "false", loanId } = useLocalSearchParams<{
+  const {
+    isInsert = "false",
+    isUpdate = "false",
+    loanId,
+  } = useLocalSearchParams<{
     isInsert?: string;
     isUpdate?: string;
     loanId?: string;
@@ -23,7 +31,9 @@ const StoreLoan: React.FC = () => {
   const isUpdateBool = isUpdate === "true";
   const isInsertBool = isInsert === "true";
   const loanForUpdate = useAppSelector(selectLoanById(loanId ?? ""));
-  const [name, setName] = useState(isUpdateBool ? (loanForUpdate?.name ?? "") : "");
+  const [name, setName] = useState(
+    isUpdateBool ? (loanForUpdate?.name ?? "") : "",
+  );
   const [value, setValue] = useState(
     isUpdateBool && loanForUpdate
       ? completeCurrencyZeros(
@@ -31,7 +41,9 @@ const StoreLoan: React.FC = () => {
         )
       : "0",
   );
-  const [note, setNote] = useState(isUpdateBool ? (loanForUpdate?.note ?? "") : "");
+  const [note, setNote] = useState(
+    isUpdateBool ? (loanForUpdate?.note ?? "") : "",
+  );
   const [isDialogVisible, setIsDialogVisible] = useState(false);
 
   useEffect(() => {
@@ -76,7 +88,13 @@ const StoreLoan: React.FC = () => {
     }
 
     if (isInsertBool) {
-      const newLoan = createLoan(undefined, name, parseFloat(parseForDb(value)), note || null, "");
+      const newLoan = createLoan(
+        undefined,
+        name,
+        parseFloat(parseForDb(value)),
+        note || null,
+        "",
+      );
       showToast("Empréstimo criado com sucesso!");
       dispatch(addLoan(newLoan));
     }
@@ -147,8 +165,6 @@ const StoreLoan: React.FC = () => {
             buttonColor={theme.colors.primary}
             textColor={theme.colors.onPrimary}
             onPress={handleSaveLoan}
-            style={styles.saveButton}
-            labelStyle={styles.buttonLabel}
           >
             Salvar
           </Button>
@@ -175,13 +191,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 25,
-  },
-  saveButton: {
-    borderRadius: 25,
-  },
-  buttonLabel: {
-    fontSize: 16,
-    fontWeight: FONT_WEIGHT.default,
   },
 });
 

@@ -35,7 +35,7 @@ const MonthProgressBar: React.FC<MonthProgressBarProps> = () => {
         <View style={{ flex: 1 - progress }} />
 
         {expenseDays.map((day) => {
-          const pos = (day / lastDay) * 100;
+          const pos = ((day - 0.5) / lastDay) * 100;
           return (
             <View
               key={day}

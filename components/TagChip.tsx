@@ -55,8 +55,7 @@ const TagChip: React.FC<TagChipProps> = ({
 
 const styles = StyleSheet.create({
   chip: {
-    borderRadius: CARD.borderRadius,
-    paddingHorizontal: 4,
+    borderRadius: 12,
   },
   text: {
     fontSize: 14,

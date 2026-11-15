@@ -197,8 +197,6 @@ const StoreExpense: React.FC = () => {
           buttonColor={theme.colors.primary}
           textColor={theme.colors.onPrimary}
           onPress={handleSaveExpense}
-          style={styles.saveButton}
-          labelStyle={styles.buttonLabel}
         >
           Salvar
         </Button>
@@ -218,13 +216,6 @@ const StoreExpense: React.FC = () => {
 const styles = StyleSheet.create({
   headerDeleteButton: {
     marginRight: -8,
-  },
-  saveButton: {
-    borderRadius: 25,
-  },
-  buttonLabel: {
-    fontSize: 16,
-    fontWeight: FONT_WEIGHT.default,
   },
 });
 

@@ -90,7 +90,7 @@ const MonthYearExpensesDetail: React.FC = () => {
         tag: {
           id: undefined,
           name: "Sem Tag",
-          color: theme.colors.onBackground,
+          color: theme.colors.onPrimaryContainer,
           icon: "pricetag-outline",
         },
         expenses: untaggedExpenses,
