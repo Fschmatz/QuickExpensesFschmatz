@@ -131,17 +131,20 @@ const MonthYearExpensesDetail: React.FC = () => {
         </Animated.View>
       ) : (
         <Animated.View entering={FadeIn.duration(400)}>
-          <SizedBox height={12} />
+          <ExpensePieChart
+            tagExpenseMap={tagExpenseMap}
+            totalAllExpenses={totalAllExpenses}
+          />
 
-          <ExpensePieChart tagExpenseMap={tagExpenseMap} />
-
+          {/* 
           <SizedBox height={12} />
 
           <Text variant="titleMedium" style={styles.monthTotalText}>
             Total: R$ {formatMoney(totalAllExpenses)}
-          </Text>
+          </Text> 
+          */}
 
-          <SizedBox height={12} />
+          <SizedBox height={8} />
 
           {Array.from(tagExpenseMap.values())
             .sort((a, b) => {

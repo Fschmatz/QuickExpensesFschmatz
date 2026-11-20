@@ -1,71 +1,121 @@
-import React, { useEffect, useState } from "react";
-import { useTheme } from "react-native-paper";
+import React, { useMemo, useState } from "react";
+import { useTheme, Text } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
-import { View, Dimensions, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { PieChart } from "react-native-gifted-charts";
 import { TagItem } from "../entities/tag";
 import { ExpenseItem } from "../entities/expense";
-import { useStyles } from "@utils";
+import { formatMoney, useStyles } from "@utils";
+import { FONT_WEIGHT } from "@constants";
 
 export interface ExpensePieChartProps {
   tagExpenseMap?: Map<
     number | string,
     { tag: TagItem; expenses: ExpenseItem[] }
   >;
+  totalAllExpenses?: number;
 }
 
 interface PieDataItem {
   value: number;
   color: string;
+  label: string;
+  pct: string;
+  formattedValue: string;
 }
 
-const ExpensePieChart: React.FC<ExpensePieChartProps> = ({ tagExpenseMap }) => {
+const ExpensePieChart: React.FC<ExpensePieChartProps> = ({
+  tagExpenseMap,
+  totalAllExpenses,
+}) => {
   const theme = useTheme();
   const styles = useStyles(createStyles);
-  const [pieData, setPieData] = useState<PieDataItem[]>([]);
-  const windowWidth = Dimensions.get("window").width;
-  const chartSize = windowWidth * 0.45;
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
-  useEffect(() => {
+  const { chartData, totalCalculated } = useMemo(() => {
     if (!tagExpenseMap || tagExpenseMap.size === 0) {
-      setPieData([]);
-      return;
+      return { chartData: [], totalCalculated: 0 };
     }
 
-    const data: PieDataItem[] = [];
+    const entries = Array.from(tagExpenseMap.values());
+    const rawItems: { tag: TagItem; value: number }[] = [];
+    let sum = 0;
 
-    Array.from(tagExpenseMap.entries()).forEach(([, entry]) => {
-      const { tag, expenses } = entry;
-
-      // Calcular o total de despesas para a tag
-      const tagTotal = expenses.reduce((sum, expense) => {
+    entries.forEach(({ tag, expenses }) => {
+      const tagTotal = expenses.reduce((acc, expense) => {
         const amount = parseFloat((expense.value ?? 0).toString());
-        return isNaN(amount) ? sum : sum + amount;
+        return isNaN(amount) ? acc : acc + amount;
       }, 0);
 
       if (tagTotal > 0) {
-        data.push({
-          value: tagTotal,
-          color: tag.color,
-        });
+        rawItems.push({ tag, value: tagTotal });
+        sum += tagTotal;
       }
     });
 
-    setPieData(data);
-  }, [tagExpenseMap]);
+    const total = totalAllExpenses ?? sum;
 
-  const hasData = pieData.length > 0;
+    const data: PieDataItem[] = rawItems.map(({ tag, value }) => {
+      const pctNumber = total > 0 ? (value / total) * 100 : 0;
+      return {
+        value,
+        color: tag.color,
+        label: tag.name,
+        pct: `${pctNumber.toFixed(1)}%`,
+        formattedValue: `R$ ${formatMoney(value)}`,
+      };
+    });
+
+    return { chartData: data, totalCalculated: total };
+  }, [tagExpenseMap, totalAllExpenses]);
+
+  const hasData = chartData.length > 0;
+  const selectedItem =
+    selectedIndex >= 0 && selectedIndex < chartData.length
+      ? chartData[selectedIndex]
+      : null;
 
   return (
     <View style={styles.container}>
       {hasData && (
         <View style={styles.chartWrapper}>
           <PieChart
-            data={pieData}
-            radius={chartSize / 2.3}
-            innerRadius={chartSize * 0.15}
-            innerCircleColor={theme.colors.background}
+            data={chartData}
             donut
+            radius={105}
+            innerRadius={68}
+            innerCircleColor={theme.colors.background}
+            strokeWidth={3}
+            strokeColor={theme.colors.background}
+            focusOnPress
+            toggleFocusOnPress
+            extraRadius={8}
+            selectedIndex={selectedIndex}
+            setSelectedIndex={setSelectedIndex}
+            isAnimated
+            animationDuration={450}
+            centerLabelComponent={() => (
+              <View style={styles.centerLabelContainer}>
+                <Text
+                  variant="labelSmall"
+                  style={styles.centerLabelTitle}
+                  numberOfLines={1}
+                >
+                  {selectedItem
+                    ? `${selectedItem.label} (${selectedItem.pct})`
+                    : "Total do mês"}
+                </Text>
+                <Text
+                  variant="titleMedium"
+                  style={styles.centerLabelValue}
+                  numberOfLines={1}
+                >
+                  {selectedItem
+                    ? selectedItem.formattedValue
+                    : `R$ ${formatMoney(totalCalculated)}`}
+                </Text>
+              </View>
+            )}
           />
         </View>
       )}
@@ -78,10 +128,27 @@ const createStyles = (theme: MD3Theme) =>
     container: {
       backgroundColor: theme.colors.background,
       alignItems: "center",
+      justifyContent: "center",
     },
     chartWrapper: {
       justifyContent: "center",
       alignItems: "center",
+    },
+    centerLabelContainer: {
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: 8,
+      maxWidth: 130,
+    },
+    centerLabelTitle: {
+      color: theme.colors.onSurfaceVariant,
+      textAlign: "center",
+    },
+    centerLabelValue: {
+      color: theme.colors.onBackground,
+      fontWeight: FONT_WEIGHT.bold,
+      marginTop: 2,
+      textAlign: "center",
     },
   });
 

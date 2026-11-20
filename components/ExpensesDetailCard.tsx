@@ -177,12 +177,12 @@ const ExpensesDetailCard: React.FC<ExpensesDetailCardProps> = ({
             </Text>
           )}
         </View>
-        <Text
-          variant="titleSmall"
-          style={[styles.footerValue, { color: chipTextColor }]}
-        >
-          R$ {formatMoney(totalTag)}
-        </Text>
+
+        <View style={[styles.totalOutlineChip, { borderColor: chipTextColor }]}>
+          <Text variant="titleSmall" style={styles.footerValue}>
+            R$ {formatMoney(totalTag)}
+          </Text>
+        </View>
       </View>
     </SegmentedList>
   );
@@ -238,7 +238,7 @@ const createStyles = (theme: MD3Theme) =>
       alignItems: "center",
       justifyContent: "space-between",
       paddingHorizontal: 16,
-      paddingVertical: 14,
+      paddingVertical: 12,
     },
     footerLeft: {
       flexDirection: "column",
@@ -251,7 +251,16 @@ const createStyles = (theme: MD3Theme) =>
     footerStats: {
       color: theme.colors.onSurfaceVariant,
     },
+    totalOutlineChip: {
+      paddingHorizontal: 10,
+      paddingVertical: 5,
+      borderRadius: 16,
+      borderWidth: 1.5,
+      alignItems: "center",
+      justifyContent: "center",
+    },
     footerValue: {
+      color: theme.colors.onBackground,
       fontWeight: FONT_WEIGHT.bold,
     },
   });
