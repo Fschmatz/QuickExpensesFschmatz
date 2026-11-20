@@ -11,7 +11,7 @@ import {
   ListTileIcon,
   SettingsSwitch,
   DefaultPageContainer,
-  CardList,
+  SectionSegmentedList,
   SettingsThemeSegmented,
 } from "@components";
 import { exportBackup, importBackup } from "../../db/backup";
@@ -83,27 +83,20 @@ const Settings: React.FC = () => {
           </Text>
         </View>
 
-        <ListTile
+        <SectionSegmentedList
           title="Aparência"
           titleColor={theme.colors.onPrimaryContainer}
-          boldText={true}
-          disabled={true}
-        />
-        <CardList>
+        >
           <SettingsThemeSegmented
             title="Tema"
             subtitle="Escolha a aparência do aplicativo"
           />
-        </CardList>
+        </SectionSegmentedList>
 
-        <ListTile
+        <SectionSegmentedList
           title="Geral"
           titleColor={theme.colors.onPrimaryContainer}
-          boldText={true}
-          disabled={true}
-        />
-
-        <CardList>
+        >
           <SettingsSwitch
             title="Mostrar total anual"
             subtitle="Exibe o total anual na página das despesas mensais"
@@ -122,16 +115,12 @@ const Settings: React.FC = () => {
             parameterKey={appParameters.expandCurrentMonthSummaryParameter}
             defaultValue={true}
           />
-        </CardList>
+        </SectionSegmentedList>
 
-        <ListTile
+        <SectionSegmentedList
           title="Backup"
           titleColor={theme.colors.onPrimaryContainer}
-          boldText={true}
-          disabled={true}
-        />
-
-        <CardList>
+        >
           <ListTile
             title="Exportar"
             subtitle={
@@ -161,16 +150,12 @@ const Settings: React.FC = () => {
             disabled={isLoading}
             onPress={handleImportBackup}
           />
-        </CardList>
+        </SectionSegmentedList>
 
-        <ListTile
+        <SectionSegmentedList
           title="Sobre"
           titleColor={theme.colors.onPrimaryContainer}
-          boldText={true}
-          disabled={true}
-        />
-
-        <CardList>
+        >
           <ListTile
             title="Ver código-fonte no GitHub"
             left={(props) => <ListTileIcon {...props} icon="link-outline" />}
@@ -186,7 +171,7 @@ const Settings: React.FC = () => {
             disabled={isLoading}
             onPress={navigateToChangelog}
           />
-        </CardList>
+        </SectionSegmentedList>
       </DefaultPageContainer>
 
       {isLoading && (

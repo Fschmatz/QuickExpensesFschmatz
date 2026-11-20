@@ -67,7 +67,10 @@ export const lessThanZero = (value: number | string): boolean => {
 };
 
 export const formatMoney = (value: number | string): string => {
-  return Number(value).toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+  return Number(value).toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 };
 
 export const showToast = (message: string): void => {

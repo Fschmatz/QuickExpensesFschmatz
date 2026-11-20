@@ -49,6 +49,12 @@ export type { SettingsThemeSegmentedProps } from "./SettingsThemeSegmented";
 export { default as EmptyState } from "./EmptyState";
 export type { EmptyStateProps } from "./EmptyState";
 
+export { default as SegmentedList } from "./SegmentedList";
+export type { SegmentedListProps } from "./SegmentedList";
+
+export { default as SectionSegmentedList } from "./SectionSegmentedList";
+export type { SectionSegmentedListProps } from "./SectionSegmentedList";
+
 export { default as MonthlyExpensesLineChart } from "./MonthlyExpensesLineChart";
 export type { MonthlyExpensesLineChartProps } from "./MonthlyExpensesLineChart";
 

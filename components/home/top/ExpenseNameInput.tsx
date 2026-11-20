@@ -61,7 +61,7 @@ const createStyles = (theme: MD3Theme) =>
     },
     input: {
       color: theme.colors.onBackground,
-      fontSize: 14,
+      fontSize: 16,
       fontWeight: FONT_WEIGHT.default,
       paddingVertical: 10,
       flex: 1,

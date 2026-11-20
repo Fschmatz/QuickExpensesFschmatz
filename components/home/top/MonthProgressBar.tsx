@@ -13,7 +13,7 @@ const MonthProgressBar: React.FC<MonthProgressBarProps> = () => {
   const styles = useStyles(createStyles);
   const expenseDays = useAppSelector(getExpenseDaysCurrentMonth);
 
-  const { progress, lastDay } = useMemo(() => {
+  const { progress, lastDay, todayDay } = useMemo(() => {
     const today = new Date();
     const todayDay = today.getDate();
     const lastDay = new Date(
@@ -21,7 +21,7 @@ const MonthProgressBar: React.FC<MonthProgressBarProps> = () => {
       today.getMonth() + 1,
       0,
     ).getDate();
-    return { progress: todayDay / lastDay, lastDay };
+    return { progress: todayDay / lastDay, lastDay, todayDay };
   }, []);
 
   return (
@@ -31,18 +31,20 @@ const MonthProgressBar: React.FC<MonthProgressBarProps> = () => {
       </Text>
 
       <View style={styles.track}>
-        <View style={[styles.fill, { flex: progress }]} />
+        <View style={[styles.fill, { flex: progress }]}>
+          {expenseDays
+            .filter((day) => day <= todayDay)
+            .map((day) => {
+              const pos = ((day - 0.5) / todayDay) * 100;
+              return (
+                <View
+                  key={day}
+                  style={[styles.expenseDayMarker, { left: `${pos}%` as any }]}
+                />
+              );
+            })}
+        </View>
         <View style={{ flex: 1 - progress }} />
-
-        {expenseDays.map((day) => {
-          const pos = ((day - 0.5) / lastDay) * 100;
-          return (
-            <View
-              key={day}
-              style={[styles.expenseDayMarker, { left: `${pos}%` as any }]}
-            />
-          );
-        })}
       </View>
 
       <Text variant="titleSmall" style={styles.dayLabel}>
@@ -83,6 +85,8 @@ const createStyles = (theme: MD3Theme) =>
       borderRadius: CARD.borderRadius,
       borderEndEndRadius: 4,
       borderEndStartRadius: 4,
+      overflow: "hidden",
+      position: "relative",
     },
     expenseDayMarker: {
       position: "absolute",

@@ -17,6 +17,8 @@ export const FAB_BUTTON = {
 
 export const CARD = {
   borderRadius: DEFAULT_BORDER_RADIUS,
+  smallBorderRadius: 4,
+  segmentedListGap: 2,
 };
 
 export const FONT_WEIGHT = {

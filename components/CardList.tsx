@@ -44,7 +44,7 @@ const createStyles = (theme: MD3Theme) =>
     },
     divider: {
       backgroundColor: theme?.colors?.background || "#00000020",
-      height: 1,
+      height: 2,
     },
   });
 
