@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { View, FlatList, StyleSheet } from "react-native";
+import { View, ScrollView, StyleSheet } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useRouter } from "expo-router";
-import { ConfirmationDialog, EmptyState, LoanTile } from "@components";
+import {
+  ConfirmationDialog,
+  EmptyState,
+  LoanTile,
+  SegmentedList,
+} from "@components";
 import { FAB_BUTTON } from "@constants";
 import { deleteLoan, getLoans, fetchLoans } from "@loanDuck";
 import { useTheme, FAB } from "react-native-paper";
@@ -58,26 +63,30 @@ const LoansList: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        contentContainerStyle={styles.listContent}
-        data={loans}
-        keyExtractor={(item) => item.id?.toString() ?? item.name}
-        renderItem={({ item }) => (
-          <LoanTile
-            loan={item}
-            onDelete={showDeleteConfirmation}
-            onEdit={goToStoreLoanForUpdate}
-          />
-        )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        ListEmptyComponent={
-          <EmptyState
-            icon="cash-outline"
-            title="Nenhum empréstimo"
-            subtitle="Você não possui empréstimos registrados."
-          />
-        }
-      />
+      {loans.length === 0 ? (
+        <EmptyState
+          icon="cash-outline"
+          title="Nenhum empréstimo"
+          subtitle="Você não possui empréstimos registrados."
+        />
+      ) : (
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <SegmentedList>
+            {loans.map((loan) => (
+              <LoanTile
+                key={loan.id?.toString() ?? loan.name}
+                loan={loan}
+                onDelete={showDeleteConfirmation}
+                onEdit={goToStoreLoanForUpdate}
+              />
+            ))}
+          </SegmentedList>
+        </ScrollView>
+      )}
 
       <ConfirmationDialog
         message="Marcar este empréstimo como pago?"
@@ -104,13 +113,13 @@ const createStyles = (theme: MD3Theme, bottomInset: number) =>
       backgroundColor: theme.colors.background,
       paddingHorizontal: 16,
     },
+    scrollView: {
+      flex: 1,
+    },
     listContent: {
-      gap: 8,
+      paddingTop: 12,
       paddingBottom: 75 + bottomInset,
       flexGrow: 1,
-    },
-    separator: {
-      height: 2,
     },
     fab: {
       position: "absolute",

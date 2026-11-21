@@ -98,8 +98,8 @@ const Settings: React.FC = () => {
           titleColor={theme.colors.onPrimaryContainer}
         >
           <SettingsSwitch
-            title="Mostrar total anual"
-            subtitle="Exibe o total anual na página das despesas mensais"
+            title="Mostrar resumo anual"
+            subtitle="Exibe o resumo anual na página das despesas mensais"
             parameterKey={appParameters.showTotalYearParameter}
             defaultValue={false}
           />

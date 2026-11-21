@@ -7,11 +7,17 @@ import { appParameters } from "@constants";
 export interface MaterialYouColors {
   primaryContainer?: string;
   onPrimaryContainer?: string;
+  secondaryContainer?: string;
+  onSecondaryContainer?: string;
+  tertiaryContainer?: string;
+  onTertiaryContainer?: string;
 }
 
-export const useMaterialYouColor = (sourceColor?: string | null): MaterialYouColors => {
+export const useMaterialYouColor = (
+  sourceColor?: string | null,
+): MaterialYouColors => {
   const themePreference = useAppSelector(
-    selectAppParameterByKey(appParameters.themePreferenceParameter, "system")
+    selectAppParameterByKey(appParameters.themePreferenceParameter, "system"),
   );
 
   const systemColorScheme = useColorScheme();
@@ -33,6 +39,10 @@ export const useMaterialYouColor = (sourceColor?: string | null): MaterialYouCol
   return {
     primaryContainer: customTheme[colorSchemeKey].primaryContainer,
     onPrimaryContainer: customTheme[colorSchemeKey].onPrimaryContainer,
+    secondaryContainer: customTheme[colorSchemeKey].secondaryContainer,
+    onSecondaryContainer: customTheme[colorSchemeKey].onSecondaryContainer,
+    tertiaryContainer: customTheme[colorSchemeKey].tertiaryContainer,
+    onTertiaryContainer: customTheme[colorSchemeKey].onTertiaryContainer,
   };
 };
 

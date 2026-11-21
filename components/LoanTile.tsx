@@ -5,7 +5,7 @@ import type { MD3Theme } from "react-native-paper";
 import IconButton from "./IconButton";
 import { formatDate, formatMoney, useStyles } from "@utils";
 import { LoanItem } from "../entities/loan";
-import { CARD, FONT_WEIGHT } from "@constants";
+import { FONT_WEIGHT } from "@constants";
 
 export interface LoanTileProps {
   loan: LoanItem;
@@ -17,44 +17,36 @@ const LoanTile: React.FC<LoanTileProps> = ({ loan, onDelete, onEdit }) => {
   const styles = useStyles(createStyles);
 
   return (
-    <Card mode="contained" style={styles.card}>
-      <TouchableRipple onPress={() => onEdit(loan)} style={styles.touchable}>
-        <Card.Title
-          title={loan.name}
-          titleVariant="titleMedium"
-          titleStyle={styles.title}
-          subtitle={
-            loan.note
-              ? `R$ ${formatMoney(loan.value)}\n${loan.note}\n${formatDate(loan.createdDate, "dd/mm/yyyy")}`
-              : `R$ ${formatMoney(loan.value)}\n${formatDate(loan.createdDate, "dd/mm/yyyy")}`
-          }
-          subtitleVariant="bodyMedium"
-          subtitleStyle={styles.subtitle}
-          subtitleNumberOfLines={3}
-          right={() => (
-            <View style={styles.rightContainer}>
-              <IconButton
-                icon="checkmark-circle-outline"
-                onPress={() => onDelete(loan)}
-                size={28}
-                style={styles.iconButton}
-              />
-            </View>
-          )}
-        />
-      </TouchableRipple>
-    </Card>
+    <TouchableRipple onPress={() => onEdit(loan)} style={styles.touchable}>
+      <Card.Title
+        title={loan.name}
+        titleVariant="titleMedium"
+        titleStyle={styles.title}
+        subtitle={
+          loan.note
+            ? `R$ ${formatMoney(loan.value)}\n${loan.note}\n${formatDate(loan.createdDate, "dd/mm/yyyy")}`
+            : `R$ ${formatMoney(loan.value)}\n${formatDate(loan.createdDate, "dd/mm/yyyy")}`
+        }
+        subtitleVariant="bodyMedium"
+        subtitleStyle={styles.subtitle}
+        subtitleNumberOfLines={3}
+        right={() => (
+          <View style={styles.rightContainer}>
+            <IconButton
+              icon="checkmark-circle-outline"
+              onPress={() => onDelete(loan)}
+              size={28}
+              style={styles.iconButton}
+            />
+          </View>
+        )}
+      />
+    </TouchableRipple>
   );
 };
 
 const createStyles = (theme: MD3Theme) =>
   StyleSheet.create({
-    card: {
-      elevation: 0,
-      borderRadius: CARD.borderRadius,
-      overflow: "hidden",
-      backgroundColor: theme.colors.elevation.level3,
-    },
     touchable: {
       paddingVertical: 16,
     },

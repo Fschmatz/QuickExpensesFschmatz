@@ -28,17 +28,28 @@ const ExpensesDetailCard: React.FC<ExpensesDetailCardProps> = ({
   const theme = useTheme();
   const styles = useStyles(createStyles);
   const isUntagged = !tag.id || tag.name === "Sem Tag";
-  const { primaryContainer, onPrimaryContainer } = useMaterialYouColor(
-    isUntagged ? null : tag.color,
-  );
+  const {
+    primaryContainer,
+    onPrimaryContainer,
+    secondaryContainer,
+    onSecondaryContainer,
+  } = useMaterialYouColor(isUntagged ? null : tag.color);
 
-  const chipBackgroundColor = isUntagged
+  const tagIconBackground = isUntagged
     ? theme.colors.elevation.level5
     : primaryContainer;
 
-  const chipTextColor = isUntagged
+  const tagIconForeground = isUntagged
     ? theme.colors.onBackground
     : onPrimaryContainer;
+
+  const chipBackgroundColor = isUntagged
+    ? theme.colors.elevation.level5
+    : secondaryContainer;
+
+  const chipTextColor = isUntagged
+    ? theme.colors.onBackground
+    : onSecondaryContainer;
 
   const expenseCount = expenses.length;
   const countLabel = `${expenseCount} ${expenseCount === 1 ? "despesa" : "despesas"}`;
@@ -110,13 +121,13 @@ const ExpensesDetailCard: React.FC<ExpensesDetailCardProps> = ({
           <View
             style={[
               styles.iconContainer,
-              { backgroundColor: chipBackgroundColor },
+              { backgroundColor: tagIconBackground },
             ]}
           >
             <Ionicons
               name={tag.icon as keyof typeof Ionicons.glyphMap}
               size={20}
-              color={chipTextColor}
+              color={tagIconForeground}
             />
           </View>
           <View style={styles.headerTextContainer}>
@@ -178,7 +189,12 @@ const ExpensesDetailCard: React.FC<ExpensesDetailCardProps> = ({
           )}
         </View>
 
-        <View style={[styles.totalOutlineChip, { borderColor: chipTextColor }]}>
+        <View
+          style={[
+            styles.totalOutlineChip,
+            { borderColor: chipBackgroundColor },
+          ]}
+        >
           <Text variant="titleSmall" style={styles.footerValue}>
             R$ {formatMoney(totalTag)}
           </Text>
@@ -209,7 +225,7 @@ const createStyles = (theme: MD3Theme) =>
     iconContainer: {
       width: 38,
       height: 38,
-      borderRadius: 19,
+      borderRadius: 25,
       alignItems: "center",
       justifyContent: "center",
     },

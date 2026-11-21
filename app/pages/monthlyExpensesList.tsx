@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import {
-  FlatList,
+  ScrollView,
   View,
   ActivityIndicator,
   Animated,
@@ -14,6 +14,7 @@ import {
   MonthlyExpensesLineChart,
   YearlyTotalCard,
   YearFilterList,
+  SegmentedList,
   SizedBox,
 } from "@components";
 import {
@@ -76,50 +77,51 @@ const MonthlyExpensesList: React.FC = () => {
     );
   }, [monthlyExpenses, selectedYear]);
 
-  const yearlyTotal = useMemo(() => {
-    return filteredExpenses.reduce((sum, expense) => sum + expense.value, 0);
-  }, [filteredExpenses]);
-
   return (
     <View style={styles.container}>
       {loading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={theme.colors.onBackground} />
+          <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
       ) : (
-        <Animated.View style={[styles.contentContainer, { opacity: fadeAnim }]}>
-          <YearFilterList
-            availableYears={availableYears}
-            selectedYear={selectedYear}
-            setSelectedYear={setSelectedYear}
-          />
-
-          {showTotalYear && (
-            <YearlyTotalCard
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <Animated.View style={[styles.contentContainer, { opacity: fadeAnim }]}>
+            <YearFilterList
+              availableYears={availableYears}
               selectedYear={selectedYear}
-              yearlyTotal={yearlyTotal}
+              setSelectedYear={setSelectedYear}
             />
-          )}
 
-          <SizedBox height={12} />
+            <SizedBox height={4} />
 
-          {showChartTotalMonth && (
-            <MonthlyExpensesLineChart filteredExpenses={filteredExpenses} />
-          )}
-
-          <SizedBox height={12} />
-
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.listContent}
-            data={filteredExpenses}
-            keyExtractor={(item) => item.date.toString()}
-            renderItem={({ item }) => (
-              <MonthlyExpenseCard monthlyExpense={item} />
+            {showTotalYear && (
+              <YearlyTotalCard
+                selectedYear={selectedYear}
+                expenses={filteredExpenses}
+              />
             )}
-          />
-        </Animated.View>
+
+            <SizedBox height={12} />
+
+            {showChartTotalMonth && (
+              <MonthlyExpensesLineChart filteredExpenses={filteredExpenses} />
+            )}
+
+            <SizedBox height={12} />
+
+            <SegmentedList style={styles.segmentedList}>
+              {filteredExpenses.map((expense) => (
+                <MonthlyExpenseCard
+                  key={expense.date.toString()}
+                  monthlyExpense={expense}
+                />
+              ))}
+            </SegmentedList>
+          </Animated.View>
+        </ScrollView>
       )}
     </View>
   );
@@ -131,18 +133,21 @@ const createStyles = (theme: MD3Theme) =>
       flex: 1,
       backgroundColor: theme.colors.background,
     },
+    scrollContent: {
+      flexGrow: 1,
+      paddingBottom: 75,
+    },
+    contentContainer: {
+      flex: 1,
+    },
     loadingContainer: {
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
       paddingTop: 100,
     },
-    contentContainer: {
-      flex: 1,
-    },
-    listContent: {
-      gap: 8,
-      paddingBottom: 50,
+    segmentedList: {
+      paddingHorizontal: 16,
     },
   });
 

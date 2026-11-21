@@ -5,7 +5,7 @@ import type { MD3Theme } from "react-native-paper";
 import { useRouter } from "expo-router";
 import { getMonthName, formatMoney, useStyles } from "@utils";
 import { MonthlyExpenseItem } from "../entities/monthlyExpense";
-import { CARD, FONT_WEIGHT } from "@constants";
+import { FONT_WEIGHT } from "@constants";
 
 export interface MonthlyExpenseCardProps {
   monthlyExpense: MonthlyExpenseItem;
@@ -25,32 +25,24 @@ const MonthlyExpenseCard: React.FC<MonthlyExpenseCardProps> = ({
   };
 
   return (
-    <View style={styles.cardContainer}>
-      <TouchableRipple
-        onPress={() => navigateToMonthlyExpenseDetail(monthlyExpense.date)}
-        style={styles.touchable}
-      >
-        <View style={styles.content}>
-          <Text variant="titleMedium" style={styles.monthText}>
-            {getMonthName(monthlyExpense.date)}
-          </Text>
-          <Text variant="titleMedium" style={styles.valueText}>
-            R$ {formatMoney(monthlyExpense.value)}
-          </Text>
-        </View>
-      </TouchableRipple>
-    </View>
+    <TouchableRipple
+      onPress={() => navigateToMonthlyExpenseDetail(monthlyExpense.date)}
+      style={styles.touchable}
+    >
+      <View style={styles.content}>
+        <Text variant="titleMedium" style={styles.monthText}>
+          {getMonthName(monthlyExpense.date)}
+        </Text>
+        <Text variant="titleMedium" style={styles.valueText}>
+          R$ {formatMoney(monthlyExpense.value)}
+        </Text>
+      </View>
+    </TouchableRipple>
   );
 };
 
 const createStyles = (theme: MD3Theme) =>
   StyleSheet.create({
-    cardContainer: {
-      marginHorizontal: 16,
-      backgroundColor: theme.colors.elevation.level3,
-      borderRadius: CARD.borderRadius,
-      overflow: "hidden",
-    },
     touchable: {
       width: "100%",
     },

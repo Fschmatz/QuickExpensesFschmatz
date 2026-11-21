@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
-import { View, FlatList, StyleSheet } from "react-native";
+import { View, ScrollView, StyleSheet } from "react-native";
 import { useAppSelector } from "../../redux/hooks";
 import { useRouter } from "expo-router";
 import { useTheme, FAB } from "react-native-paper";
 import type { MD3Theme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { TagTile, EmptyState } from "@components";
+import { TagTile, EmptyState, SegmentedList } from "@components";
 import { FAB_BUTTON } from "@constants";
 import { getTags } from "@tagDuck";
 import { TagItem } from "../../entities/tag";
@@ -36,23 +36,29 @@ const TagsList: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        style={styles.flatList}
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={false}
-        data={tags}
-        keyExtractor={(item) => item.id?.toString() ?? item.name}
-        renderItem={({ item }) => (
-          <TagTile tag={item} onPress={() => goToStoreTagForUpdate(item)} />
-        )}
-        ListEmptyComponent={
-          <EmptyState
-            icon="pricetag-outline"
-            title="Nenhuma tag"
-            subtitle="Crie uma tag para categorizar suas despesas."
-          />
-        }
-      />
+      {tags.length === 0 ? (
+        <EmptyState
+          icon="pricetag-outline"
+          title="Nenhuma tag"
+          subtitle="Crie uma tag para categorizar suas despesas."
+        />
+      ) : (
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <SegmentedList>
+            {tags.map((tag) => (
+              <TagTile
+                key={tag.id?.toString() ?? tag.name}
+                tag={tag}
+                onPress={() => goToStoreTagForUpdate(tag)}
+              />
+            ))}
+          </SegmentedList>
+        </ScrollView>
+      )}
 
       <FAB
         icon="plus"
@@ -71,11 +77,11 @@ const createStyles = (theme: MD3Theme, bottomInset: number) =>
       backgroundColor: theme.colors.background,
       paddingHorizontal: 16,
     },
-    flatList: {
+    scrollView: {
       flex: 1,
     },
     listContent: {
-      gap: 8,
+      paddingTop: 12,
       paddingBottom: 75 + bottomInset,
       flexGrow: 1,
     },
